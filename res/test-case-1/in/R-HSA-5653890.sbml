@@ -1,0 +1,550 @@
+<?xml version='1.0' encoding='utf-8' standalone='no'?>
+<sbml xmlns="http://www.sbml.org/sbml/level3/version1/core" level="3" version="1">
+  <annotation>
+    <p xmlns="http://www.w3.org/1999/xhtml">SBML generated from Reactome version 68 on 6/5/19 3:31 PM using JSBML version 1.3.1.</p>
+  </annotation>
+  <model id="pathway_5653890" metaid="metaid_0" name="Lactose synthesis">
+    <notes>
+      <p xmlns="http://www.w3.org/1999/xhtml">Synthesis of the disaccharide lactose takes place within the Golgi apparatus of epithelial cells of the lactating mammary gland. The synthesis itself is a single chemical reaction of free glucose and UDP-galactose to form lactose and UDP. For this reaction to occur, glucose is transported from the cytosol into the Golgi lumen, and B4GALT1 interacts with LALBA (alpha-lactalbumin) to modulate its substrate specificity (Brew and Hill 1975).</p>
+    </notes>
+    <annotation>
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/">
+        <rdf:Description rdf:about="#metaid_0">
+          <dc:creator>
+            <rdf:Bag>
+              <rdf:li rdf:parseType="Resource">
+                <vCard:N rdf:parseType="Resource">
+                  <vCard:Family>D'Eustachio</vCard:Family>
+                  <vCard:Given>Peter</vCard:Given>
+                </vCard:N>
+                <vCard:ORG rdf:parseType="Resource">
+                  <vCard:Orgname>NYU School of Medicine, Department of Biochemistry</vCard:Orgname>
+                </vCard:ORG>
+              </rdf:li>
+              <rdf:li rdf:parseType="Resource">
+                <vCard:N rdf:parseType="Resource">
+                  <vCard:Family>Weiser</vCard:Family>
+                  <vCard:Given>Joel</vCard:Given>
+                </vCard:N>
+              </rdf:li>
+            </rdf:Bag>
+          </dc:creator>
+          <dcterms:created rdf:parseType="Resource">
+            <dcterms:W3CDTF>2014-12-03T00:47:16Z</dcterms:W3CDTF>
+          </dcterms:created>
+          <dcterms:modified rdf:parseType="Resource">
+            <dcterms:W3CDTF>2019-03-08T17:01:06Z</dcterms:W3CDTF>
+          </dcterms:modified>
+          <bqbiol:is>
+            <rdf:Bag>
+              <rdf:li rdf:resource="https://reactome.org/content/detail/R-HSA-5653890" />
+              <rdf:li rdf:resource="https://www.ebi.ac.uk/QuickGO/term/GO:0005989" />
+            </rdf:Bag>
+          </bqbiol:is>
+          <bqbiol:isDescribedBy>
+            <rdf:Bag>
+              <rdf:li rdf:resource="http://www.ncbi.nlm.nih.gov/pubmed/806951" />
+            </rdf:Bag>
+          </bqbiol:isDescribedBy>
+        </rdf:Description>
+      </rdf:RDF>
+    </annotation>
+    <listOfCompartments>
+      <compartment constant="true" id="compartment_20699" metaid="metaid_2" name="Golgi membrane" sboTerm="SBO:0000290">
+        <annotation>
+          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/">
+            <rdf:Description rdf:about="#metaid_2">
+              <bqbiol:is>
+                <rdf:Bag>
+                  <rdf:li rdf:resource="https://www.ebi.ac.uk/QuickGO/term/GO:0000139" />
+                </rdf:Bag>
+              </bqbiol:is>
+            </rdf:Description>
+          </rdf:RDF>
+        </annotation>
+      </compartment>
+      <compartment constant="true" id="compartment_17963" metaid="metaid_4" name="Golgi lumen" sboTerm="SBO:0000290">
+        <annotation>
+          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/">
+            <rdf:Description rdf:about="#metaid_4">
+              <bqbiol:is>
+                <rdf:Bag>
+                  <rdf:li rdf:resource="https://www.ebi.ac.uk/QuickGO/term/GO:0005796" />
+                </rdf:Bag>
+              </bqbiol:is>
+            </rdf:Description>
+          </rdf:RDF>
+        </annotation>
+      </compartment>
+      <compartment constant="true" id="compartment_70101" metaid="metaid_10" name="cytosol" sboTerm="SBO:0000290">
+        <annotation>
+          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/">
+            <rdf:Description rdf:about="#metaid_10">
+              <bqbiol:is>
+                <rdf:Bag>
+                  <rdf:li rdf:resource="https://www.ebi.ac.uk/QuickGO/term/GO:0005829" />
+                </rdf:Bag>
+              </bqbiol:is>
+            </rdf:Description>
+          </rdf:RDF>
+        </annotation>
+      </compartment>
+    </listOfCompartments>
+    <listOfSpecies>
+      <species boundaryCondition="false" compartment="compartment_20699" constant="false" hasOnlySubstanceUnits="false" id="species_5653885" metaid="metaid_1" name="B4GALT1:LALBA [Golgi membrane]" sboTerm="SBO:0000253">
+        <notes>
+          <p xmlns="http://www.w3.org/1999/xhtml">Derived from a Reactome Complex. Here is Reactomes nested structure for this complex: (P15291, P00709). Reactome uses a nested structure for complexes, which cannot be fully represented in SBML Level 3 Version 1 core</p>
+        </notes>
+        <annotation>
+          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/">
+            <rdf:Description rdf:about="#metaid_1">
+              <bqbiol:isDescribedBy>
+                <rdf:Bag>
+                  <rdf:li rdf:resource="http://www.ncbi.nlm.nih.gov/pubmed/11947697" />
+                  <rdf:li rdf:resource="http://www.ncbi.nlm.nih.gov/pubmed/11419947" />
+                </rdf:Bag>
+              </bqbiol:isDescribedBy>
+              <bqbiol:is>
+                <rdf:Bag>
+                  <rdf:li rdf:resource="https://reactome.org/content/detail/R-HSA-5653885" />
+                </rdf:Bag>
+              </bqbiol:is>
+              <bqbiol:hasPart>
+                <rdf:Bag>
+                  <rdf:li rdf:resource="http://www.uniprot.org/entry/P15291" />
+                  <rdf:li rdf:resource="http://www.uniprot.org/entry/P00709" />
+                </rdf:Bag>
+              </bqbiol:hasPart>
+              <bqbiol:isHomologTo>
+                <rdf:Bag>
+                  <rdf:li rdf:resource="https://reactome.org/content/detail/R-MMU-5653885" />
+                  <rdf:li rdf:resource="https://reactome.org/content/detail/R-BTA-5653885" />
+                  <rdf:li rdf:resource="https://reactome.org/content/detail/R-SSC-5653885" />
+                  <rdf:li rdf:resource="https://reactome.org/content/detail/R-DRE-5653885" />
+                  <rdf:li rdf:resource="https://reactome.org/content/detail/R-XTR-5653885" />
+                  <rdf:li rdf:resource="https://reactome.org/content/detail/R-DME-5653885" />
+                </rdf:Bag>
+              </bqbiol:isHomologTo>
+            </rdf:Description>
+          </rdf:RDF>
+        </annotation>
+      </species>
+      <species boundaryCondition="false" compartment="compartment_17963" constant="false" hasOnlySubstanceUnits="false" id="species_964746" metaid="metaid_3" name="Glc [Golgi lumen]" sboTerm="SBO:0000247">
+        <notes>
+          <p xmlns="http://www.w3.org/1999/xhtml">Derived from a Reactome SimpleEntity. This is a small compound</p>
+        </notes>
+        <annotation>
+          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/">
+            <rdf:Description rdf:about="#metaid_3">
+              <bqbiol:is>
+                <rdf:Bag>
+                  <rdf:li rdf:resource="http://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI:17925" />
+                  <rdf:li rdf:resource="https://reactome.org/content/detail/R-ALL-964746" />
+                </rdf:Bag>
+              </bqbiol:is>
+            </rdf:Description>
+          </rdf:RDF>
+        </annotation>
+      </species>
+      <species boundaryCondition="false" compartment="compartment_17963" constant="false" hasOnlySubstanceUnits="false" id="species_735682" metaid="metaid_5" name="UDP-Gal [Golgi lumen]" sboTerm="SBO:0000247">
+        <notes>
+          <p xmlns="http://www.w3.org/1999/xhtml">Derived from a Reactome SimpleEntity. This is a small compound</p>
+        </notes>
+        <annotation>
+          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/">
+            <rdf:Description rdf:about="#metaid_5">
+              <bqbiol:is>
+                <rdf:Bag>
+                  <rdf:li rdf:resource="http://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI:18307" />
+                  <rdf:li rdf:resource="https://reactome.org/content/detail/R-ALL-735682" />
+                </rdf:Bag>
+              </bqbiol:is>
+            </rdf:Description>
+          </rdf:RDF>
+        </annotation>
+      </species>
+      <species boundaryCondition="false" compartment="compartment_17963" constant="false" hasOnlySubstanceUnits="false" id="species_205687" metaid="metaid_6" name="UDP [Golgi lumen]" sboTerm="SBO:0000247">
+        <notes>
+          <p xmlns="http://www.w3.org/1999/xhtml">Derived from a Reactome SimpleEntity. This is a small compound</p>
+        </notes>
+        <annotation>
+          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/">
+            <rdf:Description rdf:about="#metaid_6">
+              <bqbiol:is>
+                <rdf:Bag>
+                  <rdf:li rdf:resource="http://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI:17659" />
+                  <rdf:li rdf:resource="https://reactome.org/content/detail/R-ALL-205687" />
+                </rdf:Bag>
+              </bqbiol:is>
+            </rdf:Description>
+          </rdf:RDF>
+        </annotation>
+      </species>
+      <species boundaryCondition="false" compartment="compartment_17963" constant="false" hasOnlySubstanceUnits="false" id="species_5653871" metaid="metaid_7" name="Lac [Golgi lumen]" sboTerm="SBO:0000247">
+        <notes>
+          <p xmlns="http://www.w3.org/1999/xhtml">Derived from a Reactome SimpleEntity. This is a small compound</p>
+        </notes>
+        <annotation>
+          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/">
+            <rdf:Description rdf:about="#metaid_7">
+              <bqbiol:is>
+                <rdf:Bag>
+                  <rdf:li rdf:resource="http://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI:36219" />
+                  <rdf:li rdf:resource="https://reactome.org/content/detail/R-ALL-5653871" />
+                </rdf:Bag>
+              </bqbiol:is>
+            </rdf:Description>
+          </rdf:RDF>
+        </annotation>
+      </species>
+      <species boundaryCondition="false" compartment="compartment_20699" constant="false" hasOnlySubstanceUnits="false" id="species_5653881" metaid="metaid_8" name="SLC2A1 tetramer [Golgi membrane]" sboTerm="SBO:0000253">
+        <notes>
+          <p xmlns="http://www.w3.org/1999/xhtml">Derived from a Reactome Complex. Here is Reactomes nested structure for this complex: (4xP11166). Reactome uses a nested structure for complexes, which cannot be fully represented in SBML Level 3 Version 1 core</p>
+        </notes>
+        <annotation>
+          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/">
+            <rdf:Description rdf:about="#metaid_8">
+              <bqbiol:is>
+                <rdf:Bag>
+                  <rdf:li rdf:resource="https://reactome.org/content/detail/R-HSA-5653881" />
+                </rdf:Bag>
+              </bqbiol:is>
+              <bqbiol:hasPart>
+                <rdf:Bag>
+                  <rdf:li rdf:resource="http://www.uniprot.org/entry/P11166" />
+                </rdf:Bag>
+              </bqbiol:hasPart>
+              <bqbiol:isHomologTo>
+                <rdf:Bag>
+                  <rdf:li rdf:resource="https://reactome.org/content/detail/R-MMU-5653881" />
+                  <rdf:li rdf:resource="https://reactome.org/content/detail/R-RNO-5653881" />
+                  <rdf:li rdf:resource="https://reactome.org/content/detail/R-CFA-5653881" />
+                  <rdf:li rdf:resource="https://reactome.org/content/detail/R-BTA-5653881" />
+                  <rdf:li rdf:resource="https://reactome.org/content/detail/R-DRE-5653881" />
+                  <rdf:li rdf:resource="https://reactome.org/content/detail/R-XTR-5653881" />
+                  <rdf:li rdf:resource="https://reactome.org/content/detail/R-GGA-5653881" />
+                  <rdf:li rdf:resource="https://reactome.org/content/detail/R-DME-5653881" />
+                  <rdf:li rdf:resource="https://reactome.org/content/detail/R-CEL-5653881" />
+                  <rdf:li rdf:resource="https://reactome.org/content/detail/R-DDI-5653881" />
+                  <rdf:li rdf:resource="https://reactome.org/content/detail/R-SCE-5653881" />
+                  <rdf:li rdf:resource="https://reactome.org/content/detail/R-PFA-5653881" />
+                </rdf:Bag>
+              </bqbiol:isHomologTo>
+            </rdf:Description>
+          </rdf:RDF>
+        </annotation>
+      </species>
+      <species boundaryCondition="false" compartment="compartment_70101" constant="false" hasOnlySubstanceUnits="false" id="species_70113" metaid="metaid_9" name="Glc [cytosol]" sboTerm="SBO:0000247">
+        <notes>
+          <p xmlns="http://www.w3.org/1999/xhtml">Derived from a Reactome SimpleEntity. This is a small compound</p>
+        </notes>
+        <annotation>
+          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/">
+            <rdf:Description rdf:about="#metaid_9">
+              <bqbiol:is>
+                <rdf:Bag>
+                  <rdf:li rdf:resource="http://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI:17925" />
+                  <rdf:li rdf:resource="https://reactome.org/content/detail/R-ALL-70113" />
+                </rdf:Bag>
+              </bqbiol:is>
+            </rdf:Description>
+          </rdf:RDF>
+        </annotation>
+      </species>
+      <species boundaryCondition="false" compartment="compartment_20699" constant="false" hasOnlySubstanceUnits="false" id="species_528072" metaid="metaid_11" name="B4GALT1 [Golgi membrane]" sboTerm="SBO:0000297">
+        <notes>
+          <p xmlns="http://www.w3.org/1999/xhtml">Derived from a Reactome EntityWithAccessionedSequence. This is a protein</p>
+        </notes>
+        <annotation>
+          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/">
+            <rdf:Description rdf:about="#metaid_11">
+              <bqbiol:is>
+                <rdf:Bag>
+                  <rdf:li rdf:resource="http://www.uniprot.org/entry/P15291" />
+                  <rdf:li rdf:resource="https://reactome.org/content/detail/R-HSA-528072" />
+                </rdf:Bag>
+              </bqbiol:is>
+              <bqbiol:isHomologTo>
+                <rdf:Bag>
+                  <rdf:li rdf:resource="https://reactome.org/content/detail/R-MMU-528072" />
+                  <rdf:li rdf:resource="https://reactome.org/content/detail/R-CFA-528072" />
+                  <rdf:li rdf:resource="https://reactome.org/content/detail/R-BTA-528072" />
+                  <rdf:li rdf:resource="https://reactome.org/content/detail/R-SSC-528072" />
+                  <rdf:li rdf:resource="https://reactome.org/content/detail/R-DRE-528072" />
+                  <rdf:li rdf:resource="https://reactome.org/content/detail/R-XTR-528072" />
+                  <rdf:li rdf:resource="https://reactome.org/content/detail/R-GGA-528072" />
+                  <rdf:li rdf:resource="https://reactome.org/content/detail/R-DME-528072" />
+                  <rdf:li rdf:resource="https://reactome.org/content/detail/R-CEL-528072" />
+                </rdf:Bag>
+              </bqbiol:isHomologTo>
+            </rdf:Description>
+          </rdf:RDF>
+        </annotation>
+      </species>
+      <species boundaryCondition="false" compartment="compartment_17963" constant="false" hasOnlySubstanceUnits="false" id="species_5653896" metaid="metaid_12" name="LALBA [Golgi lumen]" sboTerm="SBO:0000297">
+        <notes>
+          <p xmlns="http://www.w3.org/1999/xhtml">Derived from a Reactome EntityWithAccessionedSequence. This is a protein</p>
+        </notes>
+        <annotation>
+          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/">
+            <rdf:Description rdf:about="#metaid_12">
+              <bqbiol:isDescribedBy>
+                <rdf:Bag>
+                  <rdf:li rdf:resource="http://www.ncbi.nlm.nih.gov/pubmed/5049057" />
+                </rdf:Bag>
+              </bqbiol:isDescribedBy>
+              <bqbiol:is>
+                <rdf:Bag>
+                  <rdf:li rdf:resource="http://www.uniprot.org/entry/P00709" />
+                  <rdf:li rdf:resource="https://reactome.org/content/detail/R-HSA-5653896" />
+                </rdf:Bag>
+              </bqbiol:is>
+              <bqbiol:isHomologTo>
+                <rdf:Bag>
+                  <rdf:li rdf:resource="https://reactome.org/content/detail/R-MMU-5653896" />
+                  <rdf:li rdf:resource="https://reactome.org/content/detail/R-BTA-5653896" />
+                  <rdf:li rdf:resource="https://reactome.org/content/detail/R-SSC-5653896" />
+                  <rdf:li rdf:resource="https://reactome.org/content/detail/R-XTR-5653896" />
+                  <rdf:li rdf:resource="https://reactome.org/content/detail/R-XTR-5653896-2" />
+                  <rdf:li rdf:resource="https://reactome.org/content/detail/R-XTR-5653896-3" />
+                  <rdf:li rdf:resource="https://reactome.org/content/detail/R-XTR-5653896-4" />
+                  <rdf:li rdf:resource="https://reactome.org/content/detail/R-DME-5653896" />
+                </rdf:Bag>
+              </bqbiol:isHomologTo>
+            </rdf:Description>
+          </rdf:RDF>
+        </annotation>
+      </species>
+      <species boundaryCondition="false" compartment="compartment_17963" constant="false" hasOnlySubstanceUnits="false" id="species_5653875" metaid="metaid_13" name="Mn2+ [Golgi lumen]" sboTerm="SBO:0000247">
+        <notes>
+          <p xmlns="http://www.w3.org/1999/xhtml">Derived from a Reactome SimpleEntity. This is a small compound</p>
+        </notes>
+        <annotation>
+          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/">
+            <rdf:Description rdf:about="#metaid_13">
+              <bqbiol:is>
+                <rdf:Bag>
+                  <rdf:li rdf:resource="http://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI:29035" />
+                  <rdf:li rdf:resource="https://reactome.org/content/detail/R-ALL-5653875" />
+                </rdf:Bag>
+              </bqbiol:is>
+            </rdf:Description>
+          </rdf:RDF>
+        </annotation>
+      </species>
+    </listOfSpecies>
+    <listOfReactions>
+      <reaction compartment="compartment_17963" fast="false" id="reaction_5653878" metaid="metaid_14" name="B4GALT1:LALBA transfers Gal from UDP-Gal to Glc to form Lac" reversible="false">
+        <notes>
+          <p xmlns="http://www.w3.org/1999/xhtml">In the Golgi membrane, the B4GALT1 subunit of the B4GALT1:LALBA (beta-1,4-galactosyltransferase 1 : alpha-lactalbumin) complex catalyzes the transfer of galactose from UDP-galactose to free glucose to form galactose and UDP (Andrews 1970; Ramakrishnan and Qasba 2001). The representation here of a stable protein complex catalyzing the transformation of small molecule substrates provides a simplified view of the true reaction mechanism (Brew and Hill 1975), but is sufficient to identify the key participating molecules and their roles.</p>
+        </notes>
+        <annotation>
+          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/">
+            <rdf:Description rdf:about="#metaid_14">
+              <dc:creator>
+                <rdf:Bag>
+                  <rdf:li rdf:parseType="Resource">
+                    <vCard:N rdf:parseType="Resource">
+                      <vCard:Family>D'Eustachio</vCard:Family>
+                      <vCard:Given>Peter</vCard:Given>
+                    </vCard:N>
+                    <vCard:ORG rdf:parseType="Resource">
+                      <vCard:Orgname>NYU School of Medicine, Department of Biochemistry</vCard:Orgname>
+                    </vCard:ORG>
+                  </rdf:li>
+                  <rdf:li rdf:parseType="Resource">
+                    <vCard:N rdf:parseType="Resource">
+                      <vCard:Family>Weiser</vCard:Family>
+                      <vCard:Given>Joel</vCard:Given>
+                    </vCard:N>
+                  </rdf:li>
+                </rdf:Bag>
+              </dc:creator>
+              <dcterms:created rdf:parseType="Resource">
+                <dcterms:W3CDTF>2014-12-03T00:47:16Z</dcterms:W3CDTF>
+              </dcterms:created>
+              <dcterms:modified rdf:parseType="Resource">
+                <dcterms:W3CDTF>2019-03-08T11:44:47Z</dcterms:W3CDTF>
+              </dcterms:modified>
+              <bqbiol:is>
+                <rdf:Bag>
+                  <rdf:li rdf:resource="https://reactome.org/content/detail/R-HSA-5653878" />
+                </rdf:Bag>
+              </bqbiol:is>
+              <bqbiol:isDescribedBy>
+                <rdf:Bag>
+                  <rdf:li rdf:resource="http://www.ncbi.nlm.nih.gov/pubmed/11947697" />
+                  <rdf:li rdf:resource="http://www.ncbi.nlm.nih.gov/pubmed/806951" />
+                  <rdf:li rdf:resource="http://www.ncbi.nlm.nih.gov/pubmed/11419947" />
+                </rdf:Bag>
+              </bqbiol:isDescribedBy>
+              <bqbiol:is>
+                <rdf:Bag>
+                  <rdf:li rdf:resource="https://reactome.org/content/detail/R-HSA-5653878" />
+                </rdf:Bag>
+              </bqbiol:is>
+              <bqbiol:is>
+                <rdf:Bag>
+                  <rdf:li rdf:resource="https://www.ebi.ac.uk/QuickGO/term/GO:0004461" />
+                </rdf:Bag>
+              </bqbiol:is>
+              <bqbiol:is>
+                <rdf:Bag>
+                  <rdf:li rdf:resource="https://identifiers.org/ec-code/2.4.1.22" />
+                </rdf:Bag>
+              </bqbiol:is>
+            </rdf:Description>
+          </rdf:RDF>
+        </annotation>
+        <listOfReactants>
+          <speciesReference constant="true" id="speciesreference_5653878_input_735682" sboTerm="SBO:0000010" species="species_735682" stoichiometry="1" />
+          <speciesReference constant="true" id="speciesreference_5653878_input_964746" sboTerm="SBO:0000010" species="species_964746" stoichiometry="1" />
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" id="speciesreference_5653878_output_5653871" sboTerm="SBO:0000011" species="species_5653871" stoichiometry="1" />
+          <speciesReference constant="true" id="speciesreference_5653878_output_205687" sboTerm="SBO:0000011" species="species_205687" stoichiometry="1" />
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference id="modifierspeciesreference_5653878_catalyst_5653885" sboTerm="SBO:0000013" species="species_5653885" />
+        </listOfModifiers>
+      </reaction>
+      <reaction compartment="compartment_17963" fast="false" id="reaction_5653873" metaid="metaid_15" name="SLC2A1 tetramer transports Glc from cytosol to Golgi lumen" reversible="false">
+        <notes>
+          <p xmlns="http://www.w3.org/1999/xhtml">SLC2A1 (aka GLUT1) tetramer in the Golgi membrane mediates the facilitated diffusion of glucose from the cytosol into the Golgi lumen. SLC2A1, normally confined to the plasma membrane, is also abundant in the Golgi membranes of epithelial cells of the lactating mammary gland, as demonstrated experimentally in mice (Nemeth et al. 2000). It is not known how this physiological state-specific relocalization is regulated.</p>
+        </notes>
+        <annotation>
+          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/">
+            <rdf:Description rdf:about="#metaid_15">
+              <dc:creator>
+                <rdf:Bag>
+                  <rdf:li rdf:parseType="Resource">
+                    <vCard:N rdf:parseType="Resource">
+                      <vCard:Family>D'Eustachio</vCard:Family>
+                      <vCard:Given>Peter</vCard:Given>
+                    </vCard:N>
+                    <vCard:ORG rdf:parseType="Resource">
+                      <vCard:Orgname>NYU School of Medicine, Department of Biochemistry</vCard:Orgname>
+                    </vCard:ORG>
+                  </rdf:li>
+                  <rdf:li rdf:parseType="Resource">
+                    <vCard:N rdf:parseType="Resource">
+                      <vCard:Family>Weiser</vCard:Family>
+                      <vCard:Given>Joel</vCard:Given>
+                    </vCard:N>
+                  </rdf:li>
+                </rdf:Bag>
+              </dc:creator>
+              <dcterms:created rdf:parseType="Resource">
+                <dcterms:W3CDTF>2014-12-03T00:47:16Z</dcterms:W3CDTF>
+              </dcterms:created>
+              <dcterms:modified rdf:parseType="Resource">
+                <dcterms:W3CDTF>2019-03-08T17:01:06Z</dcterms:W3CDTF>
+              </dcterms:modified>
+              <bqbiol:is>
+                <rdf:Bag>
+                  <rdf:li rdf:resource="https://reactome.org/content/detail/R-HSA-5653873" />
+                </rdf:Bag>
+              </bqbiol:is>
+              <bqbiol:isDescribedBy>
+                <rdf:Bag>
+                  <rdf:li rdf:resource="http://www.ncbi.nlm.nih.gov/pubmed/10759149" />
+                </rdf:Bag>
+              </bqbiol:isDescribedBy>
+              <bqbiol:is>
+                <rdf:Bag>
+                  <rdf:li rdf:resource="https://reactome.org/content/detail/R-HSA-5653873" />
+                </rdf:Bag>
+              </bqbiol:is>
+              <bqbiol:is>
+                <rdf:Bag>
+                  <rdf:li rdf:resource="https://www.ebi.ac.uk/QuickGO/term/GO:0005355" />
+                </rdf:Bag>
+              </bqbiol:is>
+            </rdf:Description>
+          </rdf:RDF>
+        </annotation>
+        <listOfReactants>
+          <speciesReference constant="true" id="speciesreference_5653873_input_70113" sboTerm="SBO:0000010" species="species_70113" stoichiometry="1" />
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" id="speciesreference_5653873_output_964746" sboTerm="SBO:0000011" species="species_964746" stoichiometry="1" />
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference id="modifierspeciesreference_5653873_catalyst_5653881" sboTerm="SBO:0000013" species="species_5653881" />
+        </listOfModifiers>
+      </reaction>
+      <reaction compartment="compartment_17963" fast="false" id="reaction_5653886" metaid="metaid_16" name="B4GALT1 binds LALBA" reversible="false">
+        <notes>
+          <p xmlns="http://www.w3.org/1999/xhtml">B4GALT1 (beta-1,4-galactosyltransferase 1) in the Golgi membrane associates with LALBA (alpha-lactalbumin) to form a heterodimer. This binding reaction is positively regulated by Mn2+ ions and UDP-galactose. This heterodimer has been observed both in solution in vitro and in crystalline form (Andrews 1970; Ramakrishnan and Qasba 2001). The galactosyltransferase enzyme is found in the Golgi membrane of many cell types. LALBA is expressed specifically in the lactating mammary gland. Binding LALBA modulates the specificity of the galactosyltransferase enzyme. Alone, B4GALT1 transfers galactose moieties to glycolipids and N-linked oligosaccharides of glycoproteins. Complexed with LALBA, it transfers galactose to free glucose to form lactose (Brew and Hill 1975).</p>
+        </notes>
+        <annotation>
+          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/">
+            <rdf:Description rdf:about="#metaid_16">
+              <dc:creator>
+                <rdf:Bag>
+                  <rdf:li rdf:parseType="Resource">
+                    <vCard:N rdf:parseType="Resource">
+                      <vCard:Family>D'Eustachio</vCard:Family>
+                      <vCard:Given>Peter</vCard:Given>
+                    </vCard:N>
+                    <vCard:ORG rdf:parseType="Resource">
+                      <vCard:Orgname>NYU School of Medicine, Department of Biochemistry</vCard:Orgname>
+                    </vCard:ORG>
+                  </rdf:li>
+                  <rdf:li rdf:parseType="Resource">
+                    <vCard:N rdf:parseType="Resource">
+                      <vCard:Family>Weiser</vCard:Family>
+                      <vCard:Given>Joel</vCard:Given>
+                    </vCard:N>
+                  </rdf:li>
+                </rdf:Bag>
+              </dc:creator>
+              <dcterms:created rdf:parseType="Resource">
+                <dcterms:W3CDTF>2014-12-03T00:47:16Z</dcterms:W3CDTF>
+              </dcterms:created>
+              <dcterms:modified rdf:parseType="Resource">
+                <dcterms:W3CDTF>2019-03-08T11:44:47Z</dcterms:W3CDTF>
+              </dcterms:modified>
+              <bqbiol:is>
+                <rdf:Bag>
+                  <rdf:li rdf:resource="https://reactome.org/content/detail/R-HSA-5653886" />
+                </rdf:Bag>
+              </bqbiol:is>
+              <bqbiol:isDescribedBy>
+                <rdf:Bag>
+                  <rdf:li rdf:resource="http://www.ncbi.nlm.nih.gov/pubmed/11947697" />
+                  <rdf:li rdf:resource="http://www.ncbi.nlm.nih.gov/pubmed/806951" />
+                  <rdf:li rdf:resource="http://www.ncbi.nlm.nih.gov/pubmed/11419947" />
+                </rdf:Bag>
+              </bqbiol:isDescribedBy>
+              <bqbiol:is>
+                <rdf:Bag>
+                  <rdf:li rdf:resource="https://reactome.org/content/detail/R-HSA-5653886" />
+                </rdf:Bag>
+              </bqbiol:is>
+            </rdf:Description>
+          </rdf:RDF>
+        </annotation>
+        <listOfReactants>
+          <speciesReference constant="true" id="speciesreference_5653886_input_5653896" sboTerm="SBO:0000010" species="species_5653896" stoichiometry="1" />
+          <speciesReference constant="true" id="speciesreference_5653886_input_528072" sboTerm="SBO:0000010" species="species_528072" stoichiometry="1" />
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference constant="true" id="speciesreference_5653886_output_5653885" sboTerm="SBO:0000011" species="species_5653885" stoichiometry="1" />
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference id="modifierspeciesreference_5653886_positiveregulator_735682" sboTerm="SBO:0000459" species="species_735682">
+            <notes>
+              <p xmlns="http://www.w3.org/1999/xhtml">This describes an Event/CatalystActivity that is positively regulated by the Regulator (e.g., allosteric activation)</p>
+            </notes>
+          </modifierSpeciesReference>
+          <modifierSpeciesReference id="modifierspeciesreference_5653886_positiveregulator_5653875" sboTerm="SBO:0000459" species="species_5653875">
+            <notes>
+              <p xmlns="http://www.w3.org/1999/xhtml">This describes an Event/CatalystActivity that is positively regulated by the Regulator (e.g., allosteric activation)</p>
+            </notes>
+          </modifierSpeciesReference>
+        </listOfModifiers>
+      </reaction>
+    </listOfReactions>
+  </model>
+</sbml>
