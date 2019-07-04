@@ -57,11 +57,11 @@ public class Graph {
         return null;
     }
 
-    public HashSet<Node> getNodes(){
+    HashSet<Node> getNodes(){
         return this.nodes;
     }
 
-    public HashSet<Edge> getEdges(){
+    HashSet<Edge> getEdges(){
         return this.edges;
     }
 

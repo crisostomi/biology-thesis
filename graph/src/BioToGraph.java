@@ -32,12 +32,10 @@ public class BioToGraph {
                         destinations.add(node);
                     }
                 }
-
                 Edge edge = new Edge(sources, destinations);
                 edges.add(edge);
             }
         }
-
         return new Graph(nodes, edges);
     }
 

@@ -123,7 +123,6 @@ public class ModelBuilder {
         for(Node sink:this.sinks){
             sb.append("input Amount "+sink.getCompartmentId()+"__"+makeLegalName(sink.getSpeciesName())+";\n");
         }
-        sb.append("\n");
         sb.append("// Sources \n");
         for(Node source:this.sources){
             sb.append("output Amount "+source.getCompartmentId()+"__"+makeLegalName(source.getSpeciesName())+";\n");
