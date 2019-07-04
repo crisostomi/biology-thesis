@@ -45,7 +45,7 @@ public class Main {
             System.out.println("Modelica environment creation/writing failed");
         }
 
-        System.out.println("Done.");
+        System.out.println("All done.");
 
         /*
         TODO: define input values for each block in biosystem.mo
@@ -55,5 +55,6 @@ public class Main {
 
         data flow: Reactome SBML -> (Single SBML,  config) -> (Modelica blocks, monitors) -> Search output
          */
+
     }
 }
