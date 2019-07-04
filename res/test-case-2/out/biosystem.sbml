@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<sbml xmlns="http://www.sbml.org/sbml/level3/version1/core" level="3" version="1">
+  <listOfCompartments>
+    <compartment constant="true" id="compartment_7660" metaid="metaid_2" name="nucleoplasm" sboTerm="SBO:0000290"/>
+  </listOfCompartments>
+  <listOfSpecies>
+    <species boundaryCondition="false" compartment="compartment_7660" constant="false" hasOnlySubstanceUnits="false" id="species_912428" metaid="metaid_1" name="Meiotic Holliday Junction [nucleoplasm]" sboTerm="SBO:0000253"/>
+    <species boundaryCondition="false" compartment="compartment_7660" constant="false" hasOnlySubstanceUnits="false" id="species_912495" metaid="metaid_3" name="MLH1 [nucleoplasm]" sboTerm="SBO:0000297"/>
+    <species boundaryCondition="false" compartment="compartment_7660" constant="false" hasOnlySubstanceUnits="false" id="species_912478" metaid="metaid_4" name="MLH3 [nucleoplasm]" sboTerm="SBO:0000297"/>
+    <species boundaryCondition="false" compartment="compartment_7660" constant="false" hasOnlySubstanceUnits="false" id="species_68365" metaid="metaid_5" name="CDK2 [nucleoplasm]" sboTerm="SBO:0000297"/>
+    <species boundaryCondition="false" compartment="compartment_7660" constant="false" hasOnlySubstanceUnits="false" id="species_113843" metaid="metaid_6" name="CDK4 [nucleoplasm]" sboTerm="SBO:0000297"/>
+    <species boundaryCondition="false" compartment="compartment_7660" constant="false" hasOnlySubstanceUnits="false" id="species_174881" metaid="metaid_7" name="BLM [nucleoplasm]" sboTerm="SBO:0000297"/>
+    <species boundaryCondition="false" compartment="compartment_7660" constant="false" hasOnlySubstanceUnits="false" id="species_50951" metaid="metaid_8" name="BRCA2 [nucleoplasm]" sboTerm="SBO:0000297"/>
+    <species boundaryCondition="false" compartment="compartment_7660" constant="false" hasOnlySubstanceUnits="false" id="species_912452" metaid="metaid_9" name="TOP3A [nucleoplasm]" sboTerm="SBO:0000297"/>
+    <species boundaryCondition="false" compartment="compartment_7660" constant="false" hasOnlySubstanceUnits="false" id="species_912455" metaid="metaid_10" name="MSH4 [nucleoplasm]" sboTerm="SBO:0000297"/>
+    <species boundaryCondition="false" compartment="compartment_7660" constant="false" hasOnlySubstanceUnits="false" id="species_913201" metaid="metaid_11" name="Cleaved Meiotic Holliday Junction [nucleoplasm]" sboTerm="SBO:0000253"/>
+    <species boundaryCondition="false" compartment="compartment_7660" constant="false" hasOnlySubstanceUnits="false" id="species_912435" metaid="metaid_12" name="MSH5 [nucleoplasm]" sboTerm="SBO:0000297"/>
+    <species boundaryCondition="false" compartment="compartment_7660" constant="false" hasOnlySubstanceUnits="false" id="species_68462" metaid="metaid_13" name="RPA heterotrimer [nucleoplasm]" sboTerm="SBO:0000253"/>
+    <species boundaryCondition="false" compartment="compartment_7660" constant="false" hasOnlySubstanceUnits="false" id="species_29428" metaid="metaid_14" name="DNA [nucleoplasm]" sboTerm="SBO:0000240"/>
+    <species boundaryCondition="false" compartment="compartment_7660" constant="false" hasOnlySubstanceUnits="false" id="species_912345" metaid="metaid_15" name="PRDM9 [nucleoplasm]" sboTerm="SBO:0000297"/>
+    <species boundaryCondition="false" compartment="compartment_7660" constant="false" hasOnlySubstanceUnits="false" id="species_912415" metaid="metaid_16" name="PRDM9:DNA [nucleoplasm]" sboTerm="SBO:0000253"/>
+    <species boundaryCondition="false" compartment="compartment_7660" constant="false" hasOnlySubstanceUnits="false" id="species_912507" metaid="metaid_17" name="Meiotic single-stranded DNA complex [nucleoplasm]" sboTerm="SBO:0000253"/>
+    <species boundaryCondition="false" compartment="compartment_7660" constant="false" hasOnlySubstanceUnits="false" id="species_912484" metaid="metaid_18" name="Meiotic D-loop complex [nucleoplasm]" sboTerm="SBO:0000253"/>
+    <species boundaryCondition="false" compartment="compartment_7660" constant="false" hasOnlySubstanceUnits="false" id="species_913509" metaid="metaid_19" name="HOP2(TBPIP):MND1 [nucleoplasm]" sboTerm="SBO:0000253"/>
+    <species boundaryCondition="false" compartment="compartment_7660" constant="false" hasOnlySubstanceUnits="false" id="species_975775" metaid="metaid_20" name="H2AFX-Nucleosome [nucleoplasm]" sboTerm="SBO:0000253"/>
+    <species boundaryCondition="false" compartment="compartment_7660" constant="false" hasOnlySubstanceUnits="false" id="species_75156" metaid="metaid_21" name="3' overhanging DNA at resected DSB ends [nucleoplasm]" sboTerm="SBO:0000240"/>
+    <species boundaryCondition="false" compartment="compartment_7660" constant="false" hasOnlySubstanceUnits="false" id="species_50949" metaid="metaid_22" name="BRCA1 [nucleoplasm]" sboTerm="SBO:0000297"/>
+    <species boundaryCondition="false" compartment="compartment_7660" constant="false" hasOnlySubstanceUnits="false" id="species_912490" metaid="metaid_23" name="DMC1 [nucleoplasm]" sboTerm="SBO:0000297"/>
+    <species boundaryCondition="false" compartment="compartment_7660" constant="false" hasOnlySubstanceUnits="false" id="species_62637" metaid="metaid_24" name="RAD51 [nucleoplasm]" sboTerm="SBO:0000297"/>
+    <species boundaryCondition="false" compartment="compartment_7660" constant="false" hasOnlySubstanceUnits="false" id="species_69484" metaid="metaid_25" name="ATM [nucleoplasm]" sboTerm="SBO:0000297"/>
+    <species boundaryCondition="false" compartment="compartment_7660" constant="false" hasOnlySubstanceUnits="false" id="species_914159" metaid="metaid_26" name="TEX15 [nucleoplasm]" sboTerm="SBO:0000297"/>
+    <species boundaryCondition="false" compartment="compartment_7660" constant="false" hasOnlySubstanceUnits="false" id="species_217039" metaid="metaid_27" name="RAD51C [nucleoplasm]" sboTerm="SBO:0000297"/>
+    <species boundaryCondition="false" compartment="compartment_7660" constant="false" hasOnlySubstanceUnits="false" id="species_981776" metaid="metaid_28" name="MRN:CtIP [nucleoplasm]" sboTerm="SBO:0000253"/>
+    <species boundaryCondition="false" compartment="compartment_7660" constant="false" hasOnlySubstanceUnits="false" id="species_912365" metaid="metaid_29" name="SPO11:double stand break [nucleoplasm]" sboTerm="SBO:0000253"/>
+    <species boundaryCondition="false" compartment="compartment_7660" constant="false" hasOnlySubstanceUnits="false" id="species_9023945" metaid="metaid_30" name="SPO11:double strand break with 3' single strand breaks [nucleoplasm]" sboTerm="SBO:0000253"/>
+    <species boundaryCondition="false" compartment="compartment_7660" constant="false" hasOnlySubstanceUnits="false" id="species_912393" metaid="metaid_31" name="SPO11 Dimer [nucleoplasm]" sboTerm="SBO:0000253"/>
+    <species boundaryCondition="false" compartment="compartment_7660" constant="false" hasOnlySubstanceUnits="false" id="species_1214200" metaid="metaid_32" name="Nucleosome with H3K4me2 [nucleoplasm]" sboTerm="SBO:0000253"/>
+    <species boundaryCondition="false" compartment="compartment_7660" constant="false" hasOnlySubstanceUnits="false" id="species_77087" metaid="metaid_33" name="AdoMet [nucleoplasm]" sboTerm="SBO:0000247"/>
+    <species boundaryCondition="false" compartment="compartment_7660" constant="false" hasOnlySubstanceUnits="false" id="species_1214169" metaid="metaid_34" name="Nucleosome with H3K4me3 [nucleoplasm]" sboTerm="SBO:0000253"/>
+    <species boundaryCondition="false" compartment="compartment_7660" constant="false" hasOnlySubstanceUnits="false" id="species_77502" metaid="metaid_35" name="AdoHcy [nucleoplasm]" sboTerm="SBO:0000247"/>
+    <species boundaryCondition="false" compartment="compartment_7660" constant="false" hasOnlySubstanceUnits="false" id="species_912381" metaid="metaid_36" name="SPO11:oligonucleotide [nucleoplasm]" sboTerm="SBO:0000253"/>
+  </listOfSpecies>
+  <listOfReactions>
+    <reaction compartment="compartment_7660" fast="false" id="reaction_912429" metaid="metaid_37" name="Resolution of meiotic holliday junction" reversible="false">
+      <listOfReactants>
+        <speciesReference constant="true" id="speciesreference_912429_input_68365" sboTerm="SBO:0000010" species="species_68365" stoichiometry="1"/>
+        <speciesReference constant="true" id="speciesreference_912429_input_912478" sboTerm="SBO:0000010" species="species_912478" stoichiometry="1"/>
+        <speciesReference constant="true" id="speciesreference_912429_input_912495" sboTerm="SBO:0000010" species="species_912495" stoichiometry="1"/>
+        <speciesReference constant="true" id="speciesreference_912429_input_912428" sboTerm="SBO:0000010" species="species_912428" stoichiometry="1"/>
+      </listOfReactants>
+      <listOfProducts>
+        <speciesReference constant="true" id="speciesreference_912429_output_68462" sboTerm="SBO:0000011" species="species_68462" stoichiometry="1"/>
+        <speciesReference constant="true" id="speciesreference_912429_output_912435" sboTerm="SBO:0000011" species="species_912435" stoichiometry="1"/>
+        <speciesReference constant="true" id="speciesreference_912429_output_913201" sboTerm="SBO:0000011" species="species_913201" stoichiometry="1"/>
+        <speciesReference constant="true" id="speciesreference_912429_output_912455" sboTerm="SBO:0000011" species="species_912455" stoichiometry="1"/>
+        <speciesReference constant="true" id="speciesreference_912429_output_912452" sboTerm="SBO:0000011" species="species_912452" stoichiometry="1"/>
+        <speciesReference constant="true" id="speciesreference_912429_output_50951" sboTerm="SBO:0000011" species="species_50951" stoichiometry="1"/>
+        <speciesReference constant="true" id="speciesreference_912429_output_174881" sboTerm="SBO:0000011" species="species_174881" stoichiometry="1"/>
+        <speciesReference constant="true" id="speciesreference_912429_output_113843" sboTerm="SBO:0000011" species="species_113843" stoichiometry="1"/>
+      </listOfProducts>
+      <listOfModifiers/>
+    </reaction>
+    <reaction compartment="compartment_7660" fast="false" id="reaction_912363" metaid="metaid_38" name="PRDM9 binds recombination hotspot motifs in DNA" reversible="false">
+      <listOfReactants>
+        <speciesReference constant="true" id="speciesreference_912363_input_912345" sboTerm="SBO:0000010" species="species_912345" stoichiometry="1"/>
+        <speciesReference constant="true" id="speciesreference_912363_input_29428" sboTerm="SBO:0000010" species="species_29428" stoichiometry="1"/>
+      </listOfReactants>
+      <listOfProducts>
+        <speciesReference constant="true" id="speciesreference_912363_output_912415" sboTerm="SBO:0000011" species="species_912415" stoichiometry="1"/>
+      </listOfProducts>
+      <listOfModifiers/>
+    </reaction>
+    <reaction compartment="compartment_7660" fast="false" id="reaction_912458" metaid="metaid_39" name="Formation of meiotic heteroduplex" reversible="false">
+      <listOfReactants>
+        <speciesReference constant="true" id="speciesreference_912458_input_912507" sboTerm="SBO:0000010" species="species_912507" stoichiometry="1"/>
+        <speciesReference constant="true" id="speciesreference_912458_input_29428" sboTerm="SBO:0000010" species="species_29428" stoichiometry="1"/>
+      </listOfReactants>
+      <listOfProducts>
+        <speciesReference constant="true" id="speciesreference_912458_output_912484" sboTerm="SBO:0000011" species="species_912484" stoichiometry="1"/>
+      </listOfProducts>
+      <listOfModifiers>
+        <modifierSpeciesReference id="modifierspeciesreference_912458_catalyst_912507" sboTerm="SBO:0000013" species="species_912507"/>
+        <modifierSpeciesReference id="modifierspeciesreference_912458_positiveregulator_913509" sboTerm="SBO:0000459" species="species_913509"/>
+      </listOfModifiers>
+    </reaction>
+    <reaction compartment="compartment_7660" fast="false" id="reaction_912503" metaid="metaid_40" name="Formation of meiotic single-stranded DNA invasion complex" reversible="false">
+      <listOfReactants>
+        <speciesReference constant="true" id="speciesreference_912503_input_68462" sboTerm="SBO:0000010" species="species_68462" stoichiometry="1"/>
+        <speciesReference constant="true" id="speciesreference_912503_input_69484" sboTerm="SBO:0000010" species="species_69484" stoichiometry="1"/>
+        <speciesReference constant="true" id="speciesreference_912503_input_62637" sboTerm="SBO:0000010" species="species_62637" stoichiometry="1"/>
+        <speciesReference constant="true" id="speciesreference_912503_input_912490" sboTerm="SBO:0000010" species="species_912490" stoichiometry="1"/>
+        <speciesReference constant="true" id="speciesreference_912503_input_50951" sboTerm="SBO:0000010" species="species_50951" stoichiometry="1"/>
+        <speciesReference constant="true" id="speciesreference_912503_input_50949" sboTerm="SBO:0000010" species="species_50949" stoichiometry="1"/>
+        <speciesReference constant="true" id="speciesreference_912503_input_75156" sboTerm="SBO:0000010" species="species_75156" stoichiometry="1"/>
+        <speciesReference constant="true" id="speciesreference_912503_input_113843" sboTerm="SBO:0000010" species="species_113843" stoichiometry="1"/>
+        <speciesReference constant="true" id="speciesreference_912503_input_975775" sboTerm="SBO:0000010" species="species_975775" stoichiometry="1"/>
+      </listOfReactants>
+      <listOfProducts>
+        <speciesReference constant="true" id="speciesreference_912503_output_912507" sboTerm="SBO:0000011" species="species_912507" stoichiometry="1"/>
+      </listOfProducts>
+      <listOfModifiers>
+        <modifierSpeciesReference id="modifierspeciesreference_912503_positiveregulator_217039" sboTerm="SBO:0000459" species="species_217039"/>
+        <modifierSpeciesReference id="modifierspeciesreference_912503_positiveregulator_914159" sboTerm="SBO:0000459" species="species_914159"/>
+      </listOfModifiers>
+    </reaction>
+    <reaction compartment="compartment_7660" fast="false" id="reaction_9023941" metaid="metaid_41" name="MRN:CtIP endonucleolytically cleaves single-strand DNA 3' to SPO11" reversible="false">
+      <listOfReactants>
+        <speciesReference constant="true" id="speciesreference_9023941_input_912365" sboTerm="SBO:0000010" species="species_912365" stoichiometry="1"/>
+      </listOfReactants>
+      <listOfProducts>
+        <speciesReference constant="true" id="speciesreference_9023941_output_9023945" sboTerm="SBO:0000011" species="species_9023945" stoichiometry="1"/>
+      </listOfProducts>
+      <listOfModifiers>
+        <modifierSpeciesReference id="modifierspeciesreference_9023941_catalyst_981776" sboTerm="SBO:0000013" species="species_981776"/>
+      </listOfModifiers>
+    </reaction>
+    <reaction compartment="compartment_7660" fast="false" id="reaction_912368" metaid="metaid_42" name="SPO11 hydrolyzes DNA forming double-strand breaks" reversible="false">
+      <listOfReactants>
+        <speciesReference constant="true" id="speciesreference_912368_input_912393" sboTerm="SBO:0000010" species="species_912393" stoichiometry="1"/>
+        <speciesReference constant="true" id="speciesreference_912368_input_29428" sboTerm="SBO:0000010" species="species_29428" stoichiometry="1"/>
+      </listOfReactants>
+      <listOfProducts>
+        <speciesReference constant="true" id="speciesreference_912368_output_912365" sboTerm="SBO:0000011" species="species_912365" stoichiometry="1"/>
+      </listOfProducts>
+      <listOfModifiers>
+        <modifierSpeciesReference id="modifierspeciesreference_912368_catalyst_912393" sboTerm="SBO:0000013" species="species_912393"/>
+      </listOfModifiers>
+    </reaction>
+    <reaction compartment="compartment_7660" fast="false" id="reaction_912496" metaid="metaid_43" name="Formation of meiotic holliday junction" reversible="false">
+      <listOfReactants>
+        <speciesReference constant="true" id="speciesreference_912496_input_912435" sboTerm="SBO:0000010" species="species_912435" stoichiometry="1"/>
+        <speciesReference constant="true" id="speciesreference_912496_input_912455" sboTerm="SBO:0000010" species="species_912455" stoichiometry="1"/>
+        <speciesReference constant="true" id="speciesreference_912496_input_912452" sboTerm="SBO:0000010" species="species_912452" stoichiometry="1"/>
+        <speciesReference constant="true" id="speciesreference_912496_input_912484" sboTerm="SBO:0000010" species="species_912484" stoichiometry="1"/>
+        <speciesReference constant="true" id="speciesreference_912496_input_174881" sboTerm="SBO:0000010" species="species_174881" stoichiometry="1"/>
+      </listOfReactants>
+      <listOfProducts>
+        <speciesReference constant="true" id="speciesreference_912496_output_62637" sboTerm="SBO:0000011" species="species_62637" stoichiometry="1"/>
+        <speciesReference constant="true" id="speciesreference_912496_output_912490" sboTerm="SBO:0000011" species="species_912490" stoichiometry="1"/>
+        <speciesReference constant="true" id="speciesreference_912496_output_912428" sboTerm="SBO:0000011" species="species_912428" stoichiometry="1"/>
+      </listOfProducts>
+      <listOfModifiers/>
+    </reaction>
+    <reaction compartment="compartment_7660" fast="false" id="reaction_1214188" metaid="metaid_44" name="PRDM9 trimethylates histone H3" reversible="false">
+      <listOfReactants>
+        <speciesReference constant="true" id="speciesreference_1214188_input_77087" sboTerm="SBO:0000010" species="species_77087" stoichiometry="2"/>
+        <speciesReference constant="true" id="speciesreference_1214188_input_1214200" sboTerm="SBO:0000010" species="species_1214200" stoichiometry="1"/>
+      </listOfReactants>
+      <listOfProducts>
+        <speciesReference constant="true" id="speciesreference_1214188_output_77502" sboTerm="SBO:0000011" species="species_77502" stoichiometry="2"/>
+        <speciesReference constant="true" id="speciesreference_1214188_output_1214169" sboTerm="SBO:0000011" species="species_1214169" stoichiometry="1"/>
+      </listOfProducts>
+      <listOfModifiers>
+        <modifierSpeciesReference id="modifierspeciesreference_1214188_catalyst_912415" sboTerm="SBO:0000013" species="species_912415"/>
+      </listOfModifiers>
+    </reaction>
+    <reaction compartment="compartment_7660" fast="false" id="reaction_9023943" metaid="metaid_45" name="MRN:CtIP exonucleolytically hydrolyzes DNA 3' to SPO11 and SPO11:double-strand break dissociates to SPO11:oligonucleotide and resected 5' end" reversible="false">
+      <listOfReactants>
+        <speciesReference constant="true" id="speciesreference_9023943_input_9023945" sboTerm="SBO:0000010" species="species_9023945" stoichiometry="1"/>
+      </listOfReactants>
+      <listOfProducts>
+        <speciesReference constant="true" id="speciesreference_9023943_output_75156" sboTerm="SBO:0000011" species="species_75156" stoichiometry="1"/>
+        <speciesReference constant="true" id="speciesreference_9023943_output_912381" sboTerm="SBO:0000011" species="species_912381" stoichiometry="1"/>
+      </listOfProducts>
+      <listOfModifiers>
+        <modifierSpeciesReference id="modifierspeciesreference_9023943_catalyst_981776" sboTerm="SBO:0000013" species="species_981776"/>
+      </listOfModifiers>
+    </reaction>
+  </listOfReactions>
+</sbml>
