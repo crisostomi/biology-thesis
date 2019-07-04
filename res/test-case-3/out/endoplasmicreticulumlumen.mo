@@ -24,7 +24,7 @@ N_terminal_CHOL_Hh_fragments = initial_state[5];
 
 equation
 
-reaction_5358460_rate = rate_constants[1] * (CHOL^1) * (SHH_variants^1) ;
+reaction_5358460_rate = rate_constants[1] * (SHH_variants^1) * (CHOL^1) ;
 
 der(SHH_variants) = 1 * reaction_5358460_rate ;
 der(CHOL) = 1 * reaction_5358460_rate ;

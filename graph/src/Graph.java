@@ -5,7 +5,7 @@ public class Graph {
     private HashSet<Node> nodes;
     private HashSet<Edge> edges;
 
-    public Graph(HashSet<Node> nodes, HashSet<Edge> edges){
+    Graph(HashSet<Node> nodes, HashSet<Edge> edges){
         this.nodes = nodes;
         this.edges = edges;
     }
@@ -48,7 +48,7 @@ public class Graph {
         return sources;
     }
 
-    public static Node findNode(HashSet<Node> nodes, String speciesId, String compartmentId){
+    static Node findNode(HashSet<Node> nodes, String speciesId, String compartmentId){
         for(Node node: nodes){
             if ( node.getSpeciesId().equals(speciesId) && node.getCompartmentId().equals(compartmentId) ){
                 return node;
@@ -56,7 +56,6 @@ public class Graph {
         }
         return null;
     }
-
 
     public HashSet<Node> getNodes(){
         return this.nodes;

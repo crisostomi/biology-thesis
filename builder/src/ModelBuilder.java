@@ -1,19 +1,23 @@
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashSet;
 
 public class ModelBuilder {
 
     private Biosystem B;
+    private HashSet<Node> sinks;
+    private HashSet<Node> sources;
     private String output_dir;
 
-    public ModelBuilder(Biosystem B, String od){
+    public ModelBuilder(Biosystem B, String od, HashSet<Node> sinks, HashSet<Node> sources){
         this.B = B;
         this.output_dir = od;
+        this.sinks = sinks;
+        this.sources = sources;
     }
 
     public void buildBiosystem() throws IOException{
-
 
         BufferedWriter bw = new BufferedWriter(new FileWriter(this.output_dir+"/biosystem.mo"));
         StringBuilder sb = new StringBuilder();
@@ -43,12 +47,14 @@ public class ModelBuilder {
             sb.append(name + " c_"+(i)+"(initial_state=init_c_"+(i)+ ", rate_constants=rates_c_"+(i++)+ ");\n");
         }
 
+        this.buildEnvironment();
         sb.append("\nend Biosystem;\n\n");
         bw.write(sb.toString());
         bw.close();
+
     }
 
-    public void buildCompartment(Compartment c, String name) throws IOException{
+    private void buildCompartment(Compartment c, String name) throws IOException{
 
         BufferedWriter bw = new BufferedWriter(new FileWriter(this.output_dir+"/"+name.toLowerCase()+".mo"));
         StringBuilder sb = new StringBuilder();
@@ -108,7 +114,27 @@ public class ModelBuilder {
         bw.close();
     }
 
-    public String parseInputs(Compartment c){
+    private void buildEnvironment() throws IOException {
+        BufferedWriter bw = new BufferedWriter(new FileWriter(this.output_dir+"/environment.mo"));
+        StringBuilder sb = new StringBuilder();
+        sb.append("block Environment\n\n");
+        sb.append("type Amount = Real(unit=\"mol*10^(-6)\");\n\n");
+        sb.append("// Sinks \n");
+        for(Node sink:this.sinks){
+            sb.append("input Amount "+sink.getCompartmentId()+"__"+makeLegalName(sink.getSpeciesName())+";\n");
+        }
+        sb.append("\n");
+        sb.append("// Sources \n");
+        for(Node source:this.sources){
+            sb.append("output Amount "+source.getCompartmentId()+"__"+makeLegalName(source.getSpeciesName())+";\n");
+        }
+
+        sb.append("\nend Environment;\n\n");
+        bw.write(sb.toString());
+        bw.close();
+    }
+
+    private String parseInputs(Compartment c){
 
         StringBuilder sb = new StringBuilder();
         for(Reaction r : c.getReactions()){
@@ -120,9 +146,9 @@ public class ModelBuilder {
         return sb.toString();
     }
 
-    public String makeLegalName(String s){ return s.replaceAll("[^a-zA-Z0-9]+","_"); }
+    private String makeLegalName(String s){ return s.replaceAll("[^a-zA-Z0-9]+","_"); }
 
-    public String toClassName(String s){
+    private String toClassName(String s){
         String res = "";
         res = res.concat(s.substring(0,1).toUpperCase());
         for(int i = 1; i < s.length(); i++){

@@ -6,12 +6,12 @@ public class Node {
     private String speciesName;
     private boolean isModifier = true;
 
-    public Node(String speciesId, String compartmentId, String speciesName){
+    Node(String speciesId, String compartmentId, String speciesName){
         this.speciesId = speciesId;
-        this.compartmentId = compartmentId;
         this.speciesName = speciesName;
-    }
+        this.compartmentId = compartmentId;
 
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -27,7 +27,7 @@ public class Node {
         return Objects.hash(speciesId, compartmentId);
     }
 
-    public String getSpeciesId() {
+    String getSpeciesId() {
         return speciesId;
     }
 
@@ -35,28 +35,16 @@ public class Node {
         return compartmentId;
     }
 
-    public boolean isModifier() {
+    boolean isModifier() {
         return isModifier;
     }
 
-    public void setModifier(boolean modifier) {
+    void setModifier(boolean modifier) {
         isModifier = modifier;
-    }
-
-    public void setCompartmentId(String compartmentId) {
-        this.compartmentId = compartmentId;
     }
 
     public String getSpeciesName() {
         return speciesName;
-    }
-
-    public void setSpeciesName(String speciesName) {
-        this.speciesName = speciesName;
-    }
-
-    public void setSpeciesId(String speciesId) {
-        this.speciesId = speciesId;
     }
 
 }

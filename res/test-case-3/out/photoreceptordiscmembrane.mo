@@ -5,8 +5,8 @@ type Amount = Real(unit="mol*10^(-6)");
 parameter Amount initial_state[num_species];
 parameter Real rate_constants[num_reactions];
 
-input NRPE;
 input H2O;
+input NRPE;
 input ATP;
 
 Amount OPN1SW;
@@ -39,7 +39,7 @@ PE = initial_state[11];
 
 equation
 
-reaction_2466802_rate = rate_constants[1] * (NRPE^1) * (H2O^1) * (ATP^1) ;
+reaction_2466802_rate = rate_constants[1] * (H2O^1) * (NRPE^1) * (ATP^1) ;
 
 
 end PhotoreceptorDiscMembrane;

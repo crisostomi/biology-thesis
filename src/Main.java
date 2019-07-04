@@ -5,10 +5,6 @@ import java.util.HashSet;
 public class Main {
     public static void main(String[] args) {
 
-        /** importiamo un modello composto da compartments, reazioni e specie. Si puo' rappresentare come un iper-grafo diretto in cui i nodi sono le specie e gli iper-archi sono reazioni
-         * quello che ci interessa sono le specie che compaiono sempre come prodotti in reazioni ma non compaiono come reagenti (nodi pozzo)
-         * e le specie che compaiono sempre come reagenti e mai come prodotti (nodi sorgente)
-         */
         HashSet<Compartment> comps;
         Parser P;
 
@@ -33,18 +29,11 @@ public class Main {
         HashSet<Node> sources = g.getSources();
         HashSet<Node> sinks = g.getSinks();
 
-        ModelBuilder mb = new ModelBuilder(B, outDir);
+        ModelBuilder mb = new ModelBuilder(B, outDir, sinks, sources);
         try {
             mb.buildBiosystem(); //convert Java biosystem model in Modelica
         }catch(IOException e){
             System.out.println("Modelica files creation/writing failed");
-        }
-
-        EnvModelBuilder emb = new EnvModelBuilder(sinks, sources, outDir);
-        try {
-            emb.buildModelicaModel(); //convert Java biosystem model in Modelica
-        }catch(IOException e){
-            System.out.println("Modelica environment creation/writing failed");
         }
 
         System.out.println("All done!");

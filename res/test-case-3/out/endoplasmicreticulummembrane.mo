@@ -11,8 +11,8 @@ input SHH_variants;
 input Ub;
 input SHH_processing_variants_OS9_ERLEC1;
 input N_terminal_CHOL_Hh_fragments;
-input FACYLs;
 input RBP1_atROL;
+input FACYLs;
 
 Amount PORCN;
 Amount PORCN_LGK974;
@@ -43,12 +43,12 @@ RDH5_mutants = initial_state[8];
 
 equation
 
-reaction_5340560_rate = rate_constants[1] * (PORCN^1) * (LGK974^1) ;
+reaction_5340560_rate = rate_constants[1] * (LGK974^1) * (PORCN^1) ;
 reaction_5362450_rate = rate_constants[2] * (OS9_ERLEC1^1) * (SHH_variants^1) ;
-reaction_5483238_rate = rate_constants[3] * (Ub^1) * (SHH_processing_variants_ERLEC_OS9_SEL1_SYVN1_dimer_DERL2_VCP_hexamer^1) ;
+reaction_5483238_rate = rate_constants[3] * (SHH_processing_variants_ERLEC_OS9_SEL1_SYVN1_dimer_DERL2_VCP_hexamer^1) * (Ub^1) ;
 reaction_5387386_rate = rate_constants[4] * (SEL1_SYVN1_dimer_DERL2_VCP_hexamer^1) * (SHH_processing_variants_OS9_ERLEC1^1) ;
 reaction_5483229_rate = rate_constants[5] * (N_terminal_CHOL_Hh_fragments^1) ;
-reaction_2466710_rate = rate_constants[6] * (FACYLs^1) * (RBP1_atROL^1) ;
+reaction_2466710_rate = rate_constants[6] * (RBP1_atROL^1) * (FACYLs^1) ;
 
 der(PORCN) = 1 * reaction_5340560_rate ;
 der(PORCN_LGK974) = 1 * reaction_5340560_rate ;

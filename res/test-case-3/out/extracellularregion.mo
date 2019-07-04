@@ -73,7 +73,7 @@ reaction_2220976_rate = rate_constants[5] * (NOTCH1_HD_PEST_Domain_Mutants_Ub_DL
 reaction_2730752_rate = rate_constants[6] * (NOTCH1_HD_domain_mutants_Ub_DLL_JAG_NOTCH1_HD_domain_mutants^1) ;
 reaction_5638137_rate = rate_constants[7] * (EGF^1) * (EGFRvIII_mutant_HSP90_CDC37^1) ;
 reaction_1248677_rate = rate_constants[8] * (EGFR^1) * (Cetuximab^1) ;
-reaction_2466828_rate = rate_constants[9] * (RBP4_mutants^1) * (atROL^1) ;
+reaction_2466828_rate = rate_constants[9] * (atROL^1) * (RBP4_mutants^1) ;
 
 der(FGFR2b_mutant_binding_FGFs) = 1 * reaction_2077421_rate ;
 der(FP_1039) = 1 * reaction_2077421_rate ;

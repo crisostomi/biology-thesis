@@ -122,23 +122,23 @@ p_T24_S256_S319_FOXO1_p_T32_S253_S315_FOXO3_p_T32_S197_S262_FOXO4_p_T26_S184_FOX
 
 equation
 
-reaction_5334052_rate = rate_constants[1] * (TCF7L2_mutants^1) * (CTBPs^1) ;
+reaction_5334052_rate = rate_constants[1] * (CTBPs^1) * (TCF7L2_mutants^1) ;
 reaction_5251559_rate = rate_constants[2] * (defective_AMER1_gene^1) ;
 reaction_5251562_rate = rate_constants[3] * (defective_AXIN1_gene^1) ;
-reaction_2220964_rate = rate_constants[4] * (CREBBP^1) * (EP300^1) * (NICD1_PEST_domain_mutants_RBPJ_SNW1^1) * (PCAF^1) * (MAML^1) ;
-reaction_2220967_rate = rate_constants[5] * (p_NICD1_PEST_domain_mutants^1) * (FBXW7_SKP1_CUL1_RBX1^1) ;
+reaction_2220964_rate = rate_constants[4] * (CREBBP^1) * (PCAF^1) * (MAML^1) * (EP300^1) * (NICD1_PEST_domain_mutants_RBPJ_SNW1^1) ;
+reaction_2220967_rate = rate_constants[5] * (FBXW7_SKP1_CUL1_RBX1^1) * (p_NICD1_PEST_domain_mutants^1) ;
 reaction_2220966_rate = rate_constants[6] * (HES5_gene^1) ;
 reaction_4396393_rate = rate_constants[7] * (NOTCH1_PEST_Domain_Mutants_Coactivator_Complex^1) * (MYC_gene^1) ;
-reaction_2220971_rate = rate_constants[8] * (NOTCH1_PEST_Domain_Mutants_Coactivator_Complex_CDK8_CCNC^1) * (ATP^1) ;
-reaction_4396392_rate = rate_constants[9] * (NOTCH1_PEST_Domain_Mutants_Coactivator_Complex^1) * (HES1_gene^1) ;
+reaction_2220971_rate = rate_constants[8] * (ATP^1) * (NOTCH1_PEST_Domain_Mutants_Coactivator_Complex_CDK8_CCNC^1) ;
+reaction_4396392_rate = rate_constants[9] * (HES1_gene^1) * (NOTCH1_PEST_Domain_Mutants_Coactivator_Complex^1) ;
 reaction_4396402_rate = rate_constants[10] * (HEY_Genes^1) * (NOTCH1_PEST_Domain_Mutants_Coactivator_Complex^1) ;
 reaction_2220979_rate = rate_constants[11] * (HES1_gene^1) ;
-reaction_4396401_rate = rate_constants[12] * (NOTCH1_PEST_Domain_Mutants_Coactivator_Complex^1) * (HES5_gene^1) ;
+reaction_4396401_rate = rate_constants[12] * (HES5_gene^1) * (NOTCH1_PEST_Domain_Mutants_Coactivator_Complex^1) ;
 reaction_2220981_rate = rate_constants[13] * (HEY_Genes^1) ;
-reaction_2220982_rate = rate_constants[14] * (NICD1_PEST_Domain_Mutants^1) * (RBPJ_NCOR_corepressor_complex^1) ;
+reaction_2220982_rate = rate_constants[14] * (RBPJ_NCOR_corepressor_complex^1) * (NICD1_PEST_Domain_Mutants^1) ;
 reaction_2220985_rate = rate_constants[15] * (MYC_gene^1) ;
-reaction_2220957_rate = rate_constants[16] * (NOTCH1_PEST_Domain_Mutants_Coactivator_Complex^1) * (CDK8_CCNC^1) ;
-reaction_2220978_rate = rate_constants[17] * (p_NICD1^1) * (FBXW7_WD_mutants_SKP1_CUL1_RBX1^1) ;
+reaction_2220957_rate = rate_constants[16] * (CDK8_CCNC^1) * (NOTCH1_PEST_Domain_Mutants_Coactivator_Complex^1) ;
+reaction_2220978_rate = rate_constants[17] * (FBXW7_WD_mutants_SKP1_CUL1_RBX1^1) * (p_NICD1^1) ;
 reaction_2399988_rate = rate_constants[18] * (NR4A1^1) * (ATP^1) ;
 reaction_2399996_rate = rate_constants[19] * (CREB1^1) * (ATP^1) ;
 reaction_2399999_rate = rate_constants[20] * (RPS6KB2^1) * (ATP^2) ;
