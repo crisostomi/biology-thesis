@@ -50,7 +50,7 @@ public class Main {
         System.out.println("All done!");
 
         /*
-        TODO: sort out module structure
+        TODO: refactor the two builders into one builder
 
         TODO: define input values for each block in biosystem.mo
 
