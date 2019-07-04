@@ -1,11 +1,12 @@
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.HashSet;
 
 public class ModelBuilder {
-
     private Biosystem B;
+
     private String output_dir;
 
     public ModelBuilder(Biosystem B, String od){
@@ -37,18 +38,30 @@ public class ModelBuilder {
 
         i = 1;
         String name;
+        HashMap<String, String> idToName = new HashMap<>();
         for(Compartment c : this.B.getCompartments()){
             name = this.toClassName(c.getName());
             this.buildCompartment(c, name);
             //id="+ c.getId() + ", num_species=" + c.getNumSpecies() + ", num_reactions=" + c.getNumReactions() + ",
-            sb.append(name + " c_"+(i)+"(initial_state=init_c_"+(i)+ ", rate_constants=rates_c_"+(i++)+ ");\n");
+            sb.append(name + " c_"+(i)+"(initial_state=init_c_"+(i)+ ", rate_constants=rates_c_"+(i)+ ");\n");
+            idToName.put(c.getId(), "c_"+(i));
+            i++;
         }
         equationBuilder.append("Environment env;\n");
-        equationBuilder.append("equation\n");
-//        for(Species sinkSpecies: this.B.getSinks()){
-//            equationBuilder.append("env."+sinkSpecies.getName()+" = "+sinkSpecies.get)
-//        }
-
+        equationBuilder.append("\nequation\n");
+        equationBuilder.append("\t// Sinks\n");
+        for(Species sinkSpecies: this.B.getSinks()){
+            String prefix = sinkSpecies.getCompartmentId()+"__";
+            String speciesName = makeLegalName(sinkSpecies.getName());
+            equationBuilder.append("\tenv."+prefix+speciesName+" = "+idToName.get(sinkSpecies.getCompartmentId())+"."+speciesName+";\n");
+        }
+        equationBuilder.append("\n\t// Sources\n");
+        for(Species sourceSpecies: this.B.getSources()){
+            String prefix = sourceSpecies.getCompartmentId()+"__";
+            String speciesName = makeLegalName(sourceSpecies.getName());
+            equationBuilder.append("\tenv."+prefix+speciesName+" = "+idToName.get(sourceSpecies.getCompartmentId())+"."+speciesName+";\n");
+        }
+        sb.append(equationBuilder);
         sb.append("\nend Biosystem;\n\n");
         bw.write(sb.toString());
         bw.close();
