@@ -92,13 +92,13 @@ SPO11_oligonucleotide = initial_state[35];
 
 equation
 
-reaction_912429_rate = rate_constants[1] * (MLH1^1) * (Meiotic_Holliday_Junction^1) * (CDK2^1) * (MLH3^1) ;
+reaction_912429_rate = rate_constants[1] * (MLH1^1) * (CDK2^1) * (MLH3^1) * (Meiotic_Holliday_Junction^1) ;
 reaction_912363_rate = rate_constants[2] * (PRDM9^1) * (DNA^1) ;
 reaction_912458_rate = rate_constants[3] * (Meiotic_single_stranded_DNA_complex^1) * (DNA^1) ;
-reaction_912503_rate = rate_constants[4] * (BRCA1^1) * (RAD51^1) * (3_overhanging_DNA_at_resected_DSB_ends^1) * (RPA_heterotrimer^1) * (H2AFX_Nucleosome^1) * (CDK4^1) * (BRCA2^1) * (ATM^1) * (DMC1^1) ;
+reaction_912503_rate = rate_constants[4] * (ATM^1) * (RPA_heterotrimer^1) * (3_overhanging_DNA_at_resected_DSB_ends^1) * (CDK4^1) * (RAD51^1) * (BRCA2^1) * (H2AFX_Nucleosome^1) * (DMC1^1) * (BRCA1^1) ;
 reaction_9023941_rate = rate_constants[5] * (SPO11_double_stand_break^1) ;
 reaction_912368_rate = rate_constants[6] * (SPO11_Dimer^1) * (DNA^1) ;
-reaction_912496_rate = rate_constants[7] * (BLM^1) * (MSH4^1) * (TOP3A^1) * (MSH5^1) * (Meiotic_D_loop_complex^1) ;
+reaction_912496_rate = rate_constants[7] * (BLM^1) * (MSH5^1) * (MSH4^1) * (TOP3A^1) * (Meiotic_D_loop_complex^1) ;
 reaction_1214188_rate = rate_constants[8] * (AdoMet^2) * (Nucleosome_with_H3K4me2^1) ;
 reaction_9023943_rate = rate_constants[9] * (SPO11_double_strand_break_with_3_single_strand_breaks^1) ;
 

@@ -12,8 +12,12 @@ public class Main {
         HashSet<Compartment> comps;
         Parser P;
 
+        String test = "res/test-case-3";
+        String inDir = test + "/in";
+        String outDir = test + "/out";
+
         try {
-            P = new Parser("/home/don/Dropbox/Tesisti/software/development/reactome-compiler/test-case-2/in","/home/don/Dropbox/Tesisti/software/development/reactome-compiler/test-case-2/out");
+            P = new Parser(inDir, outDir);
         } catch(ParserConfigurationException e){
             System.out.println("Parsing fail due to SBMLBuilder instantiation failure");
             return;
@@ -29,16 +33,14 @@ public class Main {
         HashSet<Node> sources = g.getSources();
         HashSet<Node> sinks = g.getSinks();
 
-        ModelBuilder mb = new ModelBuilder(B,
-                "~/Dropbox/Tesisti/software/development/reactome-compiler/test-case-2/out");
+        ModelBuilder mb = new ModelBuilder(B, outDir);
         try {
             mb.buildBiosystem(); //convert Java biosystem model in Modelica
         }catch(IOException e){
             System.out.println("Modelica files creation/writing failed");
         }
 
-        EnvModelBuilder emb = new EnvModelBuilder(sinks, sources,
-                "~/Dropbox/Tesisti/software/development/reactome-compiler/test-case-3/out");
+        EnvModelBuilder emb = new EnvModelBuilder(sinks, sources, outDir);
         try {
             emb.buildModelicaModel(); //convert Java biosystem model in Modelica
         }catch(IOException e){
@@ -48,6 +50,8 @@ public class Main {
         System.out.println("All done!");
 
         /*
+        TODO: sort out module structure
+
         TODO: define input values for each block in biosystem.mo
 
         TODO: create Modelica monitors and .csv configuration file
