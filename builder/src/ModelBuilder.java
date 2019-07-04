@@ -46,9 +46,8 @@ public class ModelBuilder {
             //id="+ c.getId() + ", num_species=" + c.getNumSpecies() + ", num_reactions=" + c.getNumReactions() + ",
             sb.append(name + " c_"+(i)+"(initial_state=init_c_"+(i)+ ", rate_constants=rates_c_"+(i++)+ ");\n");
         }
-
-        this.buildEnvironment();
         sb.append("\nend Biosystem;\n\n");
+        this.buildEnvironment();
         bw.write(sb.toString());
         bw.close();
 
@@ -121,11 +120,11 @@ public class ModelBuilder {
         sb.append("type Amount = Real(unit=\"mol*10^(-6)\");\n\n");
         sb.append("// Sinks \n");
         for(Node sink:this.sinks){
-            sb.append("input Amount "+sink.getCompartmentId()+"__"+makeLegalName(sink.getSpeciesName())+";\n");
+            sb.append("output Amount "+sink.getCompartmentId()+"__"+makeLegalName(sink.getSpeciesName())+";\n");
         }
         sb.append("// Sources \n");
         for(Node source:this.sources){
-            sb.append("output Amount "+source.getCompartmentId()+"__"+makeLegalName(source.getSpeciesName())+";\n");
+            sb.append("input Amount "+source.getCompartmentId()+"__"+makeLegalName(source.getSpeciesName())+";\n");
         }
 
         sb.append("\nend Environment;\n\n");
