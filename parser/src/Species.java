@@ -5,12 +5,14 @@ public class Species {
     private String name;
     private String id;
     private String compartmentId;
+    private String compartmentName;
     private static Unit micromol = new Unit("microMol", "mol*10^(-6)");
 
-    public Species(String name, String id, String compartmentId){
+    public Species(String name, String id, String compartmentId, String compartmentName){
         this.name = name;
         this.id = id;
         this.compartmentId = compartmentId;
+        this.compartmentName = compartmentName;
     }
 
     @Override

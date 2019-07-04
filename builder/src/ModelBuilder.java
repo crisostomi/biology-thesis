@@ -18,10 +18,8 @@ public class ModelBuilder {
         BufferedWriter bw = new BufferedWriter(new FileWriter(this.output_dir+"/biosystem.mo"));
         StringBuilder sb = new StringBuilder();
         StringBuilder equationBuilder = new StringBuilder();
-        equationBuilder.append("Environment env;\n");
-        equationBuilder.append("equation\n");
+        // env.sink1 = <compartment of sink1>.sink1
         sb.append("class Biosystem\n\n");
-
         sb.append("type Amount = Real(unit=\"mol*10^(-6)\");\n\n");
 
         //sb.append("import Data.*;\n\n");
@@ -45,6 +43,12 @@ public class ModelBuilder {
             //id="+ c.getId() + ", num_species=" + c.getNumSpecies() + ", num_reactions=" + c.getNumReactions() + ",
             sb.append(name + " c_"+(i)+"(initial_state=init_c_"+(i)+ ", rate_constants=rates_c_"+(i++)+ ");\n");
         }
+        equationBuilder.append("Environment env;\n");
+        equationBuilder.append("equation\n");
+//        for(Species sinkSpecies: this.B.getSinks()){
+//            equationBuilder.append("env."+sinkSpecies.getName()+" = "+sinkSpecies.get)
+//        }
+
         sb.append("\nend Biosystem;\n\n");
         bw.write(sb.toString());
         bw.close();
