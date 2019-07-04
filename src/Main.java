@@ -20,7 +20,7 @@ public class Main {
         }
         comps = P.instantiateCompartments(); //convert sbml data in a Java biosystem model
         if (comps == null || comps.size() == 0) {
-            System.out.println("Compartment instantiation failed. Returning with error");
+            System.out.println("Compartment instantiati3on failed. Returning with error");
             return;
         }
 
@@ -39,7 +39,6 @@ public class Main {
         System.out.println("All done!");
 
         /*
-        TODO: refactor the two builders into one builder
 
         TODO: define input values for each block in biosystem.mo
 
