@@ -1,6 +1,7 @@
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.stream.Collectors;
 
 public class Main {
     public static void main(String[] args) {
@@ -8,7 +9,7 @@ public class Main {
         HashSet<Compartment> comps;
         Parser P;
 
-        String test = "res/test-case-3";
+        String test = "res/test-case-2";
         String inDir = test + "/in";
         String outDir = test + "/out";
 
@@ -24,12 +25,19 @@ public class Main {
             return;
         }
 
-        Biosystem B = new Biosystem(comps);
-        Graph g = BioToGraph.buildGraph(B);
-        HashSet<Node> sources = g.getSources();
-        HashSet<Node> sinks = g.getSinks();
+        Graph g = BioToGraph.buildGraph(comps);
+        HashSet<Species> sinks = new HashSet<>();
+        for(Node node: g.getSinks()){
+            sinks.add(node.getSpecies());
+        }
+        HashSet<Species> sources = new HashSet<>();
+        for(Node node: g.getSources()){
+            sources.add(node.getSpecies());
+        }
 
-        ModelBuilder mb = new ModelBuilder(B, outDir, sinks, sources);
+        Biosystem bs = new Biosystem(comps, sinks, sources);
+
+        ModelBuilder mb = new ModelBuilder(bs, outDir);
         try {
             mb.buildBiosystem(); //convert Java biosystem model in Modelica
         }catch(IOException e){

@@ -6,21 +6,20 @@ import java.util.HashSet;
 public class ModelBuilder {
 
     private Biosystem B;
-    private HashSet<Node> sinks;
-    private HashSet<Node> sources;
     private String output_dir;
 
-    public ModelBuilder(Biosystem B, String od, HashSet<Node> sinks, HashSet<Node> sources){
+    public ModelBuilder(Biosystem B, String od){
         this.B = B;
         this.output_dir = od;
-        this.sinks = sinks;
-        this.sources = sources;
     }
 
     public void buildBiosystem() throws IOException{
 
         BufferedWriter bw = new BufferedWriter(new FileWriter(this.output_dir+"/biosystem.mo"));
         StringBuilder sb = new StringBuilder();
+        StringBuilder equationBuilder = new StringBuilder();
+        equationBuilder.append("Environment env;\n");
+        equationBuilder.append("equation\n");
         sb.append("class Biosystem\n\n");
 
         sb.append("type Amount = Real(unit=\"mol*10^(-6)\");\n\n");
@@ -47,9 +46,9 @@ public class ModelBuilder {
             sb.append(name + " c_"+(i)+"(initial_state=init_c_"+(i)+ ", rate_constants=rates_c_"+(i++)+ ");\n");
         }
         sb.append("\nend Biosystem;\n\n");
-        this.buildEnvironment();
         bw.write(sb.toString());
         bw.close();
+        this.buildEnvironment();
 
     }
 
@@ -119,13 +118,14 @@ public class ModelBuilder {
         sb.append("block Environment\n\n");
         sb.append("type Amount = Real(unit=\"mol*10^(-6)\");\n\n");
         sb.append("// Sinks \n");
-        for(Node sink:this.sinks){
-            sb.append("output Amount "+sink.getCompartmentId()+"__"+makeLegalName(sink.getSpeciesName())+";\n");
+        for(Species sinkSpecies:this.B.getSinks()){
+            sb.append("input Amount "+sinkSpecies.getCompartmentId()+"__"+makeLegalName(sinkSpecies.getName())+";\n");
         }
         sb.append("// Sources \n");
-        for(Node source:this.sources){
-            sb.append("input Amount "+source.getCompartmentId()+"__"+makeLegalName(source.getSpeciesName())+";\n");
+        for(Species sourceSpecies:this.B.getSources()){
+            sb.append("output Amount "+sourceSpecies.getCompartmentId()+"__"+makeLegalName(sourceSpecies.getName())+";\n");
         }
+
 
         sb.append("\nend Environment;\n\n");
         bw.write(sb.toString());

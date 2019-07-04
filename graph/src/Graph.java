@@ -48,9 +48,9 @@ public class Graph {
         return sources;
     }
 
-    static Node findNode(HashSet<Node> nodes, String speciesId, String compartmentId){
+    static Node findNode(HashSet<Node> nodes, Species species){
         for(Node node: nodes){
-            if ( node.getSpeciesId().equals(speciesId) && node.getCompartmentId().equals(compartmentId) ){
+            if ( node.getSpecies().equals(species) ){
                 return node;
             }
         }

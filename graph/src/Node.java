@@ -1,16 +1,11 @@
 import java.util.Objects;
 
 public class Node {
-    private String speciesId;
-    private String compartmentId;
-    private String speciesName;
+    private Species species;
     private boolean isModifier = true;
 
-    Node(String speciesId, String compartmentId, String speciesName){
-        this.speciesId = speciesId;
-        this.speciesName = speciesName;
-        this.compartmentId = compartmentId;
-
+    Node(Species species){
+        this.species = species;
     }
 
     @Override
@@ -18,22 +13,19 @@ public class Node {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Node node = (Node) o;
-        return Objects.equals(speciesId, node.speciesId) &&
-                Objects.equals(compartmentId, node.compartmentId);
+        return isModifier == node.isModifier &&
+                Objects.equals(species, node.species);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(speciesId, compartmentId);
+        return Objects.hash(species, isModifier);
     }
 
-    String getSpeciesId() {
-        return speciesId;
+    Species getSpecies() {
+        return species;
     }
 
-    public String getCompartmentId() {
-        return compartmentId;
-    }
 
     boolean isModifier() {
         return isModifier;
@@ -43,8 +35,5 @@ public class Node {
         isModifier = modifier;
     }
 
-    public String getSpeciesName() {
-        return speciesName;
-    }
 
 }

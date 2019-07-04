@@ -91,7 +91,7 @@ public class Parser {
             id = all_spec.item(i).getAttributes().getNamedItem("id").getNodeValue();
             Compartment found = searchCompartmentById(result, comp);
             if(found != null && found.searchSpecies(id) == null){
-                found.addSpecies(new Species(name, id));
+                found.addSpecies(new Species(name, id, found.getId()));
                 this.builder.addSpecies(all_spec.item(i));
             }
         }

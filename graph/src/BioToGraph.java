@@ -4,12 +4,12 @@ import java.util.List;
 
 public class BioToGraph {
 
-    public static Graph buildGraph(Biosystem biosystem){
+    public static Graph buildGraph(HashSet<Compartment> compartments){
         HashSet<Node> nodes = new HashSet<>();
         HashSet<Edge> edges = new HashSet<>();
-        for (Compartment compartment: biosystem.getCompartments()) {
+        for (Compartment compartment: compartments) {
             for (Species species: compartment.getSpecies()) {
-                Node node = new Node(species.getId(), compartment.getId(), species.getName());
+                Node node = new Node(species);
                 nodes.add(node);
             }
 
@@ -18,7 +18,7 @@ public class BioToGraph {
                 List<Node> destinations = new ArrayList<>();
 
                 for (Species species : reaction.getReactants().keySet()) {
-                    Node node = Graph.findNode(nodes, species.getId(), compartment.getId());
+                    Node node = Graph.findNode(nodes, species);
                     if (node != null) {
                         node.setModifier(false);
                         sources.add(node);
@@ -26,7 +26,7 @@ public class BioToGraph {
                 }
 
                 for (Species species : reaction.getProducts().keySet()) {
-                    Node node = Graph.findNode(nodes, species.getId(), compartment.getId());
+                    Node node = Graph.findNode(nodes, species);
                     if (node != null) {
                         node.setModifier(false);
                         destinations.add(node);
