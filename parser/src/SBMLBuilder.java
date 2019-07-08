@@ -22,11 +22,23 @@ public class SBMLBuilder {
         this.output_dir = out;
     }
 
-    public void buildRoot(NodeList root) {
-        this.document.appendChild(this.document.importNode(root.item(0),false));
-        this.document.getFirstChild().appendChild(this.document.createElement("listOfCompartments"));
-        this.document.getFirstChild().appendChild(this.document.createElement("listOfSpecies"));
-        this.document.getFirstChild().appendChild(this.document.createElement("listOfReactions"));
+    public void buildRoot(Node root) {
+        this.document.appendChild(this.document.importNode(root,false));
+        Element model = this.document.createElement("model");
+        model.setAttribute("id", "pathway_union");
+        model.setAttribute("name", "Union of input pathways shown in Annotation");
+        Element annotation = this.document.createElement("annotation");
+        model.appendChild(annotation);
+        model.appendChild(this.document.createElement("listOfCompartments"));
+        model.appendChild(this.document.createElement("listOfSpecies"));
+        model.appendChild(this.document.createElement("listOfReactions"));
+        this.document.getFirstChild().appendChild(model);
+    }
+
+    public void annotate(Node model){
+        Node annotation = this.document.getElementsByTagName("annotation").item(0);
+        Node model_tag = this.document.importNode(model, false);
+        annotation.appendChild(model_tag);
     }
 
     public void addCompartment(Node comp){

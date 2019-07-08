@@ -13,7 +13,7 @@ public class BioToGraph {
                 nodes.add(node);
             }
 
-            for (Reaction reaction: compartment.getReactions()) {
+            for (SimpleReaction reaction: compartment.getReactions()) {
                 List<Node> sources = new ArrayList<>();
                 List<Node> destinations = new ArrayList<>();
 

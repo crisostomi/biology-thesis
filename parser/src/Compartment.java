@@ -5,7 +5,7 @@ public class Compartment {
     private String name;
     private String id;
 
-    private ArrayList<Reaction> reactions;
+    private ArrayList<SimpleReaction> reactions;
     private ArrayList<Species> species;
 
     public Compartment(String name, String id){
@@ -21,7 +21,7 @@ public class Compartment {
 
     public void addSpecies(Species s){ this.species.add(s); }
 
-    public void addReaction(Reaction r){ this.reactions.add(r); }
+    public void addReaction(SimpleReaction r){ this.reactions.add(r); }
 
     public Species searchSpecies(String id){
         for(Species s : this.species){
@@ -30,8 +30,8 @@ public class Compartment {
         return null;
     }
 
-    public Reaction searchReaction(String id){
-        for(Reaction r : this.reactions){
+    public SimpleReaction searchReaction(String id){
+        for(SimpleReaction r : this.reactions){
             if (r.getId().equals(id)) return r;
         }
         return null;
@@ -43,7 +43,7 @@ public class Compartment {
 
     public ArrayList<Species> getSpecies(){ return this.species; }
 
-    public ArrayList<Reaction> getReactions(){ return this.reactions; }
+    public ArrayList<SimpleReaction> getReactions(){ return this.reactions; }
 
     public void printCompartment(){
         System.out.println("Compartment: "+this.id);
@@ -54,7 +54,7 @@ public class Compartment {
             System.out.print("\n");
         }
         System.out.println("-Reactions:");
-        for(Reaction r : this.reactions) {
+        for(SimpleReaction r : this.reactions) {
             r.printReaction();
             System.out.print("\n");
         }

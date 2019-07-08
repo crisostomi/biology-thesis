@@ -2,7 +2,6 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.HashSet;
 
 public class ModelBuilder {
     private Biosystem B;
@@ -152,7 +151,7 @@ public class ModelBuilder {
     private String parseInputs(Compartment c){
 
         StringBuilder sb = new StringBuilder();
-        for(Reaction r : c.getReactions()){
+        for(SimpleReaction r : c.getReactions()){
             for(Species s : r.getReactants().keySet()) {
                 if(c.searchSpecies(s.getId()) == null) sb.append("input "+this.makeLegalName(s.getName())+";\n");
             }

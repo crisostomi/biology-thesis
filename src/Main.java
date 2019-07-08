@@ -6,15 +6,15 @@ import java.util.stream.Collectors;
 public class Main {
     public static void main(String[] args) {
 
+        String[] argcopy = new String[3];
+        System.arraycopy(args, 0, argcopy, 0, args.length);
+        if(argcopy[2] == null) argcopy[2] = argcopy[1];
+
         HashSet<Compartment> comps;
         Parser P;
 
-        String test = "res/test-case-2";
-        String inDir = test + "/in";
-        String outDir = test + "/out";
-
         try {
-            P = new Parser(inDir, outDir);
+            P = new Parser(argcopy[0], argcopy[1]);
         } catch(ParserConfigurationException e){
             System.out.println("Parsing fail due to SBMLBuilder instantiation failure");
             return;
@@ -37,7 +37,7 @@ public class Main {
 
         Biosystem bs = new Biosystem(comps, sinks, sources);
 
-        ModelBuilder mb = new ModelBuilder(bs, outDir);
+        ModelBuilder mb = new ModelBuilder(bs, argcopy[2]);
         try {
             mb.buildBiosystem(); //convert Java biosystem model in Modelica
         }catch(IOException e){
