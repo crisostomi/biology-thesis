@@ -1,0 +1,11 @@
+stdout            | warning | You are overriding init_c_1[32] with a small value or zero.
+|                 | |       | This could lead to numerically dirty solutions or divisions by zero if not tearingStrictness=veryStrict.
+stdout            | warning | simulation_input_xml.c: override variable name not found in model: rates_c_1[0]
+stdout            | warning | simulation_input_xml.c: override variable name not found in model: init_c_1[0]
+LOG_SUCCESS       | info    | The initialization finished successfully without homotopy method.
+DASKR--  AT T (=R1) AND STEPSIZE H (=R2) THE                                    
+      In above,  R1 =   4.5911284258948E-03   R2 =   1.5603902558357E-12
+DASKR--  ITERATION MATRIX IS SINGULAR.                                          
+stdout            | warning | The matrix of partial derivatives is singular.
+stdout            | warning | can't continue. time = 0.004591
+stdout            | info    | model terminate | Integrator failed. | Simulation terminated at time 0.00459113

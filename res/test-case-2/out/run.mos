@@ -1,0 +1,16 @@
+loadModel(Modelica);
+getErrorString();
+
+loadFile("biosystem.mo");
+getErrorString();
+
+loadFile("nucleoplasm.mo");
+getErrorString();
+
+loadFile("environment.mo");
+getErrorString();
+
+simulate(Biosystem, simflags="-overrideFile=./parameters.txt"); 
+getErrorString();
+
+
