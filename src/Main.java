@@ -36,7 +36,7 @@ public class Main {
 
         Biosystem bs = new Biosystem(comps, sinks, sources);
 
-        ModelBuilder mb = new ModelBuilder(bs, argcopy[2]);
+        ModelBuilder2 mb = new ModelBuilder2(bs, argcopy[2]);
         try {
             mb.buildBiosystem(); //convert Java biosystem model in Modelica
         }catch(IOException e){
