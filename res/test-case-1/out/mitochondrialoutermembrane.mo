@@ -5,9 +5,9 @@ type Amount = Real(unit="mol*10^(-6)");
 parameter Amount initial_state[num_species];
 parameter Real rate_constants[num_reactions];
 
-input porphyrin;
-input ATP;
-input H2O;
+input Amount porphyrin;
+input Amount ATP;
+input Amount H2O;
 
 Amount ABCB6_mutants;
 

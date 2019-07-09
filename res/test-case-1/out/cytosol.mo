@@ -5,15 +5,15 @@ type Amount = Real(unit="mol*10^(-6)");
 parameter Amount initial_state[num_species];
 parameter Real rate_constants[num_reactions];
 
-input p21_RAS_GDP;
-input p_5Y_EGFRvIII_mutant_dimer;
-input p_5Y_EGFRvIII_mutant_dimer;
-input p_5Y_EGFRvIII_GRB2_GAB1;
-input p_5Y_EGFRvIII_mutant_dimer;
-input p_5Y_EGFRvIII_PLCG1;
-input PLCG1;
-input p_5Y_EGFRvIII_mutant_dimer;
-input p21_RAS_GDP;
+input Amount p21_RAS_GDP;
+input Amount p_5Y_EGFRvIII_mutant_dimer;
+input Amount p_5Y_EGFRvIII_mutant_dimer;
+input Amount p_5Y_EGFRvIII_GRB2_GAB1;
+input Amount p_5Y_EGFRvIII_mutant_dimer;
+input Amount p_5Y_EGFRvIII_PLCG1;
+input Amount PLCG1;
+input Amount p_5Y_EGFRvIII_mutant_dimer;
+input Amount p21_RAS_GDP;
 
 Amount ATP;
 Amount H2O;
@@ -65,9 +65,9 @@ equation
 
 reaction_5637808_rate = rate_constants[1] * (GTP^1) * (p21_RAS_GDP^1) ;
 reaction_5637766_rate = rate_constants[2] * (SHC1^1) * (p_5Y_EGFRvIII_mutant_dimer^1) ;
-reaction_5637764_rate = rate_constants[3] * (GRB2_GAB1^1) * (p_5Y_EGFRvIII_mutant_dimer^1) ;
+reaction_5637764_rate = rate_constants[3] * (p_5Y_EGFRvIII_mutant_dimer^1) * (GRB2_GAB1^1) ;
 reaction_5637765_rate = rate_constants[4] * (p_5Y_EGFRvIII_GRB2_GAB1^1) * (PIK3CA_PIK3R1^1) ;
-reaction_5637794_rate = rate_constants[5] * (CBL^2) * (p_5Y_EGFRvIII_mutant_dimer^1) ;
+reaction_5637794_rate = rate_constants[5] * (p_5Y_EGFRvIII_mutant_dimer^1) * (CBL^2) ;
 reaction_5637795_rate = rate_constants[6] * (ATP^4) * (p_5Y_EGFRvIII_PLCG1^1) ;
 reaction_5637792_rate = rate_constants[7] * (PLCG1^1) * (p_5Y_EGFRvIII_mutant_dimer^1) ;
 reaction_5637806_rate = rate_constants[8] * (GTP^1) * (p21_RAS_GDP^1) ;

@@ -5,7 +5,7 @@ type Amount = Real(unit="mol*10^(-6)");
 parameter Amount initial_state[num_species];
 parameter Real rate_constants[num_reactions];
 
-input EGFRvIII_mutant_HSP90_CDC37;
+input Amount EGFRvIII_mutant_HSP90_CDC37;
 
 Amount EGF;
 
