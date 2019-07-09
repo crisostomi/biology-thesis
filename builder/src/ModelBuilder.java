@@ -77,8 +77,8 @@ public class ModelBuilder {
         sb.append("type Amount = Real(unit=\"mol*10^(-6)\");\n\n");
 
         //sb.append("parameter String id;\nparameter Integer num_species;\nparameter Integer num_reactions;\n");
-        sb.append("parameter Amount initial_state[num_species];\n");
-        sb.append("parameter Real rate_constants[num_reactions];\n\n");
+        sb.append("parameter Amount initial_state["+c.getNumSpecies()+"];\n");
+        sb.append("parameter Real rate_constants["+c.getNumReactions()+"];\n\n");
 
         sb.append(this.parseInputs(c));
 
