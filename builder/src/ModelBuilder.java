@@ -119,6 +119,7 @@ public class ModelBuilder {
                 }
             }
             if(!der.toString().equals("der("+this.makeLegalName(c.getSpecies().get(i).getName()) + ") = ")) sb.append(der + ";\n");
+            else sb.append(der + "0;\n");
             der.delete(0, der.length());
             first = true;
         }
