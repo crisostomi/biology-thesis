@@ -161,12 +161,13 @@ public class ModelBuilder {
     }
 
     private String makeLegalName(String s){
-        String out = new String();
         if (Character.isDigit(s.charAt(0))) {
-            out.concat("s_");
+            String out = "s_";
+            return out.concat(s.replaceAll("[^a-zA-Z0-9]+","_"));
         }
 
-        return out.concat(s.replaceAll("[^a-zA-Z0-9]+","_"));
+        return s.replaceAll("[^a-zA-Z0-9]+","_");
+
     }
 
     private String toClassName(String s){
