@@ -153,7 +153,7 @@ public class ModelBuilder {
         StringBuilder sb = new StringBuilder();
         for(SimpleReaction r : c.getReactions()){
             for(Species s : r.getReactants().keySet()) {
-                if(c.searchSpecies(s.getId()) == null) sb.append("input "+this.makeLegalName(s.getName())+";\n");
+                if(c.searchSpecies(s.getId()) == null) sb.append("input Amount "+this.makeLegalName(s.getName())+";\n");
             }
         }
         sb.append("\n");
