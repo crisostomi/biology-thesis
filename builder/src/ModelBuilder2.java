@@ -86,7 +86,7 @@ public class ModelBuilder2 {
 
         sb.append("\nequation\n\n");
         for(int i = 0; i < c.getNumReactions(); i++){
-            sb.append(c.getReactions().get(i).getId()+"_rate = rate_constants_"+(i+1)+" ");
+            sb.append(c.getReactions().get(i).getId()+"_rate = rate_constant_"+(i+1)+" ");
             for(Species s : c.getReactions().get(i).getReactants().keySet()){
                 sb.append("* ("+this.makeLegalName(s.getName()) +"^"+c.getReactions().get(i).getReactantStoich(s)+") ");
             }
