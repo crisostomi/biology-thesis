@@ -70,18 +70,18 @@ public class ModelBuilder2 {
         //sb.append("parameter Amount initial_state["+c.getNumSpecies()+"];\n");
         //sb.append("parameter Real rate_constants["+c.getNumReactions()+"];\n\n");
 
+        //(10e-2+r.nextDouble()*(10e5 - 10e-2))
         for(int i = 1; i < c.getNumReactions()+1; i++) sb.append("parameter Real rate_constant_"+i+" = "+(10e-2+r.nextDouble()*(10e5 - 10e-2))+";\n");
 
         sb.append(this.parseInputs(c));
 
         for(int i = 0; i < c.getNumSpecies(); i++) sb.append("Amount "+this.makeLegalName(c.getSpecies().get(i).getName())+";\n");
 
-
-
         sb.append("\n");
         for(int i = 0; i < c.getNumReactions(); i++) sb.append("Real "+c.getReactions().get(i).getId()+"_rate;\n");
 
         sb.append("\ninitial equation\n\n");
+        //10e-10+r.nextDouble()*(10e-5 - 10e-10)
         for(int i = 0; i < c.getNumSpecies(); i++) sb.append(this.makeLegalName(c.getSpecies().get(i).getName())+" = "+(10e-10+r.nextDouble()*(10e-5 - 10e-10))+";\n");
 
         sb.append("\nequation\n\n");
