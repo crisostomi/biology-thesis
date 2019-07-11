@@ -20,12 +20,35 @@ public class ModelBuilder3 {
 
         sb.append("package BioSystem\n\n");
 
+        for(Compartment c : this.B.getCompartments()){
+            sb.append("  "+this.buildCompartment(c));
+        }
 
         sb.append("  "+this.buildCell());
 
         bw.write(sb.toString());
         bw.close();
 
+    }
+
+    public String buildCompartment(Compartment c){
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("model "+ModelBuilder3.toClassName(c.getName())+"\n");
+        sb.append("  extends BioChem.Compartments.Compartment;\n\n");
+
+        sb.append("  "+this.buildAllSpecies(c));
+
+
+        return sb.toString();
+    }
+
+    public String buildAllSpecies(Compartment c){
+
+        StringBuilder sb = new StringBuilder();
+        //for(Species s : )
+
+        return sb.toString();
     }
 
     public String buildCell(){
@@ -55,6 +78,16 @@ public class ModelBuilder3 {
             else res = res.concat(s.substring(i, i+1));
         }
         return res;
+    }
+
+    private static String makeLegalName(String s){
+        if (Character.isDigit(s.charAt(0))) {
+            String out = "s_";
+            return out.concat(s.replaceAll("[^a-zA-Z0-9]+","_"));
+        }
+
+        return s.replaceAll("[^a-zA-Z0-9]+","_");
+
     }
 
 }
