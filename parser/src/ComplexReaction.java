@@ -12,6 +12,14 @@ public class ComplexReaction extends SimpleReaction {
         this.setProducts(sr.getProducts());
     }
 
+    public boolean allBoundaryModifiers(){
+
+        for(Species s : this.modifiers){
+            if(!s.isBoundary()) return false;
+        }
+        return true;
+    }
+
     public void addModifier(Species s){ this.modifiers.add(s); }
 
     public ArrayList<Species> getModifiers() { return modifiers; }

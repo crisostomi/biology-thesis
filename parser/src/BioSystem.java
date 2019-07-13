@@ -14,9 +14,10 @@ public class BioSystem {
 
     public void markBoundaries(){
 
-        boolean mark = true;
+        boolean mark;
         for(Compartment c : compartments){
             for(Species s : c.getSpecies()){
+                mark = true;
                 for(SimpleReaction r : c.getReactions()){
                     if (r.getReactants().containsKey(s) || r.getProducts().containsKey(s)){
                         mark = false;

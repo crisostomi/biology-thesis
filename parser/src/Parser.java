@@ -95,8 +95,8 @@ public class Parser {
     private void findReactions(NodeList all_reacts, HashSet<Compartment> result){
         String comp, name, id;
         boolean reversible, complex;
-        SimpleReaction r = new SimpleReaction(), r_inv = new SimpleReaction();
-        ComplexReaction comp_r = new ComplexReaction(r), comp_r_inv = new ComplexReaction(r_inv);
+        SimpleReaction r = new SimpleReaction()/*, r_inv = new SimpleReaction()*/;
+        ComplexReaction comp_r = new ComplexReaction(r)/*, comp_r_inv = new ComplexReaction(r_inv)*/;
 
         for(int i = 0; i < all_reacts.getLength(); i++){
             complex = false;
@@ -109,14 +109,16 @@ public class Parser {
 
             if(found != null && found.searchReaction(id) == null) this.builder.addReaction(n); //add node to sbml
 
-            if(reversible) {
+            /*if(reversible) {
                 r = new SimpleReaction(name, id + "_1");
                 r_inv = new SimpleReaction(name, id + "_2");
             }
             else{
                 r = new SimpleReaction(name, id);
                 r_inv = null;
-            }
+            }*/
+            r = new SimpleReaction(name, id);
+            r.setReversible(reversible);
 
             n = n.getFirstChild();
             String reference;
@@ -129,7 +131,7 @@ public class Parser {
                             this.builder.addReactantReference(m, id);
                             reference = m.getAttributes().getNamedItem("species").getNodeValue();
                             r.addReactant(searchSpeciesInBiosystem(result, reference), Integer.parseInt(m.getAttributes().getNamedItem("stoichiometry").getNodeValue()));
-                            if(reversible) r_inv.addProduct(searchSpeciesInBiosystem(result, reference), Integer.parseInt(m.getAttributes().getNamedItem("stoichiometry").getNodeValue()));
+                            //if(reversible) r_inv.addProduct(searchSpeciesInBiosystem(result, reference), Integer.parseInt(m.getAttributes().getNamedItem("stoichiometry").getNodeValue()));
                         }
                     } while ((m = m.getNextSibling()) != null);
                 }
@@ -141,7 +143,7 @@ public class Parser {
                             this.builder.addProductReference(m, id);
                             reference = m.getAttributes().getNamedItem("species").getNodeValue();
                             r.addProduct(searchSpeciesInBiosystem(result, reference), Integer.parseInt(m.getAttributes().getNamedItem("stoichiometry").getNodeValue()));
-                            if(reversible) r_inv.addReactant(searchSpeciesInBiosystem(result, reference), Integer.parseInt(m.getAttributes().getNamedItem("stoichiometry").getNodeValue()));
+                            //if(reversible) r_inv.addReactant(searchSpeciesInBiosystem(result, reference), Integer.parseInt(m.getAttributes().getNamedItem("stoichiometry").getNodeValue()));
                         }
                     } while ((m = m.getNextSibling()) != null);
                 }
@@ -155,24 +157,18 @@ public class Parser {
                             reference = m.getAttributes().getNamedItem("species").getNodeValue();
                             comp_r = new ComplexReaction(r);
                             comp_r.addModifier(searchSpeciesInBiosystem(result, reference));
-                            if(reversible){
+                            /*if(reversible){
                                 comp_r_inv = new ComplexReaction(r_inv);
                                 comp_r_inv.addModifier(searchSpeciesInBiosystem(result, reference));
-                            }
+                            }*/
                         }
                     } while ((m = m.getNextSibling()) != null);
 
                 }
             }
             if(found != null && found.searchReaction(id) == null){ //add reaction to compartment
-                if(complex){
-                    found.addReaction(comp_r);
-                    if(reversible) found.addReaction(comp_r_inv);
-                }
-                else{
-                    found.addReaction(r);
-                    if(reversible) found.addReaction(r_inv);
-                }
+                if(complex) found.addReaction(comp_r); //if(reversible) found.addReaction(comp_r_inv);
+                else found.addReaction(r); //if(reversible) found.addReaction(r_inv);
             }
         }
     }

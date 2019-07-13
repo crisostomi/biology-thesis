@@ -4,6 +4,8 @@ public class SimpleReaction {
 
     private String id;
     private String name;
+    private boolean reversible;
+
 
     private HashMap<Species, Integer> reactants;
     private HashMap<Species, Integer> products;
@@ -55,6 +57,14 @@ public class SimpleReaction {
     public HashMap<Species, Integer> getReactants(){ return this.reactants; }
 
     public HashMap<Species, Integer> getProducts(){ return this.products; }
+
+    public boolean isReversible() {
+        return reversible;
+    }
+
+    public void setReversible(boolean reversible) {
+        this.reversible = reversible;
+    }
 
     public void printReaction(){
         System.out.println("    "+this.id + "\n        -Name: "+this.name);

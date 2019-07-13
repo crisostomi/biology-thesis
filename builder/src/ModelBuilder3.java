@@ -1,18 +1,23 @@
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Random;
 
 public class ModelBuilder3 {
 
     private BioSystem B;
     private String output_dir;
+    private static final String indentation = "    ";
 
     public ModelBuilder3(BioSystem B, String od) {
         this.B = B;
         this.output_dir = od;
     }
 
-    public void buildBiosystem() throws IOException {
+    public void buildBioSystem() throws IOException {
 
 
         int depth = 0;
@@ -33,59 +38,145 @@ public class ModelBuilder3 {
 
     public String buildCell(int depth){
 
-        String indent = "    ".repeat(depth);
+        String indent = indentation.repeat(depth);
 
         StringBuilder sb_model = new StringBuilder(indent);
         StringBuilder sb_instance = new StringBuilder();
 
-        sb_model.append("model Cell\n".concat(indent.repeat(2)).concat("extends BioChem.Compartments.MainCompartment;\n\n"));
+        sb_model.append("model Cell\n".concat(indent.repeat(2).concat("extends BioChem.Compartments.MainCompartment;\n\n")));
 
         int i = 1;
         for(Compartment c : this.B.getCompartments()){
-            String[] res = this.buildCompartment(c, depth+1, i);
-            sb_model.append(res[0]);
-            sb_instance.append(res[1]);
+            sb_model.append(this.buildCompartmentModel(c, depth+1));
+            sb_instance.append(this.buildCompartmentInstance(c, depth+1, (i++)));
         }
-
-        /*int i = 1;
-        for(Compartment c : this.B.getCompartments()){
-            sb.append("      ");
-            sb.append(ModelBuilder3.toClassName(c.getName()));
-            sb.append(" c_"+(i++)+";\n");
-        }*/
-
 
         return sb_model.toString()+sb_instance.toString()+"\n"+indent+"end Cell;\n\n";
     }
 
-    public String[] buildCompartment(Compartment c, int depth, int number){
+    public String buildCompartmentModel(Compartment c, int depth){
 
-        String indent = "    ".repeat(depth);
-        StringBuilder sb_model = new StringBuilder(indent);
-        StringBuilder sb_instance = new StringBuilder(indent);
+        String indent = indentation.repeat(depth);
+        StringBuilder sb = new StringBuilder(indent);
 
         //build Model compartment
         String name = ModelBuilder3.toClassName(c.getName());
-        sb_model.append("model ".concat(name).concat("\n"));
-        sb_model.append(indent.concat("    extends BioChem.Compartments.Compartment;\n\n"));
+        sb.append("model ".concat(name.concat("\n")));
+        sb.append(indent.concat("    extends BioChem.Compartments.Compartment;\n\n"));
 
-        //sb_model.append(indent+"  "+this.buildAllSpecies(c));
+        sb.append(this.buildAllSpecies(c, depth+1));
 
-        sb_model.append(indent.concat("end ").concat(name).concat(";\n\n"));
+        sb.append(this.buildAllReactions(c, depth+1, indent.concat("equation\n\n")));
 
-        //instantiate compartment
-        sb_instance.append(name.concat(" c_").concat(String.valueOf(number)).concat(" \"").concat(c.getId()).concat("\";\n"));
-        return new String[]{sb_model.toString(), sb_instance.toString()};
-    }
-
-    public String buildAllSpecies(Compartment c){
-
-        StringBuilder sb = new StringBuilder();
-        //for(Species s : )
+        sb.append(indent.concat("end ".concat(name.concat(";\n\n"))));
 
         return sb.toString();
     }
 
+    public String buildCompartmentInstance(Compartment c, int depth, int number){
+
+        String indent = indentation.repeat(depth);
+        //instantiate compartment
+         return indent.concat(
+                 ModelBuilder3.toClassName(c.getName()).concat(
+                         " c_".concat(
+                                 String.valueOf(number).concat(
+                                         " \"".concat(
+                                                 c.getId().concat("\";\n"))))));
+    }
+
+    public String buildAllReactions(Compartment c, int depth, String equation){
+
+        String indent = indentation.repeat(depth);
+        StringBuilder sb_instance = new StringBuilder();
+        StringBuilder sb_equation = new StringBuilder("\n"+equation);
+
+
+        ArrayList<SimpleReaction> reacts = new ArrayList<>(c.getReactions());
+
+        for(SimpleReaction react : c.getReactions()){
+            String instance = ModelBuilder3.inferReactionType(react);
+            if(instance == null){
+                reacts.remove(react);
+                sb_instance.append(indent.concat("//WARNING: could not infer reaction type of ").concat(react.getId().concat("\n")));
+            }
+            else sb_instance.append(indent.concat(
+                    instance.concat(
+                            (" \""+react.getName()+"\";\n"))));
+        }
+
+        return sb_instance.toString()+sb_equation.toString();
+    }
+
+
+    public String buildAllSpecies(Compartment c, int depth){
+
+        String indent = indentation.repeat(depth);
+        StringBuilder sb = new StringBuilder();
+        Random r = new Random();
+
+        double mean = 1e-12;
+        double std_dev = 1e-14;
+        for(Species s : c.getSpecies()){
+            if(s.isBoundary()) sb.append(indent.concat("BioChem.Substances.BoundarySubstance "));//.concat(s.getId().concat("\""+s.getName()+"\";\n"))));
+            else sb.append(indent.concat("BioChem.Substances.Substance "));//
+            double init = Math.abs(r.nextGaussian()*std_dev+mean);
+            sb.append(s.getId().concat("(n=".concat(String.valueOf(init).replace("E", "e").concat(") \""+s.getName()+"\";\n"))));
+        }
+
+        return sb.toString().concat("\n");
+    }
+
+    private static String inferReactionType(SimpleReaction r){
+
+        String kinetics;
+        String classname = "";
+        if(r instanceof ComplexReaction){
+            /*if(r.getReactants().keySet().size() > 1 || r.getReactants().keySet().size() > 1) return null;
+            classname += "Uu";
+
+            if (((ComplexReaction) r).allBoundaryModifiers()) kinetics = "MassAction";
+
+            if(r.isReversible()){
+                classname += "r";
+            }
+            else{
+                classname += "i";
+            }*/
+            return null;
+        }
+        else{
+            kinetics = "MassAction."; //assuming MassAction kinetics for all SimpleReactions
+            //Note: BioChem has MassAction reactions for all combinations of [1,3] reactants/products
+            if(r.getReactants().keySet().size() > 3 || r.getProducts().keySet().size() > 3) return null;
+            else if(r.getReactants().keySet().size() == 0 || r.getProducts().keySet().size() == 0) return null;
+            switch(r.getReactants().keySet().size()){
+                case 1: kinetics += "Uni"; classname += "U"; break;
+                case 2: kinetics += "Bi"; classname += "B"; break;
+                case 3: kinetics += "Tri"; classname += "T"; break;
+            }
+            switch(r.getProducts().keySet().size()){
+                case 1: kinetics += "Uni."; classname += "u"; break;
+                case 2: kinetics += "Bi."; classname += "b"; break;
+                case 3: kinetics += "Tri."; classname += "t"; break;
+            }
+            if(r.isReversible()) classname += "r";
+            else classname += "i";
+
+        }
+
+        return "BioChem.Reactions."+kinetics+classname+" "+ModelBuilder3.createReactionInstance(r);
+    }
+
+    private static String createReactionInstance(SimpleReaction react){
+
+        Random r = new Random();
+        double mean = 1e3;
+        double std_dev = 1e3;
+
+        return react.getId() + "(k1=" +String.valueOf(Math.abs(r.nextGaussian()*std_dev+mean)).replace("E", "e") + ")";
+
+    }
 
 
     private static String toClassName(String s){

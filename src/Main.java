@@ -40,7 +40,7 @@ public class Main {
 
         ModelBuilder3 mb = new ModelBuilder3(bs, argcopy[2]);
         try {
-            mb.buildBiosystem(); //convert Java biosystem model in Modelica
+            mb.buildBioSystem(); //convert Java biosystem model in Modelica
         }catch(IOException e){
             System.out.println("Modelica files creation/writing failed");
         }
