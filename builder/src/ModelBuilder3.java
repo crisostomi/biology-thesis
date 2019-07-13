@@ -1,9 +1,6 @@
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Random;
 
 public class ModelBuilder3 {
@@ -91,37 +88,31 @@ public class ModelBuilder3 {
         StringBuilder sb_instance = new StringBuilder();
         StringBuilder sb_equation = new StringBuilder("\n"+equation);
 
-
-        ArrayList<SimpleReaction> reacts = new ArrayList<>(c.getReactions());
-
         for(SimpleReaction react : c.getReactions()){
             String instance = ModelBuilder3.inferReactionType(react);
-            if(instance == null){
-                reacts.remove(react);
-                sb_instance.append(indent.concat("//WARNING: could not infer reaction type of ").concat(react.getId().concat("\n")));
+            if(instance == null) sb_instance.append(indent.concat("//WARNING: could not infer reaction type of ").concat(react.getId().concat("\n")));
+            else{
+                sb_instance.append(indent.concat(instance.concat((" \""+react.getName()+"\";\n"))));
+                sb_equation.append(ModelBuilder3.buildReactionEquation(react, depth));
             }
-            else sb_instance.append(indent.concat(
-                    instance.concat(
-                            (" \""+react.getName()+"\";\n"))));
         }
 
         return sb_instance.toString()+sb_equation.toString();
     }
-
 
     public String buildAllSpecies(Compartment c, int depth){
 
         String indent = indentation.repeat(depth);
         StringBuilder sb = new StringBuilder();
         Random r = new Random();
-
         double mean = 1e-12;
         double std_dev = 1e-14;
+
         for(Species s : c.getSpecies()){
             if(s.isBoundary()) sb.append(indent.concat("BioChem.Substances.BoundarySubstance "));//.concat(s.getId().concat("\""+s.getName()+"\";\n"))));
             else sb.append(indent.concat("BioChem.Substances.Substance "));//
             double init = Math.abs(r.nextGaussian()*std_dev+mean);
-            sb.append(s.getId().concat("(n=".concat(String.valueOf(init).replace("E", "e").concat(") \""+s.getName()+"\";\n"))));
+            sb.append(s.getId().concat("(n(start=".concat(String.valueOf(init)/*.replace("E", "e")*/.concat(")) \""+s.getName()+"\";\n"))));
         }
 
         return sb.toString().concat("\n");
@@ -146,10 +137,14 @@ public class ModelBuilder3 {
             return null;
         }
         else{
-            kinetics = "MassAction."; //assuming MassAction kinetics for all SimpleReactions
+            kinetics = ""; //assuming MassAction kinetics for all SimpleReactions
             //Note: BioChem has MassAction reactions for all combinations of [1,3] reactants/products
             if(r.getReactants().keySet().size() > 3 || r.getProducts().keySet().size() > 3) return null;
-            else if(r.getReactants().keySet().size() == 0 || r.getProducts().keySet().size() == 0) return null;
+            else if(r.getProducts().keySet().size() == 0){
+                //Cerca una reazione con gli stessi reagenti ma con almeno un prodotto:
+                //Se esiste, rendila ininfluente (non deve avvenire)
+                return null;
+            }
             switch(r.getReactants().keySet().size()){
                 case 1: kinetics += "Uni"; classname += "U"; break;
                 case 2: kinetics += "Bi"; classname += "B"; break;
@@ -160,8 +155,14 @@ public class ModelBuilder3 {
                 case 2: kinetics += "Bi."; classname += "b"; break;
                 case 3: kinetics += "Tri."; classname += "t"; break;
             }
-            if(r.isReversible()) classname += "r";
-            else classname += "i";
+            if(r.isReversible()){
+                kinetics = "MassAction.Reversible."+kinetics;
+                classname += "r";
+            }
+            else{
+                kinetics = "MassAction.Irreversible."+kinetics;
+                classname += "i";
+            }
 
         }
 
@@ -174,10 +175,27 @@ public class ModelBuilder3 {
         double mean = 1e3;
         double std_dev = 1e3;
 
-        return react.getId() + "(k1=" +String.valueOf(Math.abs(r.nextGaussian()*std_dev+mean)).replace("E", "e") + ")";
+        return react.getId() + "(k1=" +/*String.valueOf*/(Math.abs(r.nextGaussian()*std_dev+mean))/*.replace("E", "e")*/ + ")";
 
     }
 
+    private static String buildReactionEquation(SimpleReaction r, int depth){
+
+        String indent = indentation.repeat(depth);
+        StringBuilder sb = new StringBuilder();
+
+        int i = 1;
+        for(Species s : r.getReactants().keySet()){
+            sb.append(indent.concat("connect(".concat(s.getId().concat(".n1, ".concat(r.getId().concat(".s".concat(String.valueOf(i++).concat(");\n"))))))));
+        }
+
+        i = 1;
+        for(Species s : r.getProducts().keySet()){
+            sb.append(indent.concat("connect(".concat(s.getId().concat(".n1, ".concat(r.getId().concat(".p".concat(String.valueOf(i++).concat(");\n"))))))));
+        }
+
+        return sb.toString()+"\n";
+    }
 
     private static String toClassName(String s){
         String res = "";

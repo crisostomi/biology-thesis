@@ -49,12 +49,8 @@ public class Main {
 
         /*
 
-        TODO: define input values for each block in biosystem.mo
+        TODO: handle transport reactions
 
-        TODO: create Modelica monitors and .csv configuration file
-        -> .xml + simple interface possibly better (uniform technologies), ask Tronci
-
-        data flow: Reactome SBML -> (Single SBML,  config) -> (Modelica blocks, monitors) -> Search output
          */
 
     }
