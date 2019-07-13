@@ -10,7 +10,7 @@ getErrorString();
 loadFile("environment.mo");
 getErrorString();
 
-simulate(Biosystem, simflags="-overrideFile=./parameters.txt"); 
+simulate(BioSystem, simflags="-overrideFile=./parameters.txt");
 getErrorString();
 
 

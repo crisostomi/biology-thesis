@@ -1,4 +1,4 @@
-class Biosystem
+class BioSystem
 
 type Amount = Real(unit="mol*10^(-6)");
 
@@ -59,5 +59,5 @@ equation
 	env.compartment_20699__B4GALT1 = c_1.B4GALT1;
 
 	
-end Biosystem;
+end BioSystem;
 

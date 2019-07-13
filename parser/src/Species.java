@@ -6,7 +6,9 @@ public class Species {
     private String id;
     private String compartmentId;
     private String compartmentName;
-    private static Unit micromol = new Unit("microMol", "mol*10^(-6)");
+    private boolean isBoundary;
+
+
 
     public Species(String name, String id, String compartmentId, String compartmentName){
         this.name = name;
@@ -36,6 +38,14 @@ public class Species {
 
     public String getCompartmentId(){
         return this.compartmentId;
+    }
+
+    public boolean isBoundary() {
+        return isBoundary;
+    }
+
+    public void setBoundary(boolean boundary) {
+        isBoundary = boundary;
     }
 
     public void printSpecies(){

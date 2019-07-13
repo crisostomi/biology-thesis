@@ -4,8 +4,8 @@
 <fmiModelDescription
   fmiVersion                          = "1.0"
 
-  modelName                           = "Biosystem"
-  modelIdentifier                     = "Biosystem"
+  modelName                           = "BioSystem"
+  modelIdentifier                     = "BioSystem"
 
   OPENMODELICAHOME                    = "/usr"
 

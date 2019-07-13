@@ -1,4 +1,4 @@
-class Biosystem
+class BioSystem
 
 type Amount = Real(unit="mol*10^(-6)");
 
@@ -30,5 +30,5 @@ equation
 	env.compartment_7660__MLH1 = c_1.MLH1;
 	env.compartment_7660__SPO11_Dimer = c_1.SPO11_Dimer;
 
-end Biosystem;
+end BioSystem;
 

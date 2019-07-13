@@ -34,9 +34,11 @@ public class Main {
             sources.add(node.getSpecies());
         }
 
-        Biosystem bs = new Biosystem(comps, sinks, sources);
+        BioSystem bs = new BioSystem(comps, sinks, sources);
 
-        ModelBuilder2 mb = new ModelBuilder2(bs, argcopy[2]);
+        bs.markBoundaries();
+
+        ModelBuilder3 mb = new ModelBuilder3(bs, argcopy[2]);
         try {
             mb.buildBiosystem(); //convert Java biosystem model in Modelica
         }catch(IOException e){

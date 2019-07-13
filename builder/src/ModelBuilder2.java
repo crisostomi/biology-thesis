@@ -6,11 +6,11 @@ import java.util.Random;
 
 public class ModelBuilder2 {
 
-    private Biosystem B;
+    private BioSystem B;
 
     private String output_dir;
 
-    public ModelBuilder2(Biosystem B, String od){
+    public ModelBuilder2(BioSystem B, String od){
         this.B = B;
         this.output_dir = od;
     }
@@ -21,7 +21,7 @@ public class ModelBuilder2 {
         StringBuilder sb = new StringBuilder();
         StringBuilder equationBuilder = new StringBuilder();
         // env.sink1 = <compartment of sink1>.sink1
-        sb.append("class Biosystem\n\n");
+        sb.append("class BioSystem\n\n");
         sb.append("type Amount = Real(unit=\"mol*10^(-6)\");\n\n");
 
         int i = 1;
@@ -50,7 +50,7 @@ public class ModelBuilder2 {
             equationBuilder.append("\tenv."+prefix+speciesName+" = "+idToName.get(sourceSpecies.getCompartmentId())+"."+speciesName+";\n");
         }
         sb.append(equationBuilder);
-        sb.append("\nend Biosystem;\n\n");
+        sb.append("\nend BioSystem;\n\n");
         bw.write(sb.toString());
         bw.close();
         this.buildEnvironment();
