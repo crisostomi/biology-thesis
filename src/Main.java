@@ -6,8 +6,8 @@ public class Main {
     public static void main(String[] args) {
 
         /*
-        0. input folder
-        1. output folder
+        0. input folder with sbml files
+        1. output folder to write sbml_union and Modelica files
         */
         String[] argcopy = new String[3];
         System.arraycopy(args, 0, argcopy, 0, args.length);
@@ -65,10 +65,7 @@ public class Main {
         System.out.println("All done!");
 
         /*
-
         TODO: handle transport reactions
-        TODO: handle cell volume
-
          */
 
     }
