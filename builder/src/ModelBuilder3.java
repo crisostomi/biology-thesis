@@ -4,16 +4,28 @@ import java.io.IOException;
 import java.util.Random;
 
 public class ModelBuilder3 {
+    /**
+     * Class for building Modelica model of the biosystem using the BioChem library
+     */
 
     private BioSystem B;
     private String output_dir;
-    private static final String indentation = "    ";
+    private static final String indentation = "    ";   // 4 spaces for indentation
 
+    /**
+     * @param B the BioSystem object containing all the relevant information parsed and processed from the sbml
+     * @param od output directory to which the BioSystem.mo file gets written
+     */
     public ModelBuilder3(BioSystem B, String od) {
         this.B = B;
         this.output_dir = od;
     }
 
+    /**
+     * Main method of the class, used to actually write onto the modelica file
+     * @throws IOException if something goes south with the BufferedWriter write() call
+     * @see #buildCell(int)
+     */
     public void buildBioSystem() throws IOException {
 
 
@@ -33,6 +45,13 @@ public class ModelBuilder3 {
 
     }
 
+    /**
+     * Method to build all the compartments of the cell found in the sbml
+     * @param depth used for text indentation purposes
+     * @return the Modelica code for the BioSystem
+     * @see #buildCompartmentModel(Compartment, int)
+     * @see #buildCompartmentInstance(Compartment, int, int)
+     */
     public String buildCell(int depth){
 
         String indent = indentation.repeat(depth);
@@ -51,6 +70,15 @@ public class ModelBuilder3 {
         return sb_model.toString()+sb_instance.toString()+"\n"+indent+"end Cell;\n\n";
     }
 
+    /**
+     * Method to actually build the compartments, which means writing Modelica code for
+     * the Species and the Reactions
+     * @param c the name of the compartment
+     * @param depth used for indentation purposes
+     * @return a String comprised of Modelica code
+     * @see #buildAllSpecies(Compartment, int)
+     * @see #buildAllReactions(Compartment, int, String)
+     */
     public String buildCompartmentModel(Compartment c, int depth){
 
         String indent = indentation.repeat(depth);
@@ -70,6 +98,13 @@ public class ModelBuilder3 {
         return sb.toString();
     }
 
+    /**
+     * Method used to declare all the compartments inside Modelica
+     * @param c the name of the compartment
+     * @param depth used for indentation purposes
+     * @param number progressive number used to declare the compartment
+     * @return a String comprised of Modelica code for the declaration of compartments
+     */
     public String buildCompartmentInstance(Compartment c, int depth, int number){
 
         String indent = indentation.repeat(depth);
@@ -82,24 +117,12 @@ public class ModelBuilder3 {
                                                  c.getId().concat("\";\n"))))));
     }
 
-    public String buildAllReactions(Compartment c, int depth, String equation){
-
-        String indent = indentation.repeat(depth);
-        StringBuilder sb_instance = new StringBuilder();
-        StringBuilder sb_equation = new StringBuilder("\n"+equation);
-
-        for(SimpleReaction react : c.getReactions()){
-            String instance = ModelBuilder3.inferReactionType(react);
-            if(instance == null) sb_instance.append(indent.concat("//WARNING: could not infer reaction type of ").concat(react.getId().concat("\n")));
-            else{
-                sb_instance.append(indent.concat(instance.concat((" \""+react.getName()+"\";\n"))));
-                sb_equation.append(ModelBuilder3.buildReactionEquation(react, depth));
-            }
-        }
-
-        return sb_instance.toString()+sb_equation.toString();
-    }
-
+    /**
+     * Method used to declare and initialize all the species in a Compartment
+     * @param c the Compartment
+     * @param depth used for indentation purposes
+     * @return a String comprised of Modelica code handling the species
+     */
     public String buildAllSpecies(Compartment c, int depth){
 
         String indent = indentation.repeat(depth);
@@ -118,6 +141,44 @@ public class ModelBuilder3 {
         return sb.toString().concat("\n");
     }
 
+    /**
+     * Method used to build the Modelica code for the reactions in the compartment, that is,
+     * declare, initialize and properly link every reaction in the compartment in Modelica
+     * WARNING: it ignores all the ComplexReactions, only building a warning in their stead
+     * @param c the compartment
+     * @param depth used for indentation purposes
+     * @param equation a String only containing the "equation" block header (not sure if needed)
+     * @return a String comprised of Modelica code handling the reactions
+     * @see #inferReactionType(SimpleReaction)
+     * @see #buildReactionEquation(SimpleReaction, int)
+     */
+    public String buildAllReactions(Compartment c, int depth, String equation){
+
+        String indent = indentation.repeat(depth);
+        StringBuilder sb_instance = new StringBuilder();
+        StringBuilder sb_equation = new StringBuilder("\n"+equation);
+
+        for(SimpleReaction react : c.getReactions()){
+            String instance = ModelBuilder3.inferReactionType(react);
+            if(instance == null) sb_instance.append(indent.concat("//WARNING: could not infer reaction type of ").concat(react.getId().concat("\n")));
+            else{
+                sb_instance.append(indent.concat(instance.concat((" \""+react.getName()+"\";\n"))));
+                sb_equation.append(ModelBuilder3.buildReactionEquation(react, depth));
+            }
+        }
+
+        return sb_instance.toString()+sb_equation.toString();
+    }
+
+    /**
+     * Method used to assign a reaction to a proper Reaction class from the ones available from
+     * the BioChem library, that is detect number of reactants and of products and kinetic type
+     * WARNING: for now the method ignores all the ComplexReactions, that is all the reactons with
+     * modifiers, and it assumes all the others follow Mass Action kinetic law
+     * @param r the reaction
+     * @return a String comprised of the declaration of the reaction
+     * @see #createReactionInstance(SimpleReaction)
+     */
     private static String inferReactionType(SimpleReaction r){
 
         String kinetics;
@@ -169,6 +230,12 @@ public class ModelBuilder3 {
         return "BioChem.Reactions."+kinetics+classname+" "+ModelBuilder3.createReactionInstance(r);
     }
 
+    /**
+     * Method used to randomly assign a kinetic constant to the reaction (following Mass Action law)
+     * @param react the reaction (must be SimpleReaction for now)
+     * @return a String comprised of the name of the reaction (its Reactome ID), plus the parameters needed
+     * by the library
+     */
     private static String createReactionInstance(SimpleReaction react){
 
         Random r = new Random();
@@ -179,6 +246,14 @@ public class ModelBuilder3 {
 
     }
 
+    /**
+     * Method used to link the reactants and products of a reaction to the correct species
+     * in Modelica
+     * @param r the reaction
+     * @param depth used for indentation purposes
+     * @return a String comprised of Modelica code to properly link reactions and species in the
+     * model
+     */
     private static String buildReactionEquation(SimpleReaction r, int depth){
 
         String indent = indentation.repeat(depth);
@@ -197,6 +272,11 @@ public class ModelBuilder3 {
         return sb.toString()+"\n";
     }
 
+    /**
+     * Method used to make Modelica class names using CamelCase convention
+     * @param s the name of the class
+     * @return the "standardized" name of the class
+     */
     private static String toClassName(String s){
         String res = "";
         res = res.concat(s.substring(0,1).toUpperCase());
@@ -210,6 +290,11 @@ public class ModelBuilder3 {
         return res;
     }
 
+    /**
+     * Method used to remove all invalid characters from the names of the Species
+     * @param s the name of the Species
+     * @return a legal name for the Species
+     */
     private static String makeLegalName(String s){
         if (Character.isDigit(s.charAt(0))) {
             String out = "s_";
