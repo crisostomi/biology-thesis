@@ -23,7 +23,7 @@ public class Graph {
      * in the pathway, thus being only "produced" by it and possibly regarded as its output
      * @return a set of sinks Nodes
      */
-    public HashSet<Node> getSinks() {
+    public HashSet<Node> findSinks() {
         HashSet<Node> sinks = new HashSet<>(Set.copyOf(this.getNodes()));
         HashSet<Node> notSinks = new HashSet<>();
         for(Node node: sinks){
@@ -47,7 +47,7 @@ public class Graph {
      * in the pathway, thus being only "consumed" by it and possibly regarded as its input
      * @return
      */
-    public HashSet<Node> getSources() {
+    public HashSet<Node> findSources() {
         HashSet<Node> sources = new HashSet<>(Set.copyOf(this.getNodes()));
         HashSet<Node> notSources = new HashSet<>();
         for(Node node: sources){
@@ -80,6 +80,7 @@ public class Graph {
         }
         return null;
     }
+
 
     HashSet<Node> getNodes(){
         return this.nodes;

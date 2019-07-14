@@ -37,11 +37,11 @@ public class Main {
          */
         Graph g = BioToGraph.buildGraph(comps);
         HashSet<Species> sinks = new HashSet<>();
-        for(Node node: g.getSinks()){
+        for(Node node: g.findSinks()){
             sinks.add(node.getSpecies());
         }
         HashSet<Species> sources = new HashSet<>();
-        for(Node node: g.getSources()){
+        for(Node node: g.findSources()){
             sources.add(node.getSpecies());
         }
 
