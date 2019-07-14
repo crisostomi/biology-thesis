@@ -11,6 +11,7 @@ public class ModelBuilder3 {
     private BioSystem B;
     private String output_dir;
     private static final String indentation = "    ";   // 4 spaces for indentation
+    private static final double cellVolume = 10e-12;
 
     /**
      * @param B the BioSystem object containing all the relevant information parsed and processed from the sbml
@@ -24,7 +25,7 @@ public class ModelBuilder3 {
     /**
      * Main method of the class, used to actually write onto the modelica file
      * @throws IOException if something goes south with the BufferedWriter write() call
-     * @see #buildCell(int)
+     * @see #buildCell(double, int)
      */
     public void buildBioSystem() throws IOException {
 
@@ -36,7 +37,7 @@ public class ModelBuilder3 {
 
         sb.append("package BioSystem\n\n");
 
-        sb.append(this.buildCell(depth+1));
+        sb.append(this.buildCell(cellVolume, depth+1));
 
         sb.append("end BioSystem;\n");
 
@@ -48,23 +49,27 @@ public class ModelBuilder3 {
     /**
      * Method to build all the compartments of the cell found in the sbml
      * @param depth used for text indentation purposes
+     * @param cellVolume the volume of the cell in litres
      * @return the Modelica code for the BioSystem
-     * @see #buildCompartmentModel(Compartment, int)
+     * @see #buildCompartmentModel(Compartment, double, int)
      * @see #buildCompartmentInstance(Compartment, int, int)
      */
-    public String buildCell(int depth){
+    public String buildCell(double cellVolume, int depth){
 
+        double compartmentVolumePercentage = 0.1;
         String indent = indentation.repeat(depth);
 
         StringBuilder sb_model = new StringBuilder(indent);
         StringBuilder sb_instance = new StringBuilder();
 
-        sb_model.append("model Cell\n".concat(indent.repeat(2).concat("extends BioChem.Compartments.MainCompartment;\n\n")));
+        sb_model.append("model Cell\n".concat(indent.repeat(2).concat("extends BioChem.Compartments.MainCompartment")));
+        sb_model.append("(V(start=cell_V));\n\n");
+        sb_model.append(indent.repeat(depth+1).concat("inner parameter BioChem.Units.Volume cell_V = "+String.valueOf(cellVolume)+";\n\n"));
 
         int i = 1;
         for(Compartment c : this.B.getCompartments()){
-            sb_model.append(this.buildCompartmentModel(c, depth+1));
-            sb_instance.append(this.buildCompartmentInstance(c, depth+1, (i++)));
+            sb_model.append(this.buildCompartmentModel(c, compartmentVolumePercentage, depth+1));
+            sb_instance.append(this.buildCompartmentInstance(c, (i++) , depth+1));
         }
 
         return sb_model.toString()+sb_instance.toString()+"\n"+indent+"end Cell;\n\n";
@@ -74,12 +79,13 @@ public class ModelBuilder3 {
      * Method to actually build the compartments, which means writing Modelica code for
      * the Species and the Reactions
      * @param c the name of the compartment
+     * @param cellVolumePercentage the volume of the compartment in proportion to the cell volume
      * @param depth used for indentation purposes
      * @return a String comprised of Modelica code
      * @see #buildAllSpecies(Compartment, int)
-     * @see #buildAllReactions(Compartment, int, String)
+     * @see #buildAllReactions(Compartment, String, int)
      */
-    public String buildCompartmentModel(Compartment c, int depth){
+    public String buildCompartmentModel(Compartment c, double cellVolumePercentage, int depth){
 
         String indent = indentation.repeat(depth);
         StringBuilder sb = new StringBuilder(indent);
@@ -87,11 +93,14 @@ public class ModelBuilder3 {
         //build Model compartment
         String name = ModelBuilder3.toClassName(c.getName());
         sb.append("model ".concat(name.concat("\n")));
-        sb.append(indent.concat("    extends BioChem.Compartments.Compartment;\n\n"));
+        sb.append(indent.concat("    extends BioChem.Compartments.Compartment"));
+        sb.append("(V(start="+cellVolumePercentage+"*cell_V));\n\n");
+
+        sb.append(indent.concat("    outer parameter BioChem.Units.Volume cell_V;\n\n"));
 
         sb.append(this.buildAllSpecies(c, depth+1));
 
-        sb.append(this.buildAllReactions(c, depth+1, indent.concat("equation\n\n")));
+        sb.append(this.buildAllReactions(c, indent.concat("equation\n\n"), depth+1));
 
         sb.append(indent.concat("end ".concat(name.concat(";\n\n"))));
 
@@ -105,7 +114,7 @@ public class ModelBuilder3 {
      * @param number progressive number used to declare the compartment
      * @return a String comprised of Modelica code for the declaration of compartments
      */
-    public String buildCompartmentInstance(Compartment c, int depth, int number){
+    public String buildCompartmentInstance(Compartment c, int number, int depth){
 
         String indent = indentation.repeat(depth);
         //instantiate compartment
@@ -152,7 +161,7 @@ public class ModelBuilder3 {
      * @see #inferReactionType(SimpleReaction)
      * @see #buildReactionEquation(SimpleReaction, int)
      */
-    public String buildAllReactions(Compartment c, int depth, String equation){
+    public String buildAllReactions(Compartment c, String equation, int depth){
 
         String indent = indentation.repeat(depth);
         StringBuilder sb_instance = new StringBuilder();
