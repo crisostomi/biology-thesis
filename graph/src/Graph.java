@@ -81,6 +81,41 @@ public class Graph {
         return null;
     }
 
+    /**
+     * Method to find the links between compartments, that is transport reactions that move
+     * species from a compartment to the other, making those species I/O for the compartments
+     * @param comps a set of compartments
+     * @return
+     */
+    HashSet<CompartmentEdge> findCompartmentEdges(HashSet<Compartment> comps) {
+        HashSet<CompartmentEdge> compsEdges = new HashSet<>();
+
+        for (Compartment comp: comps) {
+            for (SimpleReaction reac: comp.getReactions()) {
+                // ASSUMPTION: transport reactions only transport a species at a time
+                if (reac.getReactants().keySet().size() != 1 ||
+                        reac.getProducts().keySet().size() != 1) {
+
+                    continue;
+                }
+
+                Species reactant = (Species)reac.getReactants().keySet().toArray()[0];
+                Species product = (Species)reac.getProducts().keySet().toArray()[0];
+
+                String srcCompId = reactant.getCompartmentId();
+                String dstCompId = product.getCompartmentId();
+
+                if (!srcCompId.equals(dstCompId)) {
+                    // transport found
+
+                    CompartmentEdge e = new CompartmentEdge(srcCompId, dstCompId, reac, reactant, product);
+                    compsEdges.add(e);
+                }
+            }
+        }
+
+        return compsEdges;
+    }
 
     HashSet<Node> getNodes(){
         return this.nodes;
