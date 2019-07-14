@@ -1,5 +1,0 @@
-record Rate
-
-
-
-end Rate;
