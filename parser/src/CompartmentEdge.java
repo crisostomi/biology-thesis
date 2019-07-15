@@ -1,27 +1,27 @@
+import java.util.ArrayList;
+
 public class CompartmentEdge {
+
     private String compSrcId;
     private String compDstId;
     private SimpleReaction transport;
-    private Species speciesSrc;
-    private Species speciesDst;
+    private Species external_reactant;
+    private Species external_product;
+    private Species external_modifier;
+
 
     /**
      * Class representing a connection between compartments due to a transport reaction
      * @param compSrcId the id of the compartment from which the species gets transported
      * @param compDstId the id of the compartment to which the species gets transported
      * @param transport the transport reaction
-     * @param speciesSrc the species being moved in the source compartment
-     * @param speciesDst the species being moved in the destination compartment
      */
     public CompartmentEdge(String compSrcId, String compDstId,
-                           SimpleReaction transport,
-                           Species speciesSrc, Species speciesDst)
+                           SimpleReaction transport)
     {
         this.compSrcId = compSrcId;
         this.compDstId = compDstId;
         this.transport = transport;
-        this.speciesSrc = speciesSrc;
-        this.speciesDst = speciesDst;
     }
 
     public String getCompSrcId() {
@@ -32,15 +32,16 @@ public class CompartmentEdge {
         return compDstId;
     }
 
+    public void setExternalReactant(Species s){ this.external_reactant = s; }
+
+    public void setExternalProduct(Species s){ this.external_product = s; }
+
+    public void setExternalModifier(Species s){ this.external_modifier = s; }
+
+    public void setCompDstId(String id){ this.compDstId = id; }
+
     public SimpleReaction getTransport() {
         return transport;
     }
 
-    public Species getSpeciesSrc() {
-        return speciesSrc;
-    }
-
-    public Species getSpeciesDst() {
-        return speciesDst;
-    }
 }

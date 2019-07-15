@@ -82,7 +82,7 @@ public class Parser {
         String comp, name, id;
         for(int i = 0; i < all_spec.getLength(); i++){
             comp = all_spec.item(i).getAttributes().getNamedItem("compartment").getNodeValue();
-            name = all_spec.item(i).getAttributes().getNamedItem("name").getNodeValue().replaceAll("\\[.*\\]", "").trim();
+            name = all_spec.item(i).getAttributes().getNamedItem("name").getNodeValue()/*.replaceAll("\\[.*\\]", "").trim()*/;
             id = all_spec.item(i).getAttributes().getNamedItem("id").getNodeValue();
             Compartment found = searchCompartmentById(result, comp);
             if(found != null && found.searchSpecies(id) == null){

@@ -48,12 +48,6 @@ public class Main {
         // instantiate the Java model
         BioSystem bs = new BioSystem(comps, sinks, sources);
 
-        /*
-         detect species that don't get neither consumed nor produced by any reaction in the system
-         might be done in the constructor (?)
-         */
-        bs.markBoundaries();
-
         // convert Java biosystem model in Modelica
         ModelBuilder3 mb = new ModelBuilder3(bs, argcopy[2]);
         try {
