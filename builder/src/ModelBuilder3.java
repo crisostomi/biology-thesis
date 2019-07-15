@@ -39,16 +39,40 @@ public class ModelBuilder3 {
 
         StringBuilder sb_model = new StringBuilder(indent);
         StringBuilder sb_instance = new StringBuilder();
+        StringBuilder sb_connections = new StringBuilder(indent+"equation\n\n");
 
         sb_model.append("model Cell\n".concat(indent.repeat(2).concat("extends BioChem.Compartments.MainCompartment;\n\n")));
 
         int i = 1;
         for(Compartment c : this.B.getCompartments()){
             sb_model.append(this.buildCompartmentModel(c, depth+1));
-            sb_instance.append(this.buildCompartmentInstance(c, depth+1, (i++)));
+            sb_instance.append(this.buildCompartmentInstance(c, depth+1, i));
+            sb_connections.append(this.buildCompartmentEdges(c, depth+1, (i++)));
         }
 
-        return sb_model.toString()+sb_instance.toString()+"\n"+indent+"end Cell;\n\n";
+        return sb_model.toString()+sb_instance.toString()+sb_connections.toString()+"\n"+indent+"end Cell;\n\n";
+    }
+
+    public String buildCompartmentEdges(Compartment c, int depth, int index){
+
+        String indent = indentation.repeat(depth);
+        StringBuilder sb = new StringBuilder(indent);
+
+        int s = 1, p = 1, m = 1;
+        for(CompartmentEdge ce : this.B.getCompEdges()){ //la reazione sta in ce.compSourceId
+            sb.append("connect(");
+            if(ce.getCompDstId().equals(c.getId())){
+                if(ce.getExternalReactant() != null){
+                    sb.append("c_".concat(String.valueOf(index).
+                            concat(".".concat("reaction_".
+                                    concat(ce.getTransport().getId().
+                                            concat(".".concat("s".concat(String.valueOf(s++)))))))));
+                }
+            }
+        }
+
+        return sb.toString();
+
     }
 
     public String buildCompartmentModel(Compartment c, int depth){

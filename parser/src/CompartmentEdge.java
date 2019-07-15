@@ -38,6 +38,18 @@ public class CompartmentEdge {
 
     public void setExternalModifier(Species s){ this.external_modifier = s; }
 
+    public Species getExternalReactant() {
+        return external_reactant;
+    }
+
+    public Species getExternalProduct() {
+        return external_product;
+    }
+
+    public Species getExternalModifier() {
+        return external_modifier;
+    }
+
     public void setCompDstId(String id){ this.compDstId = id; }
 
     public SimpleReaction getTransport() {
