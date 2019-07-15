@@ -4,6 +4,12 @@ import java.util.List;
 
 public class BioToGraph {
 
+    /**
+     * Method used to build a graph object from a set of compartments built from sbml data
+     * @param compartments a set of compartments
+     * @return a hyper-graph object with species as Nodes and reactions as hyper-edges
+     * @see Graph
+     */
     public static Graph buildGraph(HashSet<Compartment> compartments){
         HashSet<Node> nodes = new HashSet<>();
         HashSet<Edge> edges = new HashSet<>();

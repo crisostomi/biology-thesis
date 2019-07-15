@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.util.HashMap;
 
 public class ModelBuilder {
+    /**
+     * Class for building Modelica model of the biosystem
+     */
     private BioSystem B;
 
     private String output_dir;

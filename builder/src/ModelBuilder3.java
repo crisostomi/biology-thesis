@@ -63,7 +63,7 @@ public class ModelBuilder3 {
 
         sb.append(this.buildAllSpecies(c, depth+1));
 
-        if(c.getReactions().size() > 0) sb.append(this.buildAllReactions(c, depth+1, indent.concat("equation\n\n")));
+        sb.append(this.buildAllReactions(c, depth+1, indent.concat("equation\n\n")));
 
         sb.append(indent.concat("end ".concat(name.concat(";\n\n"))));
 
@@ -90,7 +90,6 @@ public class ModelBuilder3 {
 
         for(SimpleReaction react : c.getReactions()){
             String instance = ModelBuilder3.inferReactionType(react);
-            instance = ModelBuilder3.validateTemp(instance, react, c.getId()); //TEMPORARY until we have the pre-processing
             if(instance == null) sb_instance.append(indent.concat("//WARNING: could not infer reaction type of ").concat(react.getId().concat("\n")));
             else{
                 sb_instance.append(indent.concat(instance.concat((" \""+react.getName()+"\";\n"))));
@@ -123,8 +122,8 @@ public class ModelBuilder3 {
 
         String kinetics;
         String classname = "";
-        /*if(r instanceof ComplexReaction){
-            if(r.getReactants().keySet().size() > 1 || r.getReactants().keySet().size() > 1) return null;
+        if(r instanceof ComplexReaction){
+            /*if(r.getReactants().keySet().size() > 1 || r.getReactants().keySet().size() > 1) return null;
             classname += "Uu";
 
             if (((ComplexReaction) r).allBoundaryModifiers()) kinetics = "MassAction";
@@ -134,10 +133,10 @@ public class ModelBuilder3 {
             }
             else{
                 classname += "i";
-            }
+            }*/
             return null;
         }
-        else{*/
+        else{
             kinetics = ""; //assuming MassAction kinetics for all SimpleReactions
             //Note: BioChem has MassAction reactions for all combinations of [1,3] reactants/products
             if(r.getReactants().keySet().size() > 3 || r.getProducts().keySet().size() > 3) return null;
@@ -163,32 +162,21 @@ public class ModelBuilder3 {
             else{
                 kinetics = "MassAction.Irreversible."+kinetics;
                 classname += "i";
-            //}
+            }
 
         }
 
-        return "BioChem.Reactions."+kinetics+classname+" "+ModelBuilder3.createReactionInstance(r, kinetics);
+        return "BioChem.Reactions."+kinetics+classname+" "+ModelBuilder3.createReactionInstance(r);
     }
 
-    private static String createReactionInstance(SimpleReaction react, String kinetics){
+    private static String createReactionInstance(SimpleReaction react){
 
-        StringBuilder sb = new StringBuilder();
-        Random r = new Random(); //manca: assegna coefficienti stechiometrici
+        Random r = new Random();
         double mean = 1e3;
         double std_dev = 1e3;
 
-        sb.append(react.getId().concat("(k1=".concat(String.valueOf(Math.abs(r.nextGaussian()*std_dev+mean)))));
+        return react.getId() + "(k1=" +/*String.valueOf*/(Math.abs(r.nextGaussian()*std_dev+mean))/*.replace("E", "e")*/ + ")";
 
-        int i = 1;
-        for(Species s : react.getReactants().keySet()){
-            sb.append(", nS".concat(String.valueOf(i++).concat("=".concat(String.valueOf(react.getReactantStoich(s))))));
-        }
-        i = 1;
-        for(Species s : react.getProducts().keySet()){
-            sb.append(", nP".concat(String.valueOf(i++).concat("=".concat(String.valueOf(react.getProductStoich(s))))));
-        }
-
-        return sb.toString().concat(")");
     }
 
     private static String buildReactionEquation(SimpleReaction r, int depth){
@@ -207,25 +195,6 @@ public class ModelBuilder3 {
         }
 
         return sb.toString()+"\n";
-    }
-
-    private static String validateTemp(String instance, SimpleReaction r, String comp_id){
-        //this method is necessary until we can do the pre-processing (to-do.2)
-        for(Species s : r.getReactants().keySet()){
-            if (!s.getCompartmentId().equals(comp_id)) return null;
-        }
-
-        for(Species s : r.getProducts().keySet()){
-            if (!s.getCompartmentId().equals(comp_id)) return null;
-        }
-
-        /*if(r instanceof ComplexReaction){
-            for(Species s : ((ComplexReaction) r).getModifiers()){
-                if(!s.getCompartmentId().equals(comp_id)) return null;
-            }
-        }*/
-
-        return instance;
     }
 
     private static String toClassName(String s){

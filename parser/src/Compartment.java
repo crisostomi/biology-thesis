@@ -1,4 +1,4 @@
-import java.util.ArrayList;
+import java.util.*;
 
 public class Compartment {
 
@@ -37,6 +37,22 @@ public class Compartment {
         return null;
     }
 
+    /**
+     * Method to find a compartment by ID
+     * @param comps a HashSet of Compartments
+     * @param compId the ID of the compartment to look for
+     * @return
+     */
+    public static Compartment getCompartmentById(HashSet<Compartment> comps, String compId) {
+        for (Compartment comp: comps) {
+            if (comp.getId().equals(compId)) {
+                return comp;
+            }
+        }
+
+        return null;
+    }
+
     public int getNumSpecies(){ return this.species.size(); }
 
     public int getNumReactions(){ return this.reactions.size(); }
@@ -61,4 +77,16 @@ public class Compartment {
         System.out.print("\n");
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Compartment that = (Compartment) o;
+        return id.equals(that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

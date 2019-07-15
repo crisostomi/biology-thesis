@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.HashSet;
 
 public class BioSystem {
@@ -15,17 +16,20 @@ public class BioSystem {
     public void markBoundaries(){
 
         boolean mark;
-        for(Compartment c : compartments){
-            for(Species s : c.getSpecies()){
-                mark = true;
-                for(SimpleReaction r : c.getReactions()){
-                    if (r.getReactants().containsKey(s) || r.getProducts().containsKey(s)){
-                        mark = false;
-                        break;
-                    }
+        ArrayList<SimpleReaction> all_reacts = new ArrayList<>();
+        ArrayList<Species> all_spec = new ArrayList<>();
+        for(Compartment c : compartments) all_reacts.addAll(c.getReactions());
+        for(Compartment c : compartments) all_spec.addAll(c.getSpecies());
+
+        for(Species s : all_spec){
+            mark = true;
+            for(SimpleReaction r : all_reacts){
+                if (r.getReactants().containsKey(s) || r.getProducts().containsKey(s)){
+                    mark = false;
+                    break;
                 }
-                if(mark) s.setBoundary(true);
             }
+            if(mark) s.setBoundary(true);
         }
     }
 
