@@ -51,10 +51,9 @@ public class ModelBuilder3 {
 
         sb_model.append("model Cell\n".concat(indent.repeat(2).concat("extends BioChem.Compartments.MainCompartment;\n\n")));
 
-        int i = 1;
         for(Compartment c : this.B.getCompartments()){
-            sb_model.append(this.buildCompartmentModel(c, depth+1, i));
-            sb_instance.append(this.buildCompartmentInstance(c, depth+1, i++));
+            sb_model.append(this.buildCompartmentModel(c, depth+1, this.comp_number.get(c.getId())));
+            sb_instance.append(this.buildCompartmentInstance(c, depth+1, this.comp_number.get(c.getId())));
         }
 
         if(this.cell_equation.toString().equals(indent.concat("equation\n\n"))) this.cell_equation.delete(0, this.cell_equation.length());
