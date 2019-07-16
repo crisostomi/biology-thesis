@@ -8,6 +8,15 @@ public class BioSystem {
     private HashSet<Compartment> compartments;
     private HashSet<CompartmentEdge> compEdges;
 
+    /**
+     * Class representing a biosystem, with all the information parsed and processed from sbml data
+     * @param set a set of Compartment objects, carrying information about the compartments
+     *            and the species and reactions they comprise
+     * @param sinks a set of species that are only involved as products in reactions in the system
+     * @param sources a set of species that are only involved as reactants in reactions in the system
+     * @see #markBoundaries()
+     * @see #findCompartmentEdges()
+     */
     public BioSystem(HashSet<Compartment> set, HashSet<Species> sinks, HashSet<Species> sources){
         this.compartments = set;
         this.sinks = sinks;
@@ -16,6 +25,10 @@ public class BioSystem {
         this.compEdges = this.findCompartmentEdges();
     }
 
+    /**
+     * Method used to mark the species that are not involved in any reaction in the system as either
+     * reactant or product
+     */
     public void markBoundaries(){
 
         boolean mark;
@@ -38,8 +51,9 @@ public class BioSystem {
 
     /**
      * Method to find the links between compartments, that is transport reactions that move
-     * species from a compartment to the other, making those species I/O for the compartments
-     * @return
+     * species from a compartment to another, making those species I/O for the compartments
+     * @return a set of compartment edges
+     * @see CompartmentEdge
      */
     public HashSet<CompartmentEdge> findCompartmentEdges() {
 
