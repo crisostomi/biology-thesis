@@ -131,32 +131,26 @@ public class ModelBuilder3 {
                     if(ce.getTransport().getId().equals(react.getId())){
                         int comp_number = this.comp_number.get(ce.getCompDstId());
                         if(ce.getExternalReactant() != null){
-                            this.cell_equation.append(indentation.repeat(depth-2)
-                                    .concat("connect(c_".concat(String.valueOf(comp_number).concat("."
-                                            .concat(ce.getExternalReactant().getId().concat(".n1, c_")
-                                                    .concat(String.valueOf(comp_index).concat("."
-                                                            .concat(react.getId().concat(".s"
-                                                                    .concat(String.valueOf(s++).concat(");\n")))))))))));
+                            this.cell_equation.append(
+                                    buildConnectExternalReactant(comp_number, compIndex, react, ce, s, depth)
+                            );
+                            s++;
                         }
                         else if(ce.getExternalProduct() != null){
-                            this.cell_equation.append(indentation.repeat(depth-2)
-                                    .concat("connect(c_".concat(String.valueOf(comp_number).concat("."
-                                            .concat(ce.getExternalProduct().getId().concat(".n1, c_")
-                                                    .concat(String.valueOf(comp_index).concat("."
-                                                            .concat(react.getId().concat(".p"
-                                                                    .concat(String.valueOf(p++).concat(");\n")))))))))));
+                            this.cell_equation.append(
+                                    buildConnectExternalProduct(comp_number, compIndex, react, ce, p, depth)
+                            );
+                            p++;
                         }
                         else if(ce.getExternalModifier() != null){
-                            this.cell_equation.append(indentation.repeat(depth-2)
-                                    .concat("connect(c_".concat(String.valueOf(comp_number).concat("."
-                                            .concat(ce.getExternalModifier().getId().concat(".n1, c_")
-                                                    .concat(String.valueOf(comp_index).concat("."
-                                                            .concat(react.getId().concat(".aF"
-                                                                    .concat(String.valueOf(m++).concat(");\n")))))))))));
+                            this.cell_equation.append(
+                                    buildConnectExternalModifier(comp_number, compIndex, react, ce, m, depth)
+                            );
+                            m++;
                         }
                     }
                 }
-                sb_equation.append(ModelBuilder3.buildReactionEquation(react, depth, c.getId(), s, p, m));
+                sb_equation.append(ModelBuilder3.buildReactionEquation(react, c.getId(), s, p, m, depth));
             }
         }
 
@@ -164,6 +158,42 @@ public class ModelBuilder3 {
         return sb_instance.toString()+mid+sb_equation.toString();
     }
 
+    private String buildConnectExternalReactant(int compNumber, int compIndex, SimpleReaction react, CompartmentEdge ce, int s, int depth) {
+        return indentation.repeat(depth-2)
+                .concat("connect(c_".concat(String.valueOf(compNumber).concat("."
+                        .concat(ce.getExternalReactant().getId().concat(".n1, c_")
+                                .concat(String.valueOf(compIndex).concat("."
+                                        .concat(react.getId().concat(".s"
+                                                .concat(String.valueOf(s).concat(");\n"))))))))));
+    }
+
+    private String buildConnectExternalProduct(int compNumber, int compIndex, SimpleReaction react, CompartmentEdge ce, int p, int depth) {
+        return indentation.repeat(depth-2)
+                .concat("connect(c_".concat(String.valueOf(compNumber).concat("."
+                        .concat(ce.getExternalProduct().getId().concat(".n1, c_")
+                                .concat(String.valueOf(compIndex).concat("."
+                                        .concat(react.getId().concat(".p"
+                                                .concat(String.valueOf(p).concat(");\n"))))))))));
+    }
+
+    private String buildConnectExternalModifier(int compNumber, int compIndex, SimpleReaction react, CompartmentEdge ce, int m, int depth) {
+        return indentation.repeat(depth-2)
+                .concat("connect(c_".concat(String.valueOf(compNumber).concat("."
+                        .concat(ce.getExternalModifier().getId().concat(".n1, c_")
+                                .concat(String.valueOf(compIndex).concat("."
+                                        .concat(react.getId().concat(".aF"
+                                                .concat(String.valueOf(m).concat(");\n"))))))))));
+    }
+
+    /**
+     * Method used to assign a reaction to a proper Reaction class from the ones available from
+     * the BioChem library, that is detect number of reactants and of products and kinetic type
+     * WARNING: for now the method ignores all the ComplexReactions, that is all the reactons with
+     * modifiers, and it assumes all the others follow Mass Action kinetic law
+     * @param r the reaction
+     * @return a String comprised of the declaration of the reaction
+     * @see #createReactionInstance(SimpleReaction)
+     */
     private static String inferReactionType(SimpleReaction r){
 
         String kinetics;
