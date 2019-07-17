@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Random;
 
-public class ModelBuilder3 {
+public class ModelBuilder {
 
     private BioSystem B;
     private String output_dir;
@@ -72,7 +72,7 @@ public class ModelBuilder3 {
 
         String indent = indentation.repeat(depth);
         return indent.concat(
-                ModelBuilder3.toClassName(compartment.getName()).concat(
+                ModelBuilder.toClassName(compartment.getName()).concat(
                         " c_".concat(
                                 String.valueOf(compIndex).concat(
                                         " \"".concat(
@@ -114,7 +114,7 @@ public class ModelBuilder3 {
         StringBuilder sb = new StringBuilder(indent);
 
         //build Model compartment
-        String name = ModelBuilder3.toClassName(compartment.getName());
+        String name = ModelBuilder.toClassName(compartment.getName());
         sb.append("model ".concat(name.concat("\n")));
         sb.append(indent.concat("    extends BioChem.Compartments.Compartment;\n\n"));
 
@@ -135,7 +135,7 @@ public class ModelBuilder3 {
         String mid = "\n"+indentation.repeat(depth-1)+"equation\n\n";
 
         for(SimpleReaction react : compartment.getReactions()){
-            String instance = ModelBuilder3.inferReactionType(react);
+            String instance = ModelBuilder.inferReactionType(react);
             if(instance == null) sb_instance.append(indent.concat("//WARNING: could not infer reaction type of ").concat(react.getId().concat("\n")));
             else{
                 sb_instance.append(indent.concat(instance.concat((" \""+react.getName()+"\";\n"))));
@@ -163,7 +163,7 @@ public class ModelBuilder3 {
                         }
                     }
                 }
-                sb_equation.append(ModelBuilder3.buildReactionEquation(react, compartment.getId(), s, p, m, depth));
+                sb_equation.append(ModelBuilder.buildReactionEquation(react, compartment.getId(), s, p, m, depth));
             }
         }
 
@@ -258,7 +258,7 @@ public class ModelBuilder3 {
 
         //}
 
-        return "BioChem.Reactions."+kinetics+classname+" "+ModelBuilder3.createReactionInstance(react);
+        return "BioChem.Reactions."+kinetics+classname+" "+ ModelBuilder.createReactionInstance(react);
     }
 
     private static String createReactionInstance(SimpleReaction react){

@@ -49,7 +49,7 @@ public class Main {
         BioSystem bs = new BioSystem(comps, sinks, sources);
 
         // convert Java biosystem model in Modelica
-        ModelBuilder3 mb = new ModelBuilder3(bs, argcopy[2]);
+        ModelBuilder mb = new ModelBuilder(bs, argcopy[2]);
         try {
             mb.buildBioSystem();
         }catch(IOException e){
