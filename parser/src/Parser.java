@@ -5,6 +5,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashSet;
 
 public class Parser {
@@ -30,6 +31,11 @@ public class Parser {
      * @see Compartment
      */
     public HashSet<Compartment> instantiateCompartments() {
+        return instantiateCompartmentsIgnore(null, null);
+    }
+
+    public HashSet<Compartment> instantiateCompartmentsIgnore(ArrayList<String> ignoreNameList,
+                                                              ArrayList<String> ignoreIdList) {
         HashSet<Compartment> result = new HashSet<>();
         File dir = new File(this.inputDir);
         File[] dirList = dir.listFiles();
@@ -46,7 +52,43 @@ public class Parser {
                         first = false;
                     }
                     this.builder.annotate(doc.getElementsByTagName("model").item(0));
-                    this.findCompartments(doc.getElementsByTagName("compartment"), result);
+                    this.findCompartmentsIgnore(doc.getElementsByTagName("compartment"), ignoreNameList, ignoreIdList, result);
+                    this.findSpecies(doc.getElementsByTagName("species"), result);
+                    this.findReactions(doc.getElementsByTagName("reaction"), result);
+                }
+                this.builder.close();
+            }
+            catch(Exception e){
+                e.printStackTrace();
+                System.out.println("Parsing failed. Returning with error");
+                return null;
+            }
+        }
+        else{
+            System.out.println(this.inputDir + "is not a directory. Please specify a directory containing .sbml files derived from Reactome database");
+        }
+        return result;
+    }
+
+    public HashSet<Compartment> instantiateCompartmentsSelect(ArrayList<String> selectNameList,
+                                                              ArrayList<String> selectIdList) {
+        HashSet<Compartment> result = new HashSet<>();
+        File dir = new File(this.inputDir);
+        File[] dirList = dir.listFiles();
+        if(dirList != null){
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            boolean first = true;
+            try {
+                DocumentBuilder docBuild = dbf.newDocumentBuilder();
+                for (File sbml : dirList) {
+                    //String id, name;
+                    Document doc = docBuild.parse(sbml);
+                    if(first){
+                        this.builder.buildRoot(doc.getElementsByTagName("sbml").item(0));
+                        first = false;
+                    }
+                    this.builder.annotate(doc.getElementsByTagName("model").item(0));
+                    this.findCompartmentsSelect(doc.getElementsByTagName("compartment"), selectNameList, selectIdList, result);
                     this.findSpecies(doc.getElementsByTagName("species"), result);
                     this.findReactions(doc.getElementsByTagName("reaction"), result);
                 }
@@ -79,10 +121,48 @@ public class Parser {
     }
 
     private void findCompartments(NodeList all_comps, HashSet<Compartment> result){
+        findCompartmentsIgnore(all_comps, null, null, result);
+    }
+
+    /**
+     * Method to create the object for the compartments found in the sbml
+     * @param all_comps a list of NodeList object containing information about the compartments
+     * @param ignoreNameList a list of names of compartments not to be added to result
+     * @param ignoreIdList a list of id of compartments not to be added to result
+     * @param result the resulting set of Compartments that gets populated by the method
+     */
+    private void findCompartmentsIgnore(NodeList all_comps, ArrayList<String> ignoreNameList,
+                                  ArrayList<String> ignoreIdList, HashSet<Compartment> result){
+        String name, id;
+        for(int i = 0; i < all_comps.getLength(); i++){
+            name = all_comps.item(i).getAttributes().getNamedItem("name").getNodeValue();
+            if (ignoreNameList != null && ignoreNameList.contains(name)) continue;
+            id = all_comps.item(i).getAttributes().getNamedItem("id").getNodeValue();
+            if (ignoreNameList != null && ignoreIdList.contains(id)) continue;
+            if(searchCompartmentById(result, id) == null){
+                result.add(new Compartment(name, id));
+                this.builder.addCompartment(all_comps.item(i));
+            }
+        }
+    }
+
+    /**
+     * Method to create the object for the compartments found in the sbml
+     * @param all_comps a list of NodeList object containing information about the compartments
+     * @param selectNameList a list of names of compartments not to be added to result
+     * @param selectIdList a list of id of compartments not to be added to result
+     * @param result the resulting set of Compartments that gets populated by the method
+     */
+    private void findCompartmentsSelect(NodeList all_comps, ArrayList<String> selectNameList,
+                                  ArrayList<String> selectIdList, HashSet<Compartment> result){
         String name, id;
         for(int i = 0; i < all_comps.getLength(); i++){
             name = all_comps.item(i).getAttributes().getNamedItem("name").getNodeValue();
             id = all_comps.item(i).getAttributes().getNamedItem("id").getNodeValue();
+            if ((selectIdList != null && !selectIdList.contains(id)) &&
+                    (selectNameList != null && !selectNameList.contains(name))) {
+                continue;
+            }
             if(searchCompartmentById(result, id) == null){
                 result.add(new Compartment(name, id));
                 this.builder.addCompartment(all_comps.item(i));
