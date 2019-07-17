@@ -4,29 +4,26 @@ public class SimpleReaction {
 
     private String id;
     private String name;
-    private boolean reversible;
+    private boolean reversible;                     // whether or not the reaction is reversible
 
+    private HashMap<Species, Integer> reactants;    // a map <Reactant, Stoichiometry>
+    private HashMap<Species, Integer> products;     // a map <Product, Stoichiometry>
 
-    private HashMap<Species, Integer> reactants;
-    private HashMap<Species, Integer> products;
-
-    /*public SimpleReaction(Species[] reactants, Species[] products, int[] reac_stoich, int[] prod_stoich){
-        this.reactants = new HashMap<>();
-        this.products = new HashMap<>();
-        for(int i = 0; i < reactants.length; i++){
-            this.reactants.put(reactants[i], reac_stoich[i]);
-            this.products.put(products[i], prod_stoich[i]);
-        }
-    }*/
-
+    /**
+     * Class that represents a reaction in the biosystem
+     * @param name the name of the reaction
+     * @param id the unique id of the reaction
+     */
     public SimpleReaction(String name, String id){
         this.name = name;
         this.id = id;
         this.reactants = new HashMap<>();
         this.products = new HashMap<>();
-        //this.modifiers = new ArrayList<>();
     }
 
+    /**
+     * Default constructor needed for extensions
+     */
     public SimpleReaction(){
         this.name = "";
         this.id = "";
@@ -42,8 +39,18 @@ public class SimpleReaction {
 
     public String getName(){ return this.name; }
 
+    /**
+     * Method to add a reactant to the reaction
+     * @param s the species to be added as reactant
+     * @param stoich the stoichiometry of the reactant in the reaction
+     */
     public void addReactant(Species s, int stoich){ this.reactants.put(s,stoich); }
 
+    /**
+     * Method to add a product to the reaction
+     * @param s the species to be added as reactant
+     * @param stoich the stoichiometry of the reactant in the reaction
+     */
     public void addProduct(Species s, int stoich){ this.products.put(s,stoich); }
 
     public int getReactantStoich(Species s){ return (this.reactants.get(s) == null) ? 0 : this.reactants.get(s); }
@@ -66,6 +73,9 @@ public class SimpleReaction {
         this.reversible = reversible;
     }
 
+    /**
+     * Method to pretty-print the reaction for debugging purposes
+     */
     public void printReaction(){
         System.out.println("    "+this.id + "\n        -Name: "+this.name);
         System.out.println("        -Reactants:");

@@ -5,9 +5,14 @@ public class Compartment {
     private String name;
     private String id;
 
-    private ArrayList<SimpleReaction> reactions;
+    private ArrayList<SimpleReaction> reactions;    // the list of reactions
     private ArrayList<Species> species;
 
+    /**
+     * Class that represents a compartment in the cell, e.g. Cytosol, Mythocondria ecc...
+     * @param name the name of the compartment
+     * @param id the id of the compartment
+     */
     public Compartment(String name, String id){
         this.name = name;
         this.id = id;
@@ -23,6 +28,11 @@ public class Compartment {
 
     public void addReaction(SimpleReaction r){ this.reactions.add(r); }
 
+    /**
+     * Method to look for a particular species by id in the compartment
+     * @param id the id of the species to look for
+     * @return the species with the required id in the compartment, if present, otherwise null
+     */
     public Species searchSpecies(String id){
         for(Species s : this.species){
             if (s.getId().equals(id)) return s;
@@ -30,6 +40,11 @@ public class Compartment {
         return null;
     }
 
+    /**
+     * Method to look for a particular reaction by id in the compartment
+     * @param id the id of the reaction to look for
+     * @return the reaction with the required id in the compartment, if present, otherwise null
+     */
     public SimpleReaction searchReaction(String id){
         for(SimpleReaction r : this.reactions){
             if (r.getId().equals(id)) return r;
@@ -38,7 +53,7 @@ public class Compartment {
     }
 
     /**
-     * Method to find a compartment by ID
+     * Method to find a compartment by id
      * @param comps a HashSet of Compartments
      * @param compId the ID of the compartment to look for
      * @return
@@ -61,6 +76,10 @@ public class Compartment {
 
     public ArrayList<SimpleReaction> getReactions(){ return this.reactions; }
 
+    /**
+     * Method to pretty-print the contents of the compartment for debugging purposes
+     * @see SimpleReaction#printReaction()
+     */
     public void printCompartment(){
         System.out.println("Compartment: "+this.id);
         System.out.println("-Name: "+this.name);

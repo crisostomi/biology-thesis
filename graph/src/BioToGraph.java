@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 
 public class BioToGraph {
 
@@ -20,13 +19,13 @@ public class BioToGraph {
             }
 
             for (SimpleReaction reaction: compartment.getReactions()) {
-                List<Node> sources = new ArrayList<>();
-                List<Node> destinations = new ArrayList<>();
+                ArrayList<Node> sources = new ArrayList<>();
+                ArrayList<Node> destinations = new ArrayList<>();
 
                 for (Species species : reaction.getReactants().keySet()) {
                     Node node = Graph.findNode(nodes, species);
                     if (node != null) {
-                        node.setModifier(false);
+                        node.setOnlyModifier(false);
                         sources.add(node);
                     }
                 }
@@ -34,7 +33,7 @@ public class BioToGraph {
                 for (Species species : reaction.getProducts().keySet()) {
                     Node node = Graph.findNode(nodes, species);
                     if (node != null) {
-                        node.setModifier(false);
+                        node.setOnlyModifier(false);
                         destinations.add(node);
                     }
                 }

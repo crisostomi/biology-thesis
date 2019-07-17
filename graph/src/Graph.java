@@ -28,7 +28,7 @@ public class Graph {
         HashSet<Node> sinks = new HashSet<>(Set.copyOf(this.getNodes()));
         HashSet<Node> notSinks = new HashSet<>();
         for(Node node: sinks){
-            if (node.isModifier()) {
+            if (node.isOnlyModifier()) {
                 notSinks.add(node);
                 continue;
             }
@@ -52,7 +52,7 @@ public class Graph {
         HashSet<Node> sources = new HashSet<>(Set.copyOf(this.getNodes()));
         HashSet<Node> notSources = new HashSet<>();
         for(Node node: sources){
-            if (node.isModifier()) {
+            if (node.isOnlyModifier()) {
                 notSources.add(node);
                 continue;
             }

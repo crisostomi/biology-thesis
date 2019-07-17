@@ -4,6 +4,10 @@ public class ComplexReaction extends SimpleReaction {
 
     private ArrayList<Species> modifiers;
 
+    /**
+     * Class representing a complex reaction, that is a reaction with no modifiers
+     * @param sr the "base" reaction, to which the modifiers need to be added
+     */
     public ComplexReaction(SimpleReaction sr){
         this.modifiers = new ArrayList<>();
         this.setId(sr.getId());
@@ -11,6 +15,7 @@ public class ComplexReaction extends SimpleReaction {
         this.setReactants(sr.getReactants());
         this.setProducts(sr.getProducts());
     }
+
 
     public boolean allBoundaryModifiers(){
 
@@ -20,6 +25,10 @@ public class ComplexReaction extends SimpleReaction {
         return true;
     }
 
+    /**
+     * Method to add a modifier to the list of modifiers of the reaction
+     * @param s the species to be added as modifier
+     */
     public void addModifier(Species s){ this.modifiers.add(s); }
 
     public ArrayList<Species> getModifiers() { return modifiers; }

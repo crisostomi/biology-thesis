@@ -12,14 +12,19 @@ import java.io.File;
 
 public class SBMLBuilder {
 
-    private Document document;
-    private String output_dir;
+    private Document document;      // it stores the sbml being built
+    private String outputDir;
 
-    public SBMLBuilder(String out) throws ParserConfigurationException{
+    /**
+     * Class used to build the union SBML from SBML data
+     * @param outputDir the path of the output directory of the union sbml
+     * @throws ParserConfigurationException
+     */
+    public SBMLBuilder(String outputDir) throws ParserConfigurationException{
         DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder documentBuilder = documentFactory.newDocumentBuilder();
         this.document = documentBuilder.newDocument();
-        this.output_dir = out;
+        this.outputDir = outputDir;
     }
 
     public void buildRoot(Node root) {
@@ -104,7 +109,7 @@ public class SBMLBuilder {
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
         DOMSource domSource = new DOMSource(this.document);
-        StreamResult streamResult = new StreamResult(new File(this.output_dir+"/biosystem.sbml"));
+        StreamResult streamResult = new StreamResult(new File(this.outputDir +"/biosystem.sbml"));
         transformer.setOutputProperty(OutputKeys.INDENT, "yes");
         transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
         transformer.transform(domSource, streamResult);

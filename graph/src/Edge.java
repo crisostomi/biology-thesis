@@ -1,20 +1,27 @@
-import java.util.List;
+import java.util.ArrayList;
 
 class Edge {
-    private List<Node> sources;
-    private List<Node> destinations;
+    private ArrayList<Node> sources;
+    private ArrayList<Node> destinations;
 
-    List<Node> getSources() {
+    /**
+     * Class that represents a hyper-edge in a graph
+     * In models a reaction in the biosystem graph
+     * @param sources the list of source nodes
+     * @param destinations the list of destination nodes
+     * @see Node
+     */
+    Edge(ArrayList<Node> sources, ArrayList<Node> destinations){
+        this.sources = sources;
+        this.destinations = destinations;
+    }
+
+    ArrayList<Node> getSources() {
         return sources;
     }
 
-    List<Node> getDestinations() {
+    ArrayList<Node> getDestinations() {
         return destinations;
-    }
-
-    Edge(List<Node> sources, List<Node> destinations){
-        this.sources = sources;
-        this.destinations = destinations;
     }
 
 }

@@ -8,8 +8,13 @@ public class Species {
     private String compartmentName;
     private boolean isBoundary;
 
-
-
+    /**
+     * Class that represents a species in the biosystem
+     * @param name the name of the species
+     * @param id the unique id of the species
+     * @param compartmentId the unique id of the compartment in which the species is
+     * @param compartmentName the name of the compartment
+     */
     public Species(String name, String id, String compartmentId, String compartmentName){
         this.name = name;
         this.id = id;

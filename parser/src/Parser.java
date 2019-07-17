@@ -9,17 +9,29 @@ import java.util.HashSet;
 
 public class Parser {
 
-    private String filepath;
+    private String inputDir;
     private SBMLBuilder builder;
 
-    public Parser(String fp, String sbml_out) throws ParserConfigurationException{
-        this.filepath = fp;
-        this.builder = new SBMLBuilder(sbml_out);
+    /**
+     * Class used to parse sbml data and pass it down to the SBMLBuilder in order to build the union SBML
+     * @param inputDir the directory with the sbml data to be parsed
+     * @param sbmlOut the directory where to build the union sbml
+     * @throws ParserConfigurationException
+     * @see SBMLBuilder
+     */
+    public Parser(String inputDir, String sbmlOut) throws ParserConfigurationException{
+        this.inputDir = inputDir;
+        this.builder = new SBMLBuilder(sbmlOut);
     }
 
+    /**
+     * Method to get out all the information of the input sbml carried by a set of compartments
+     * @return the set of compartments in the sbml data
+     * @see Compartment
+     */
     public HashSet<Compartment> instantiateCompartments() {
         HashSet<Compartment> result = new HashSet<>();
-        File dir = new File(this.filepath);
+        File dir = new File(this.inputDir);
         File[] dirList = dir.listFiles();
         if(dirList != null){
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -46,7 +58,7 @@ public class Parser {
             }
         }
         else{
-            System.out.println(this.filepath + "is not a directory. Please specify a directory containing .sbml files derived from Reactome database");
+            System.out.println(this.inputDir + "is not a directory. Please specify a directory containing .sbml files derived from Reactome database");
         }
         return result;
     }
