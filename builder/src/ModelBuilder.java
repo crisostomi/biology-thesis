@@ -11,6 +11,7 @@ public class ModelBuilder {
     private StringBuilder cell_equation;
     private HashMap<String, Integer> comp_number;       // key: compartmentId, value: progressive number
     private static final String indentation = "    ";   // 4 spaces used for indentation
+    private static double cellVolume = 10e-12;
 
     public ModelBuilder(BioSystem B, String od) {
         this.B = B;
@@ -32,7 +33,7 @@ public class ModelBuilder {
 
         sb.append("package BioSystem\n\n");
 
-        sb.append(this.buildCell(depth+1));
+        sb.append(this.buildCell(cellVolume, depth+1));
 
         sb.append("end BioSystem;\n");
 
@@ -41,18 +42,22 @@ public class ModelBuilder {
 
     }
 
-    public String buildCell(int depth){
+    public String buildCell(double cellVolume, int depth){
 
+        double compartmentVolumePercentage = 0.1;
         String indent = indentation.repeat(depth);
 
         StringBuilder sb_model = new StringBuilder(indent);
         StringBuilder sb_instance = new StringBuilder();
         this.cell_equation.append(indent.concat("equation\n\n"));
 
-        sb_model.append("model Cell\n".concat(indent.repeat(2).concat("extends BioChem.Compartments.MainCompartment;\n\n")));
+        sb_model.append("model Cell\n".concat(indent.repeat(2).concat("extends BioChem.Compartments.MainCompartment")));
+        sb_model.append("(V(start=cell_V));\n\n");
+        sb_model.append(indent.repeat(depth+1).concat("inner parameter BioChem.Units.Volume cell_V = " +cellVolume)+";\n\n");
 
         for(Compartment c : this.B.getCompartments()){
-            sb_model.append(this.buildCompartmentModel(c, this.comp_number.get(c.getId()), depth+1));
+            sb_model.append(this.buildCompartmentModel(c, this.comp_number.get(c.getId()),
+                    compartmentVolumePercentage, depth+1));
             sb_instance.append(this.buildCompartmentInstance(c, this.comp_number.get(c.getId()), depth+1));
         }
 
@@ -105,10 +110,12 @@ public class ModelBuilder {
      * Method used to build the compartments in Modelica, handling the building of their species and reactions
      * @param compartment the compartment to be built
      * @param compIndex the progressive index used in the declaration of the compartment
+     * @param cellVolumePercentage the volume of the compartment in proportion to the cell volume
      * @param depth used for indentation purposes
      * @return a string comprised of Modelica code handling a compartment
      */
-    public String buildCompartmentModel(Compartment compartment, int compIndex, int depth){
+    public String buildCompartmentModel(Compartment compartment, int compIndex,
+                                        double cellVolumePercentage, int depth){
 
         String indent = indentation.repeat(depth);
         StringBuilder sb = new StringBuilder(indent);
@@ -116,7 +123,10 @@ public class ModelBuilder {
         //build Model compartment
         String name = ModelBuilder.toClassName(compartment.getName());
         sb.append("model ".concat(name.concat("\n")));
-        sb.append(indent.concat("    extends BioChem.Compartments.Compartment;\n\n"));
+        sb.append(indent.concat("    extends BioChem.Compartments.Compartment"));
+        sb.append("(V(start="+cellVolumePercentage+"*cell_V));\n\n");
+
+        sb.append(indent.concat("    outer parameter BioChem.Units.Volume cell_V;\n\n"));
 
         sb.append(this.buildAllSpecies(compartment, depth+1));
 
