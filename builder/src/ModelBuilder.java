@@ -12,7 +12,7 @@ public class ModelBuilder {
     private HashMap<String, Integer> comp_number;       // key: compartmentId, value: progressive number
     private static final String indentation = "    ";   // 4 spaces used for indentation
 
-    public ModelBuilder3(BioSystem B, String od) {
+    public ModelBuilder(BioSystem B, String od) {
         this.B = B;
         this.output_dir = od;
         this.cell_equation = new StringBuilder();
@@ -127,7 +127,7 @@ public class ModelBuilder {
         return sb.toString();
     }
 
-    public String buildAllReactions(Compartment c, int depth, int comp_index){
+    public String buildAllReactions(Compartment compartment, int compIndex, int depth){
 
         String indent = indentation.repeat(depth);
         StringBuilder sb_instance = new StringBuilder();
@@ -145,19 +145,19 @@ public class ModelBuilder {
                         int comp_number = this.comp_number.get(ce.getCompDstId());
                         if(ce.getExternalReactant() != null){
                             this.cell_equation.append(
-                                    buildConnectExternalReactant(comp_number, compIndex, react, ce, s, depth)
+                                    buildConnectExternalReactant(comp_number, compIndex, react, ce, s, depth-1)
                             );
                             s++;
                         }
                         else if(ce.getExternalProduct() != null){
                             this.cell_equation.append(
-                                    buildConnectExternalProduct(comp_number, compIndex, react, ce, p, depth)
+                                    buildConnectExternalProduct(comp_number, compIndex, react, ce, p, depth-1)
                             );
                             p++;
                         }
                         else if(ce.getExternalModifier() != null){
                             this.cell_equation.append(
-                                    buildConnectExternalModifier(comp_number, compIndex, react, ce, m, depth)
+                                    buildConnectExternalModifier(comp_number, compIndex, react, ce, m, depth-1)
                             );
                             m++;
                         }
@@ -172,7 +172,7 @@ public class ModelBuilder {
     }
 
     private String buildConnectExternalReactant(int compNumber, int compIndex, SimpleReaction react, CompartmentEdge ce, int s, int depth) {
-        return indentation.repeat(depth-2)
+        return indentation.repeat(depth)
                 .concat("connect(c_".concat(String.valueOf(compNumber).concat("."
                         .concat(ce.getExternalReactant().getId().concat(".n1, c_")
                                 .concat(String.valueOf(compIndex).concat("."
@@ -181,7 +181,7 @@ public class ModelBuilder {
     }
 
     private String buildConnectExternalProduct(int compNumber, int compIndex, SimpleReaction react, CompartmentEdge ce, int p, int depth) {
-        return indentation.repeat(depth-2)
+        return indentation.repeat(depth)
                 .concat("connect(c_".concat(String.valueOf(compNumber).concat("."
                         .concat(ce.getExternalProduct().getId().concat(".n1, c_")
                                 .concat(String.valueOf(compIndex).concat("."
@@ -190,7 +190,7 @@ public class ModelBuilder {
     }
 
     private String buildConnectExternalModifier(int compNumber, int compIndex, SimpleReaction react, CompartmentEdge ce, int m, int depth) {
-        return indentation.repeat(depth-2)
+        return indentation.repeat(depth)
                 .concat("connect(c_".concat(String.valueOf(compNumber).concat("."
                         .concat(ce.getExternalModifier().getId().concat(".n1, c_")
                                 .concat(String.valueOf(compIndex).concat("."
@@ -271,7 +271,7 @@ public class ModelBuilder {
 
     }
 
-    private static String buildReactionEquation(SimpleReaction r, int depth, String comp_id, int s, int p, int m){
+    private static String buildReactionEquation(SimpleReaction reaction, String compId, int s, int p, int m, int depth){
 
         String indent = indentation.repeat(depth);
         StringBuilder sb = new StringBuilder();
@@ -302,7 +302,7 @@ public class ModelBuilder {
         return sb.toString()+"\n";
     }
 
-    public String buildAllSpecies(Compartment c, int depth){
+    public String buildAllSpecies(Compartment compartment, int depth){
 
         String indent = indentation.repeat(depth);
         StringBuilder sb = new StringBuilder();
