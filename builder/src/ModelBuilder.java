@@ -142,7 +142,7 @@ public class ModelBuilder {
         String indent = indentation.repeat(depth);
         StringBuilder sb_instance = new StringBuilder();
         StringBuilder sb_equation = new StringBuilder();
-        String mid = "\n"+indentation.repeat(depth-1)+"equation\n\n";
+        String mid = indentation.repeat(depth-1)+"equation\n\n";
 
         for(SimpleReaction react : compartment.getReactions()){
             String instance = ModelBuilder.inferReactionType(react);
@@ -176,6 +176,7 @@ public class ModelBuilder {
                 sb_equation.append(ModelBuilder.buildReactionEquation(react, compartment.getId(), s, p, m, depth));
             }
         }
+        sb_instance.append("\n");
 
         if(sb_equation.toString().equals("")) mid = "";
         return sb_instance.toString()+mid+sb_equation.toString();
