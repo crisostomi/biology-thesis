@@ -1,0 +1,16 @@
+loadModel(Modelica); 
+getErrorString();
+
+loadFile("/home/don/Dropbox/Tesisti/software/BioChem-1.0.1/BioChem/package.mo"); 
+// loadFile("/home/bayo/Dropbox/Tesisti/software/BioChem-1.0.1/BioChem/package.mo");
+
+loadFile("./BioSystem.mo");
+getErrorString();
+
+simulate(BioSystem.Cell, stopTime=20, stepSize=10e-4);
+getErrorString();
+
+// plot({c.Gal1P.n, c.UDP_Glc.n, c.UDP_Gal.n, c.ATP.n, c.ADP.n, c.G1P.n, c.G6P.n, c.Gal.n});
+plot({c_1.species_111627.n, c_3.species_425425.n, c_1.species_352022.n, c_3.species_188972.n});
+getErrorString();
+
