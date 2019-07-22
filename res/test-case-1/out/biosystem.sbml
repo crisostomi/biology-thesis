@@ -2,23 +2,19 @@
 <sbml xmlns="http://www.sbml.org/sbml/level3/version1/core" level="3" version="1">
   <model id="pathway_union" name="Union of input pathways shown in Annotation">
     <annotation>
-      <model id="pathway_5683371" metaid="metaid_0" name="Defective ABCB6 causes isolated colobomatous microphthalmia 7 (MCOPCB7)"/>
       <model id="pathway_5637812" metaid="metaid_0" name="Signaling by EGFRvIII in Cancer"/>
       <model id="pathway_5653890" metaid="metaid_0" name="Lactose synthesis"/>
+      <model id="pathway_5683371" metaid="metaid_0" name="Defective ABCB6 causes isolated colobomatous microphthalmia 7 (MCOPCB7)"/>
     </annotation>
     <listOfCompartments>
-      <compartment constant="true" id="compartment_17906" metaid="metaid_2" name="mitochondrial outer membrane" sboTerm="SBO:0000290"/>
-      <compartment constant="true" id="compartment_70101" metaid="metaid_4" name="cytosol" sboTerm="SBO:0000290"/>
       <compartment constant="true" id="compartment_876" metaid="metaid_2" name="plasma membrane" sboTerm="SBO:0000290"/>
+      <compartment constant="true" id="compartment_70101" metaid="metaid_5" name="cytosol" sboTerm="SBO:0000290"/>
       <compartment constant="true" id="compartment_984" metaid="metaid_13" name="extracellular region" sboTerm="SBO:0000290"/>
       <compartment constant="true" id="compartment_20699" metaid="metaid_2" name="Golgi membrane" sboTerm="SBO:0000290"/>
       <compartment constant="true" id="compartment_17963" metaid="metaid_4" name="Golgi lumen" sboTerm="SBO:0000290"/>
+      <compartment constant="true" id="compartment_17906" metaid="metaid_2" name="mitochondrial outer membrane" sboTerm="SBO:0000290"/>
     </listOfCompartments>
     <listOfSpecies>
-      <species boundaryCondition="false" compartment="compartment_17906" constant="false" hasOnlySubstanceUnits="false" id="species_5683361" metaid="metaid_1" name="ABCB6 mutants [mitochondrial outer membrane]"/>
-      <species boundaryCondition="false" compartment="compartment_70101" constant="false" hasOnlySubstanceUnits="false" id="species_113592" metaid="metaid_3" name="ATP [cytosol]" sboTerm="SBO:0000247"/>
-      <species boundaryCondition="false" compartment="compartment_70101" constant="false" hasOnlySubstanceUnits="false" id="species_29356" metaid="metaid_5" name="H2O [cytosol]" sboTerm="SBO:0000247"/>
-      <species boundaryCondition="false" compartment="compartment_70101" constant="false" hasOnlySubstanceUnits="false" id="species_1369066" metaid="metaid_6" name="porphyrin [cytosol]" sboTerm="SBO:0000247"/>
       <species boundaryCondition="false" compartment="compartment_876" constant="false" hasOnlySubstanceUnits="false" id="species_5637704" metaid="metaid_1" name="p-5Y-EGFRvIII:p-Y349,Y350-SHC1:GRB2:SOS1 [plasma membrane]" sboTerm="SBO:0000253"/>
       <species boundaryCondition="false" compartment="compartment_876" constant="false" hasOnlySubstanceUnits="false" id="species_109796" metaid="metaid_3" name="p21 RAS:GDP [plasma membrane]" sboTerm="SBO:0000253"/>
       <species boundaryCondition="false" compartment="compartment_70101" constant="false" hasOnlySubstanceUnits="false" id="species_29438" metaid="metaid_4" name="GTP [cytosol]" sboTerm="SBO:0000247"/>
@@ -35,6 +31,7 @@
       <species boundaryCondition="false" compartment="compartment_876" constant="false" hasOnlySubstanceUnits="false" id="species_5637703" metaid="metaid_17" name="p-5Y-EGFRvIII:p-Y349,Y350-SHC1 [plasma membrane]" sboTerm="SBO:0000253"/>
       <species boundaryCondition="false" compartment="compartment_70101" constant="false" hasOnlySubstanceUnits="false" id="species_109797" metaid="metaid_18" name="GRB2-1:SOS1 [cytosol]" sboTerm="SBO:0000253"/>
       <species boundaryCondition="false" compartment="compartment_876" constant="false" hasOnlySubstanceUnits="false" id="species_1248010" metaid="metaid_19" name="EGFRvIII mutant dimer [plasma membrane]" sboTerm="SBO:0000253"/>
+      <species boundaryCondition="false" compartment="compartment_70101" constant="false" hasOnlySubstanceUnits="false" id="species_113592" metaid="metaid_20" name="ATP [cytosol]" sboTerm="SBO:0000247"/>
       <species boundaryCondition="false" compartment="compartment_70101" constant="false" hasOnlySubstanceUnits="false" id="species_29370" metaid="metaid_21" name="ADP [cytosol]" sboTerm="SBO:0000247"/>
       <species boundaryCondition="false" compartment="compartment_70101" constant="false" hasOnlySubstanceUnits="false" id="species_179849" metaid="metaid_22" name="GRB2:GAB1 [cytosol]" sboTerm="SBO:0000253"/>
       <species boundaryCondition="false" compartment="compartment_876" constant="false" hasOnlySubstanceUnits="false" id="species_5637694" metaid="metaid_23" name="p-5Y-EGFRvIII:GRB2:GAB1 [plasma membrane]" sboTerm="SBO:0000253"/>
@@ -60,19 +57,11 @@
       <species boundaryCondition="false" compartment="compartment_20699" constant="false" hasOnlySubstanceUnits="false" id="species_528072" metaid="metaid_11" name="B4GALT1 [Golgi membrane]" sboTerm="SBO:0000297"/>
       <species boundaryCondition="false" compartment="compartment_17963" constant="false" hasOnlySubstanceUnits="false" id="species_5653896" metaid="metaid_12" name="LALBA [Golgi lumen]" sboTerm="SBO:0000297"/>
       <species boundaryCondition="false" compartment="compartment_17963" constant="false" hasOnlySubstanceUnits="false" id="species_5653875" metaid="metaid_13" name="Mn2+ [Golgi lumen]" sboTerm="SBO:0000247"/>
+      <species boundaryCondition="false" compartment="compartment_17906" constant="false" hasOnlySubstanceUnits="false" id="species_5683361" metaid="metaid_1" name="ABCB6 mutants [mitochondrial outer membrane]"/>
+      <species boundaryCondition="false" compartment="compartment_70101" constant="false" hasOnlySubstanceUnits="false" id="species_29356" metaid="metaid_5" name="H2O [cytosol]" sboTerm="SBO:0000247"/>
+      <species boundaryCondition="false" compartment="compartment_70101" constant="false" hasOnlySubstanceUnits="false" id="species_1369066" metaid="metaid_6" name="porphyrin [cytosol]" sboTerm="SBO:0000247"/>
     </listOfSpecies>
     <listOfReactions>
-      <reaction compartment="compartment_17906" fast="false" id="reaction_5683355" metaid="metaid_7" name="Defective ABCB6 does not transport porphyrin from cytosol into mitochondria matrix" reversible="false">
-        <listOfReactants>
-          <speciesReference constant="true" id="speciesreference_5683355_input_1369066" sboTerm="SBO:0000010" species="species_1369066" stoichiometry="1"/>
-          <speciesReference constant="true" id="speciesreference_5683355_input_29356" sboTerm="SBO:0000010" species="species_29356" stoichiometry="1"/>
-          <speciesReference constant="true" id="speciesreference_5683355_input_113592" sboTerm="SBO:0000010" species="species_113592" stoichiometry="1"/>
-        </listOfReactants>
-        <listOfProducts/>
-        <listOfModifiers>
-          <modifierSpeciesReference id="modifierspeciesreference_5683355_catalyst_5683361" sboTerm="SBO:0000013" species="species_5683361"/>
-        </listOfModifiers>
-      </reaction>
       <reaction compartment="compartment_70101" fast="false" id="reaction_5637808" metaid="metaid_36" name="SOS-mediated nucleotide exchange of RAS (mediated by GRB2:SOS1 in complex with phosphorylated SHC1 and p-EGFRvIII)" reversible="false">
         <listOfReactants>
           <speciesReference constant="true" id="speciesreference_5637808_input_29438" sboTerm="SBO:0000010" species="species_29438" stoichiometry="1"/>
@@ -302,6 +291,17 @@
         <listOfModifiers>
           <modifierSpeciesReference id="modifierspeciesreference_5653886_positiveregulator_735682" sboTerm="SBO:0000459" species="species_735682"/>
           <modifierSpeciesReference id="modifierspeciesreference_5653886_positiveregulator_5653875" sboTerm="SBO:0000459" species="species_5653875"/>
+        </listOfModifiers>
+      </reaction>
+      <reaction compartment="compartment_17906" fast="false" id="reaction_5683355" metaid="metaid_7" name="Defective ABCB6 does not transport porphyrin from cytosol into mitochondria matrix" reversible="false">
+        <listOfReactants>
+          <speciesReference constant="true" id="speciesreference_5683355_input_1369066" sboTerm="SBO:0000010" species="species_1369066" stoichiometry="1"/>
+          <speciesReference constant="true" id="speciesreference_5683355_input_29356" sboTerm="SBO:0000010" species="species_29356" stoichiometry="1"/>
+          <speciesReference constant="true" id="speciesreference_5683355_input_113592" sboTerm="SBO:0000010" species="species_113592" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts/>
+        <listOfModifiers>
+          <modifierSpeciesReference id="modifierspeciesreference_5683355_catalyst_5683361" sboTerm="SBO:0000013" species="species_5683361"/>
         </listOfModifiers>
       </reaction>
     </listOfReactions>
