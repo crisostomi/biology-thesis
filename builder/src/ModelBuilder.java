@@ -127,7 +127,7 @@ public class ModelBuilder {
             if(instance == null) sb_instance.append(indent.concat("//WARNING: could not infer reaction type of ").concat(react.getId().concat("\n")));
             else{
                 sb_instance.append(indent.concat(instance.concat((" \""+react.getName()+"\";\n"))));
-                int s = react.getReactants().size(), p = 1, m = 1;
+                int s = react.getReactants().size(), p = 1/*, m = 1*/;
                 for(CompartmentEdge ce : this.B.getCompEdges()){
                     if(ce.getTransport().getId().equals(react.getId())){
                         int comp_number = this.comp_number.get(ce.getCompDstId());
@@ -145,13 +145,13 @@ public class ModelBuilder {
                         }
                         else if(ce.getExternalModifier() != null){
                             this.cell_equation.append(
-                                    buildConnectExternalModifier(comp_number, compIndex, react, ce, m, depth-1)
+                                    buildConnectExternalModifier(comp_number, compIndex, react, ce, /*m,*/ depth-1)
                             );
-                            m++;
+                            //m++;
                         }
                     }
                 }
-                sb_equation.append(ModelBuilder.buildReactionEquation(react, compartment.getId(), s, p, m, depth));
+                sb_equation.append(ModelBuilder.buildReactionEquation(react, compartment.getId(), s, p, /*m,*/ depth));
             }
         }
         sb_instance.append("\n");
@@ -161,30 +161,43 @@ public class ModelBuilder {
     }
 
     private String buildConnectExternalReactant(int compNumber, int compIndex, SimpleReaction react, CompartmentEdge ce, int s, int depth) {
-        return indentation.repeat(depth)
+        String res = indentation.repeat(depth)
                 .concat("connect(c_".concat(String.valueOf(compNumber).concat("."
                         .concat(ce.getExternalReactant().getId().concat(".n1, c_")
                                 .concat(String.valueOf(compIndex).concat("."
-                                        .concat(react.getId().concat(".s"
-                                                .concat(String.valueOf(s).concat(");\n"))))))))));
+                                        .concat(react.getId().concat(".s"))))))));
+        if(react.getReactants().size() > 3 || react.getProducts().size() > 3) return res + "[".concat(String.valueOf(s).concat("]);\n"));
+        else return res + String.valueOf(s).concat(");\n");
     }
 
     private String buildConnectExternalProduct(int compNumber, int compIndex, SimpleReaction react, CompartmentEdge ce, int p, int depth) {
-        return indentation.repeat(depth)
+        String res = indentation.repeat(depth)
                 .concat("connect(c_".concat(String.valueOf(compNumber).concat("."
                         .concat(ce.getExternalProduct().getId().concat(".n1, c_")
                                 .concat(String.valueOf(compIndex).concat("."
-                                        .concat(react.getId().concat(".p"
-                                                .concat(String.valueOf(p).concat(");\n"))))))))));
+                                        .concat(react.getId().concat(".p"))))))));
+        if(react.getReactants().size() > 3 || react.getProducts().size() > 3) return res + "[".concat(String.valueOf(p).concat("]);\n"));
+        else return res + String.valueOf(p).concat(");\n");
     }
 
-    private String buildConnectExternalModifier(int compNumber, int compIndex, SimpleReaction react, CompartmentEdge ce, int m, int depth) {
-        return indentation.repeat(depth)
+    private String buildConnectExternalModifier(int compNumber, int compIndex, SimpleReaction react, CompartmentEdge ce, /*int m,*/ int depth) {
+
+        String type;
+        if(((ComplexReaction) react).getModifierType(ce.getExternalModifier()) == ComplexReaction.ModifierType.NEGATIVE_REGULATOR) type = "i";
+        else type = "a";
+        String res = indentation.repeat(depth)
                 .concat("connect(c_".concat(String.valueOf(compNumber).concat("."
                         .concat(ce.getExternalModifier().getId().concat(".n1, c_")
                                 .concat(String.valueOf(compIndex).concat("."
-                                        .concat(react.getId().concat(".aF"
-                                                .concat(String.valueOf(m).concat(");\n"))))))))));
+                                        .concat(react.getId().concat(".".concat(type
+                                                .concat("F1);\n"))))))))));
+        if(react.isReversible()) res += indentation.repeat(depth)
+                .concat("connect(c_".concat(String.valueOf(compNumber).concat("."
+                        .concat(ce.getExternalModifier().getId().concat(".n1, c_")
+                                .concat(String.valueOf(compIndex).concat("."
+                                        .concat(react.getId().concat(".".concat(type
+                                                .concat("B1);\n"))))))))));
+        return res;
     }
 
     /**
@@ -285,21 +298,21 @@ public class ModelBuilder {
         double mean = 1e3;
         double std_dev = 1e3;
 
-
         sb.append("k1=".concat(String.valueOf(Math.abs(r.nextGaussian()*std_dev+mean))));
         if(react.isReversible()) sb.append(", k2=".concat(String.valueOf(Math.abs(r.nextGaussian()*std_dev+mean))));
 
         int sub = 1, prod = 1;
         for(Species s : react.getReactants().keySet()){
-            if(react.getReactantStoich(s) > 1) sb.append(", s".concat(String.valueOf(sub++).concat("=".concat(String.valueOf(react.getReactantStoich(s))))));
+            if(react.getReactantStoich(s) > 1) sb.append(", nS".concat(String.valueOf(sub++).concat("=".concat(String.valueOf(react.getReactantStoich(s))))));
         }
 
         for(Species s : react.getProducts().keySet()){
-            if(react.getProductStoich(s) > 1) sb.append(", p".concat(String.valueOf(prod++).concat("=".concat(String.valueOf(react.getProductStoich(s))))));
+            if(react.getProductStoich(s) > 1) sb.append(", nP".concat(String.valueOf(prod++).concat("=".concat(String.valueOf(react.getProductStoich(s))))));
         }
 
         if(multi){
             Iterator<Species> it_R = react.getReactants().keySet().iterator();
+            sb.append(", dimS=".concat(String.valueOf(react.getReactants().size())));
             sb.append(", nS={".concat(String.valueOf(react.getReactantStoich(it_R.next()))));
             while(it_R.hasNext()){
                 Species s = it_R.next();
@@ -308,6 +321,7 @@ public class ModelBuilder {
             sb.append("}");
 
             Iterator<Species> it_P = react.getProducts().keySet().iterator();
+            sb.append(", dimP=".concat(String.valueOf(react.getProducts().size())));
             sb.append(", nP={".concat(String.valueOf(react.getProductStoich(it_P.next()))));
             while(it_P.hasNext()){
                 Species s = it_P.next();
@@ -319,7 +333,7 @@ public class ModelBuilder {
         return sb.toString()+")";
     }
 
-    private static String buildReactionEquation(SimpleReaction reaction, String compId, int s, int p, int m, int depth){
+    private static String buildReactionEquation(SimpleReaction reaction, String compId, int s, int p, /*int m,*/ int depth){
 
         String indent = indentation.repeat(depth);
         StringBuilder sb = new StringBuilder();
@@ -327,22 +341,33 @@ public class ModelBuilder {
         for(Species spec : reaction.getReactants().keySet()){
             if(spec.getCompartmentId().equals(compId)) {
                 sb.append(indent.concat("connect(".concat(spec.getId().concat(".n1, ".concat(reaction.getId().
-                        concat(".s".concat(String.valueOf(s--).concat(");\n"))))))));
+                        concat(".s"))))));
+                if(reaction.getReactants().size() > 3 || reaction.getProducts().size() > 3) sb.append("[".concat(String.valueOf(s--).concat("]);\n")));
+                else sb.append(String.valueOf(s--).concat(");\n"));
             }
         }
 
         for(Species spec : reaction.getProducts().keySet()) {
             if (spec.getCompartmentId().equals(compId)) {
                 sb.append(indent.concat("connect(".concat(spec.getId().concat(".n1, ".concat(reaction.getId().
-                        concat(".p".concat(String.valueOf(p++).concat(");\n"))))))));
+                        concat(".p"))))));
+                if(reaction.getReactants().size() > 3 || reaction.getProducts().size() > 3) sb.append("[".concat(String.valueOf(p++).concat("]);\n")));
+                else sb.append(String.valueOf(p++).concat(");\n"));
             }
         }
 
         if(reaction instanceof ComplexReaction){
             for(Species spec : ((ComplexReaction) reaction).getModifiers().keySet()) {
                 if (spec.getCompartmentId().equals(compId)) {
+                    String type;
+                    if(((ComplexReaction) reaction).getModifierType(spec) == ComplexReaction.ModifierType.NEGATIVE_REGULATOR) type = "i";
+                    else type = "a";
                     sb.append(indent.concat("connect(".concat(spec.getId().concat(".n1, ".concat(reaction.getId().
-                            concat(".aF".concat(String.valueOf(m++).concat(");\n"))))))));
+                            concat(".".concat(type.concat("F1);\n"))))))));
+                    if(reaction.isReversible()){
+                        sb.append(indent.concat("connect(".concat(spec.getId().concat(".n1, ".concat(reaction.getId().
+                                concat(".".concat(type.concat("B1);\n"))))))));
+                    }
                 }
             }
         }
