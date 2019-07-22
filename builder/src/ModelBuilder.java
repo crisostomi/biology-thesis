@@ -2,6 +2,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Random;
 
 public class ModelBuilder {
@@ -21,7 +22,6 @@ public class ModelBuilder {
     }
 
     public void buildBioSystem() throws IOException {
-
 
         int depth = 0;
 
@@ -84,28 +84,6 @@ public class ModelBuilder {
                                                 compartment.getId().concat("\";\n"))))));
     }
 
-    /*public String buildCompartmentEdges(Compartment c, int depth, int index){
-
-        String indent = indentation.repeat(depth);
-        StringBuilder sb = new StringBuilder(indent);
-
-
-        for(CompartmentEdge ce : this.B.getCompEdges()){ //la reazione sta in ce.compSourceId
-            sb.append("connect(");
-            if(ce.getCompDstId().equals(c.getId())){
-                if(ce.getExternalReactant() != null){
-                    sb.append("c_".concat(String.valueOf(index).
-                            concat(".".concat("reaction_".
-                                    concat(ce.getTransport().getId().
-                                            concat(".".concat("s".concat(String.valueOf(s++)))))))));
-                }
-            }
-        }
-
-        return sb.toString();
-
-    }*/
-
     /**
      * Method used to build the compartments in Modelica, handling the building of their species and reactions
      * @param compartment the compartment to be built
@@ -149,7 +127,7 @@ public class ModelBuilder {
             if(instance == null) sb_instance.append(indent.concat("//WARNING: could not infer reaction type of ").concat(react.getId().concat("\n")));
             else{
                 sb_instance.append(indent.concat(instance.concat((" \""+react.getName()+"\";\n"))));
-                int s = 1, p = 1, m = 1;
+                int s = react.getReactants().size(), p = 1, m = 1;
                 for(CompartmentEdge ce : this.B.getCompEdges()){
                     if(ce.getTransport().getId().equals(react.getId())){
                         int comp_number = this.comp_number.get(ce.getCompDstId());
@@ -157,7 +135,7 @@ public class ModelBuilder {
                             this.cell_equation.append(
                                     buildConnectExternalReactant(comp_number, compIndex, react, ce, s, depth-1)
                             );
-                            s++;
+                            s--;
                         }
                         else if(ce.getExternalProduct() != null){
                             this.cell_equation.append(
@@ -216,70 +194,129 @@ public class ModelBuilder {
      * modifiers, and it assumes all the others follow Mass Action kinetic law
      * @param react the reaction
      * @return a String comprised of the declaration of the reaction
-     * @see #createReactionInstance(SimpleReaction)
+     * @see #createReactionInstance(SimpleReaction, boolean)
      */
     private static String inferReactionType(SimpleReaction react){
 
-        String kinetics;
+        String kinetics = "";
         String classname = "";
-        /*if(r instanceof ComplexReaction){
-            if(r.getReactants().keySet().size() > 1 || r.getReactants().keySet().size() > 1) return null;
-            classname += "Uu";
+        String root;
+        boolean multi = false;
 
-            if (((ComplexReaction) r).allBoundaryModifiers()) kinetics = "MassAction";
+        //kinetics = "";
+        //assuming MassAction kinetics for all SimpleReactions
+        //Note: BioChem has MassAction reactions for all combinations of [1,3] reactants/products
 
-            if(r.isReversible()){
-                classname += "r";
-            }
-            else{
-                classname += "i";
-            }
+        if(react.getProducts().keySet().size() == 0){
+            //TODO: Cerca una reazione con gli stessi reagenti ma con almeno un prodotto: se esiste, rendila ininfluente (non deve avvenire)
             return null;
         }
-        else{*/
-            kinetics = "";
-            //assuming MassAction kinetics for all SimpleReactions
-            //Note: BioChem has MassAction reactions for all combinations of [1,3] reactants/products
-            if(react.getReactants().keySet().size() > 3 || react.getProducts().keySet().size() > 3) return null;
-            else if(react.getProducts().keySet().size() == 0){
-                //Cerca una reazione con gli stessi reagenti ma con almeno un prodotto:
-                //Se esiste, rendila ininfluente (non deve avvenire)
-                return null;
+        if(react.getReactants().keySet().size() > 3 || react.getProducts().keySet().size() > 3){
+            root = "Reactions.MassAction.";
+            classname += "Mm";
+            multi = true;
+        }
+        else {
+            root = "BioChem.Reactions.MassAction.";
+            switch (react.getReactants().keySet().size()) {
+                case 1:
+                    kinetics += "Uni";
+                    classname += "U";
+                    break;
+                case 2:
+                    kinetics += "Bi";
+                    classname += "B";
+                    break;
+                case 3:
+                    kinetics += "Tri";
+                    classname += "T";
+                    break;
             }
-            switch(react.getReactants().keySet().size()){
-                case 1: kinetics += "Uni"; classname += "U"; break;
-                case 2: kinetics += "Bi"; classname += "B"; break;
-                case 3: kinetics += "Tri"; classname += "T"; break;
+            switch (react.getProducts().keySet().size()) {
+                case 1:
+                    kinetics += "Uni.";
+                    classname += "u";
+                    break;
+                case 2:
+                    kinetics += "Bi.";
+                    classname += "b";
+                    break;
+                case 3:
+                    kinetics += "Tri.";
+                    classname += "t";
+                    break;
             }
-            switch(react.getProducts().keySet().size()){
-                case 1: kinetics += "Uni."; classname += "u"; break;
-                case 2: kinetics += "Bi."; classname += "b"; break;
-                case 3: kinetics += "Tri."; classname += "t"; break;
+        }
+        if (react.isReversible()) {
+            kinetics = "Reversible." + kinetics;
+            classname += "r";
+        } else {
+            kinetics = "Irreversible." + kinetics;
+            classname += "i";
+        }
+        if(react instanceof ComplexReaction){
+            int pos = 0;
+            int neg = 0;
+            for(Species m : ((ComplexReaction) react).getModifiers().keySet()){
+                ComplexReaction.ModifierType t = ((ComplexReaction) react).getModifierType(m);
+                if(t != null){
+                    if(t == ComplexReaction.ModifierType.CATALYST || t == ComplexReaction.ModifierType.POSITIVE_REGULATOR){
+                        if((pos++) < 1) classname += "fa";
+                        else return null;
+                    }
+                    else if(t == ComplexReaction.ModifierType.NEGATIVE_REGULATOR){
+                        if((neg++) < 1) classname += "fi";
+                        else return null;
+                    }
+                    if(react.isReversible()){
+                        if(pos == 1) classname += "ba";
+                        if(neg == 1) classname += "bi";
+                    }
+                }
             }
-            if(react.isReversible()){
-                kinetics = "MassAction.Reversible."+kinetics;
-                classname += "r";
-            }
-            else{
-                kinetics = "MassAction.Irreversible."+kinetics;
-                classname += "i";
-            }
-
-            if(react instanceof ComplexReaction) classname = classname+"fa";
-
-        //}
-
-        return "BioChem.Reactions."+kinetics+classname+" "+ ModelBuilder.createReactionInstance(react);
+        }
+        return root+kinetics+classname+" "+ ModelBuilder.createReactionInstance(react, multi);
     }
 
-    private static String createReactionInstance(SimpleReaction react){
+    private static String createReactionInstance(SimpleReaction react, boolean multi){
 
         Random r = new Random();
+        StringBuilder sb = new StringBuilder(react.getId()+"(");
         double mean = 1e3;
         double std_dev = 1e3;
 
-        return react.getId() + "(k1=" +/*String.valueOf*/(Math.abs(r.nextGaussian()*std_dev+mean))/*.replace("E", "e")*/ + ")";
 
+        sb.append("k1=".concat(String.valueOf(Math.abs(r.nextGaussian()*std_dev+mean))));
+        if(react.isReversible()) sb.append(", k2=".concat(String.valueOf(Math.abs(r.nextGaussian()*std_dev+mean))));
+
+        int sub = 1, prod = 1;
+        for(Species s : react.getReactants().keySet()){
+            if(react.getReactantStoich(s) > 1) sb.append(", s".concat(String.valueOf(sub++).concat("=".concat(String.valueOf(react.getReactantStoich(s))))));
+        }
+
+        for(Species s : react.getProducts().keySet()){
+            if(react.getProductStoich(s) > 1) sb.append(", p".concat(String.valueOf(prod++).concat("=".concat(String.valueOf(react.getProductStoich(s))))));
+        }
+
+        if(multi){
+            Iterator<Species> it_R = react.getReactants().keySet().iterator();
+            sb.append(", nS={".concat(String.valueOf(react.getReactantStoich(it_R.next()))));
+            while(it_R.hasNext()){
+                Species s = it_R.next();
+                sb.append(",".concat(String.valueOf(react.getReactantStoich(s))));
+            }
+            sb.append("}");
+
+            Iterator<Species> it_P = react.getProducts().keySet().iterator();
+            sb.append(", nP={".concat(String.valueOf(react.getProductStoich(it_P.next()))));
+            while(it_P.hasNext()){
+                Species s = it_P.next();
+                sb.append(",".concat(String.valueOf(react.getProductStoich(s))));
+            }
+            sb.append("}");
+
+        }
+        return sb.toString()+")";
     }
 
     private static String buildReactionEquation(SimpleReaction reaction, String compId, int s, int p, int m, int depth){
@@ -290,7 +327,7 @@ public class ModelBuilder {
         for(Species spec : reaction.getReactants().keySet()){
             if(spec.getCompartmentId().equals(compId)) {
                 sb.append(indent.concat("connect(".concat(spec.getId().concat(".n1, ".concat(reaction.getId().
-                        concat(".s".concat(String.valueOf(s++).concat(");\n"))))))));
+                        concat(".s".concat(String.valueOf(s--).concat(");\n"))))))));
             }
         }
 
@@ -302,7 +339,7 @@ public class ModelBuilder {
         }
 
         if(reaction instanceof ComplexReaction){
-            for(Species spec : ((ComplexReaction) reaction).getModifiers()) {
+            for(Species spec : ((ComplexReaction) reaction).getModifiers().keySet()) {
                 if (spec.getCompartmentId().equals(compId)) {
                     sb.append(indent.concat("connect(".concat(spec.getId().concat(".n1, ".concat(reaction.getId().
                             concat(".aF".concat(String.valueOf(m++).concat(");\n"))))))));

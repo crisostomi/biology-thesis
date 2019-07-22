@@ -83,7 +83,7 @@ public class BioSystem {
                 }
 
                 if(reac instanceof ComplexReaction){
-                    for(Species s : ((ComplexReaction) reac).getModifiers()){
+                    for(Species s : ((ComplexReaction) reac).getModifiers().keySet()){
                         CompartmentEdge ce_m;
                         if(!s.getCompartmentId().equals(comp_id)){
                             ce_m = new CompartmentEdge(comp_id, s.getCompartmentId(), reac);

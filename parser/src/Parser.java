@@ -112,7 +112,7 @@ public class Parser {
         return null;
     }
 
-    private Species searchSpeciesInBiosystem(HashSet<Compartment> set, String species_id){
+    private Species searchSpeciesInBioSystem(HashSet<Compartment> set, String species_id){
         for(Compartment c : set){
             Species s = c.searchSpecies(species_id);
             if(s != null) return s;
@@ -201,14 +201,6 @@ public class Parser {
 
             if(found != null && found.searchReaction(id) == null) this.builder.addReaction(n); //add node to sbml
 
-            /*if(reversible) {
-                r = new SimpleReaction(name, id + "_1");
-                r_inv = new SimpleReaction(name, id + "_2");
-            }
-            else{
-                r = new SimpleReaction(name, id);
-                r_inv = null;
-            }*/
             r = new SimpleReaction(name, id);
             r.setReversible(reversible);
 
@@ -222,7 +214,7 @@ public class Parser {
                         if (m.getNodeName().equals("speciesReference")) {
                             this.builder.addReactantReference(m, id);
                             reference = m.getAttributes().getNamedItem("species").getNodeValue();
-                            r.addReactant(searchSpeciesInBiosystem(result, reference), Integer.parseInt(m.getAttributes().getNamedItem("stoichiometry").getNodeValue()));
+                            r.addReactant(searchSpeciesInBioSystem(result, reference), Integer.parseInt(m.getAttributes().getNamedItem("stoichiometry").getNodeValue()));
                             //if(reversible) r_inv.addProduct(searchSpeciesInBiosystem(result, reference), Integer.parseInt(m.getAttributes().getNamedItem("stoichiometry").getNodeValue()));
                         }
                     } while ((m = m.getNextSibling()) != null);
@@ -234,7 +226,7 @@ public class Parser {
                         if (m.getNodeName().equals("speciesReference")) {
                             this.builder.addProductReference(m, id);
                             reference = m.getAttributes().getNamedItem("species").getNodeValue();
-                            r.addProduct(searchSpeciesInBiosystem(result, reference), Integer.parseInt(m.getAttributes().getNamedItem("stoichiometry").getNodeValue()));
+                            r.addProduct(searchSpeciesInBioSystem(result, reference), Integer.parseInt(m.getAttributes().getNamedItem("stoichiometry").getNodeValue()));
                             //if(reversible) r_inv.addReactant(searchSpeciesInBiosystem(result, reference), Integer.parseInt(m.getAttributes().getNamedItem("stoichiometry").getNodeValue()));
                         }
                     } while ((m = m.getNextSibling()) != null);
@@ -242,17 +234,17 @@ public class Parser {
 
                 else if(n.getNodeName().equals("listOfModifiers")){ //find modifiers
                     Node m = n.getFirstChild();
+                    String type;
                     do {
                         if (m.getNodeName().equals("modifierSpeciesReference")) {
                             complex = true;
                             this.builder.addModifierReference(m, id);
                             reference = m.getAttributes().getNamedItem("species").getNodeValue();
+                            type = m.getAttributes().getNamedItem("id").getNodeValue();
                             comp_r = new ComplexReaction(r);
-                            comp_r.addModifier(searchSpeciesInBiosystem(result, reference));
-                            /*if(reversible){
-                                comp_r_inv = new ComplexReaction(r_inv);
-                                comp_r_inv.addModifier(searchSpeciesInBiosystem(result, reference));
-                            }*/
+                            if(type.matches("catalyst")) comp_r.addModifier(searchSpeciesInBioSystem(result, reference), ComplexReaction.ModifierType.CATALYST);
+                            else if(type.matches("positiveregulator")) comp_r.addModifier(searchSpeciesInBioSystem(result, reference), ComplexReaction.ModifierType.POSITIVE_REGULATOR);
+                            else if(type.matches("negativeregulator")) comp_r.addModifier(searchSpeciesInBioSystem(result, reference), ComplexReaction.ModifierType.NEGATIVE_REGULATOR);
                         }
                     } while ((m = m.getNextSibling()) != null);
 
