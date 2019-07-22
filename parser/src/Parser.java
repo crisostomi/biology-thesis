@@ -242,9 +242,9 @@ public class Parser {
                             reference = m.getAttributes().getNamedItem("species").getNodeValue();
                             type = m.getAttributes().getNamedItem("id").getNodeValue();
                             comp_r = new ComplexReaction(r);
-                            if(type.matches("catalyst")) comp_r.addModifier(searchSpeciesInBioSystem(result, reference), ComplexReaction.ModifierType.CATALYST);
-                            else if(type.matches("positiveregulator")) comp_r.addModifier(searchSpeciesInBioSystem(result, reference), ComplexReaction.ModifierType.POSITIVE_REGULATOR);
-                            else if(type.matches("negativeregulator")) comp_r.addModifier(searchSpeciesInBioSystem(result, reference), ComplexReaction.ModifierType.NEGATIVE_REGULATOR);
+                            if(type.matches(".*catalyst.*")) comp_r.addModifier(searchSpeciesInBioSystem(result, reference), ComplexReaction.ModifierType.CATALYST);
+                            else if(type.matches(".*positiveregulator.*")) comp_r.addModifier(searchSpeciesInBioSystem(result, reference), ComplexReaction.ModifierType.POSITIVE_REGULATOR);
+                            else if(type.matches(".*negativeregulator.*")) comp_r.addModifier(searchSpeciesInBioSystem(result, reference), ComplexReaction.ModifierType.NEGATIVE_REGULATOR);
                         }
                     } while ((m = m.getNextSibling()) != null);
 
