@@ -143,10 +143,28 @@ public class Main {
             System.out.println("Modelica files creation/writing failed");
         }
 
+        String xmlOutDir = "/home/scacio/Dropbox/Tesisti/software/development/reactome-compiler/test-case-6/out";
+
+        ConstraintBuilder cb = new ConstraintBuilder(bs, xmlOutDir);
+        try {
+            cb.build();
+        } catch (IOException e) {
+            System.out.println("Constraints XML creation/writing failed");
+            e.printStackTrace();
+        }
+
+        String monOutDir = "/home/scacio/Dropbox/Tesisti/software/development/reactome-compiler/test-case-6/out";
+        MonitorBuilder monb = new MonitorBuilder(bs, xmlOutDir, monOutDir);
+        try {
+            monb.build();
+        } catch (IOException e) {
+            System.out.println("Modelica monitor creation/writing failed");
+            e.printStackTrace();
+        }
+
         System.out.println("All done!");
 
         /*
-        TODO: restore handling of volume from previous commit
         TODO: fix ignoring compartments trouble with reaction
          */
 
