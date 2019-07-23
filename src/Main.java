@@ -128,30 +128,30 @@ public class Main {
         BioSystem bs = new BioSystem(comps, sinks, sources);
 
         // convert Java biosystem model in Modelica
-        ModelBuilder mb = new ModelBuilder(bs, outputModelicaDir);
+        ModelBuilder mb = new ModelBuilder(bs, outputModelicaDir, configXMLfile);
         try {
             mb.buildBioSystem();
         } catch(IOException e){
             System.out.println("Modelica files creation/writing failed");
         }
 
-        String xmlOutDir = "/home/scacio/Dropbox/Tesisti/software/development/reactome-compiler/test-case-6/out";
+        //String xmlOutDir = "/home/scacio/Dropbox/Tesisti/software/development/reactome-compiler/test-case-6/out";
 
-        try {
-            ConstraintBuilder cb = new ConstraintBuilder(bs, xmlOutDir);
+        /*try {
+            ConstraintBuilder cb = new ConstraintBuilder(bs, configXMLfile);
             cb.build();
         } catch (Exception e) {
             System.out.println("Constraints XML creation/writing failed");
             e.printStackTrace();
-        }
+        }*/
 
-        MonitorBuilder monb = new MonitorBuilder(bs, xmlOutDir, outputModelicaDir);
+        /*MonitorBuilder monb = new MonitorBuilder(bs, configXMLfile, outputModelicaDir);
         try {
             monb.build();
         } catch (IOException e) {
             System.out.println("Modelica monitor creation/writing failed");
             e.printStackTrace();
-        }
+        }*/
 
         System.out.println("All done!");
 

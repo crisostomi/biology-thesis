@@ -11,7 +11,6 @@ class CompartmentBuilder {
         this.compartment_links = new StringBuilder();
     }
 
-
     /**
      * Method used to build the compartments in Modelica, handling the building of their species and reactions
      * @param cellVolumePercentage the volume of the compartment in proportion to the cell volume
@@ -29,12 +28,17 @@ class CompartmentBuilder {
         sb.append(indent.concat("    extends BioChem.Compartments.Compartment"));
         sb.append("(V(start=".concat(String.valueOf(cellVolumePercentage)).concat("*cell_V));\n\n"));
 
-        sb.append(indent.concat("    outer parameter BioChem.Units.Volume cell_V;\n\n"));
+        sb.append(indent.concat("    outer parameter BioChem.Units.Volume cell_V;\n"));
         //sb.append(indent.concat("    parameter "));
 
         //sb.append(this.buildAllSpecies(compartment, depth+1));
-        for(Species s : this.c.getSpecies()) sb.append(new SpeciesBuilder(s).buildSpecies(c, depth+1));
-        sb.append("\n");
+        SpeciesBuilder.not_assigned = 0;
+        SpeciesBuilder.buildKnowledge();
+        StringBuilder species = new StringBuilder();
+        for(Species s : this.c.getSpecies()) species.append(new SpeciesBuilder(s).buildSpecies(c, depth+1));
+        //sb.append("\n");
+        sb.append(indent.concat("    parameter BioChem.Units.AmountOfSubstance init[".concat(String.valueOf(SpeciesBuilder.not_assigned).concat("];\n\n"))));
+        sb.append(species.toString().concat("\n"));
 
         //sb.append(this.buildAllReactions(compartment, compIndex, depth+1));
         ReactionBuilder rb;

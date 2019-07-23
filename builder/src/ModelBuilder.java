@@ -1,4 +1,9 @@
+import org.w3c.dom.Document;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
@@ -15,11 +20,12 @@ public class ModelBuilder {
     private static final String indentation = "    ";   // 4 spaces used for indentation
     private static double cellVolume = 10e-12;
 
-    public ModelBuilder(BioSystem B, String od) {
+    public ModelBuilder(BioSystem B, String od, String config) {
         this.B = B;
         this.output_dir = od;
         this.cell_equation = new StringBuilder();
         this.comp_number = new HashMap<>();
+        this.config = config;
     }
 
     public void buildBioSystem() throws IOException {
@@ -55,6 +61,17 @@ public class ModelBuilder {
         ReactionBuilder.setCompEdges(this.B.getCompEdges());
         ReactionBuilder.setCompNumber(this.comp_number);
 
+        try {
+            File conf = new File(this.config);
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            SpeciesBuilder.knowledge = dBuilder.parse(conf);
+            ReactionBuilder.knowledge = SpeciesBuilder.knowledge;
+        }catch(Exception e){
+            System.out.println("Failed to open configuration file. Is "+this.config+" a legitimate xml configuration file?");
+            return null;
+        }
+
         sb_model.append("model Cell\n".concat(indent.repeat(2).concat("extends BioChem.Compartments.MainCompartment")));
         sb_model.append("(V(start=cell_V));\n\n");
         sb_model.append(indent.repeat(depth+1).concat("inner parameter BioChem.Units.Volume cell_V = " +cellVolume)+";\n\n");
@@ -72,14 +89,12 @@ public class ModelBuilder {
         return sb_model.toString()+sb_instance.toString()+"\n"+this.cell_equation.toString()+"\n"+indent+"end Cell;\n\n";
     }
 
-    private static String makeLegalName(String s){
+    /*private static String makeLegalName(String s){
         if (Character.isDigit(s.charAt(0))) {
             String out = "s_";
             return out.concat(s.replaceAll("[^a-zA-Z0-9]+","_"));
         }
-
         return s.replaceAll("[^a-zA-Z0-9]+","_");
-
-    }
+    }*/
 
 }

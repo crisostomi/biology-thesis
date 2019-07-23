@@ -165,7 +165,7 @@ public class MonitorBuilder {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder docBuild = dbf.newDocumentBuilder();
 
-        File xml = new File(this.xmlDir + "/constraints.xml");
+        File xml = new File(this.xmlDir /*+ "/constraints.xml"*/);
         Document doc = docBuild.parse(xml);
         NodeList elements = doc.getElementsByTagName("constraint");
 

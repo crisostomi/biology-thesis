@@ -1,3 +1,5 @@
+import org.w3c.dom.Document;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -9,6 +11,7 @@ class ReactionBuilder {
     private static String indentation = "    ";
     private static HashSet<CompartmentEdge> compEdges;
     private static HashMap<String, Integer> comp_number;
+    static Document knowledge;
     StringBuilder transport;
     StringBuilder equation;
 
