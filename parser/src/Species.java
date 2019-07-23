@@ -7,6 +7,8 @@ public class Species {
     private String compartmentId;
     private String compartmentName;
     private boolean isBoundary;
+    private double initial;
+
 
     /**
      * Class that represents a species in the biosystem
@@ -51,6 +53,14 @@ public class Species {
 
     public void setBoundary(boolean boundary) {
         isBoundary = boundary;
+    }
+
+    public double getInitial() {
+        return initial;
+    }
+
+    public void setInitial(double initial) {
+        this.initial = initial;
     }
 
     public void printSpecies(){

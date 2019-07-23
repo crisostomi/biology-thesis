@@ -3,7 +3,7 @@
 class SpeciesBuilder {
 
     private Species s;
-    private String indentation = "    ";
+    private static String indentation = "    ";
 
     public SpeciesBuilder(Species s){ this.s = s; }
 
@@ -20,7 +20,6 @@ class SpeciesBuilder {
         //double init = Math.abs(r.nextGaussian()*std_dev+mean);
         res += s.getId() + "(n(start=".concat(")) \""+s.getName()+"\";\n");
 
-
-        return res + "\n";
+        return res;
     }
 }

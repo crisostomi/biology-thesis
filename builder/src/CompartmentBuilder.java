@@ -2,12 +2,15 @@ class CompartmentBuilder {
 
     private Compartment c;
     private int comp_number;
-    private String indentation = "    ";
+    private static String indentation = "    ";
+    private StringBuilder compartment_links;
 
     CompartmentBuilder(Compartment c, int comp_number){
         this.c = c;
         this.comp_number = comp_number;
+        this.compartment_links = new StringBuilder();
     }
+
 
     /**
      * Method used to build the compartments in Modelica, handling the building of their species and reactions
@@ -27,12 +30,25 @@ class CompartmentBuilder {
         sb.append("(V(start=".concat(String.valueOf(cellVolumePercentage)).concat("*cell_V));\n\n"));
 
         sb.append(indent.concat("    outer parameter BioChem.Units.Volume cell_V;\n\n"));
-        sb.append(indent.concat("    parameter "));
+        //sb.append(indent.concat("    parameter "));
 
         //sb.append(this.buildAllSpecies(compartment, depth+1));
         for(Species s : this.c.getSpecies()) sb.append(new SpeciesBuilder(s).buildSpecies(c, depth+1));
+        sb.append("\n");
 
         //sb.append(this.buildAllReactions(compartment, compIndex, depth+1));
+        ReactionBuilder rb;
+        StringBuilder connect = new StringBuilder();
+        for(SimpleReaction r : this.c.getReactions()){
+            rb = new ReactionBuilder(r);
+            sb.append(rb.buildReaction(this.c, depth+1));
+            connect.append(rb.equation.toString());
+            this.compartment_links.append(rb.transport.toString());
+        }
+        if(!connect.toString().equals("")){
+            sb.append("\n".concat(indent.concat("equation\n\n")));
+            sb.append(connect.toString());
+        }
 
         sb.append(indent.concat("end ".concat(name.concat(";\n\n"))));
 
@@ -60,5 +76,13 @@ class CompartmentBuilder {
             else res = res.concat(s.substring(i, i+1));
         }
         return res;
+    }
+
+    public StringBuilder getCompartmentLinks() {
+        return compartment_links;
+    }
+
+    public void setCompartmentLinks(StringBuilder compLinks) {
+        this.compartment_links = compLinks;
     }
 }

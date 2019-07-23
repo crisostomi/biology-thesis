@@ -62,7 +62,7 @@ public class Main {
         2. output folder to write Modelica files (BioSystem + Monitor)
         3. input config file
         */
-        String[] argcopy = new String[args.length];
+        String[] argcopy = new String[4];
         System.arraycopy(args, 0, argcopy, 0, args.length);
         if(argcopy[2] == null) argcopy[2] = argcopy[1];
 
@@ -156,13 +156,13 @@ public class Main {
         }*/
 
         //String monOutDir = "/home/scacio/Dropbox/Tesisti/software/development/reactome-compiler/test-case-6/out";
-        MonitorBuilder monb = new MonitorBuilder(bs, argcopy[3], argcopy[2]);
+        /*MonitorBuilder monb = new MonitorBuilder(bs, argcopy[3], argcopy[2]);
         try {
             monb.build();
         } catch (IOException e) {
             System.out.println("Modelica monitor creation/writing failed");
             e.printStackTrace();
-        }
+        }*/
 
         System.out.println("All done!");
 
