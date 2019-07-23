@@ -25,7 +25,7 @@ public class ConstraintBuilder {
         BufferedWriter bw = new BufferedWriter(new FileWriter(this.outDir + "/constraints.xml"));
         StringBuilder sb = new StringBuilder();
 
-        sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+        sb.append("<?xml version=\'1.0\' encoding=\'utf-8\'?>\n");
         sb.append("<listOfConstraints>\n");
 
         for (Compartment compartment: B.getCompartments()) {
@@ -48,7 +48,9 @@ public class ConstraintBuilder {
     private StringBuilder buildSpeciesConstraint(Species species) {
         StringBuilder sb = new StringBuilder();
 
-        sb.append("\t<constraint species=\""+species.getName()+"\" id=\""+species.getId()+"\" minConcentration=\"\" maxConcentration=\"\">\n");
+        sb.append("\t<constraint species=\""+species.getName()+ "\" id=\""+species.getId()+ "\" " +
+                "initialAmount=\"1\" minAmount=\"0\" maxAmount=\"10\">");
+        sb.append("</constraint>\n");
 
         return sb;
     }
