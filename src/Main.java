@@ -8,10 +8,8 @@ import org.apache.commons.cli.*;
 public class Main {
 
     static private Options options = new Options();
-    static private ArrayList<String> ignoreCompartmentIdList = new ArrayList<>();
-    static private ArrayList<String> ignoreCompartmentNameList = new ArrayList<>();
-    static private ArrayList<String> selectCompartmentIdList = new ArrayList<>();
-    static private ArrayList<String> selectCompartmentNameList = new ArrayList<>();
+    static private ArrayList<String> ignoreCompartmentList = new ArrayList<>();
+    static private ArrayList<String> selectCompartmentList = new ArrayList<>();
 
     /**
      * Method to add an option to the cmd invocation of the program
@@ -66,19 +64,16 @@ public class Main {
         System.arraycopy(args, 0, argcopy, 0, args.length);
         if(argcopy[2] == null) argcopy[2] = argcopy[1];
 
-        /*String inputDir = args[0];
-        String outputDir = args[1];
+        String inputDir = argcopy[0];
+        String outputSBMLDir = argcopy[1];
+        String outputModelicaDir = argcopy[2];
+        String configXMLfile = argcopy[3];
 
-        addOption(null, "ignoreName", true,
-                "list of compartment names to be ignored {compName_1, ..., compName_n}", false);
-
-        addOption(null, "ignoreId", true,
+        /*
+        addOption(null, "ignoreComp", true,
                 "list of compartment ids to be ignored {compId_1, ..., compId_n}", false);
 
-        addOption(null, "selectName", true,
-                "list of compartment names to be selected {compName_1, ..., compName_n}", false);
-
-        addOption(null, "selectId", true,
+        addOption(null, "selectComp", true,
                 "list of compartment ids to be selected {compId_1, ..., compId_n}", false);
 
         CommandLineParser parser = new DefaultParser();
@@ -87,32 +82,28 @@ public class Main {
 
         try {
             cmd = parser.parse(options, args);
-            ignoreCompartmentNameList.addAll(parseOptionList(cmd, "ignoreName"));
-            ignoreCompartmentIdList.addAll(parseOptionList(cmd, "ignoreId"));
+            ignoreCompartmentIdList.addAll(parseOptionList(cmd, "ignoreComp"));
+            selectCompartmentIdList.addAll(parseOptionList(cmd, "selectComp"));
         } catch (ParseException e) {
             System.out.println(e.getMessage());
             formatter.printHelp("utility-name", options);
 
             System.exit(1);
         }
-
-        System.out.println(Arrays.toString(ignoreCompartmentNameList.toArray()));
-        System.out.println(Arrays.toString(ignoreCompartmentIdList.toArray()));*/
+        */
 
         HashSet<Compartment> comps;
         Parser P;
 
         // parse input sbml
         try { //TODO: don't generate sbml union in this Main
-            // P = new Parser(inputDir, outputDir);
-            P = new Parser(argcopy[0], argcopy[1]);
+            P = new Parser(inputDir, outputSBMLDir);
         } catch(ParserConfigurationException e){
             System.out.println("Parsing fail due to SBMLBuilder instantiation failure");
             return;
         }
 
         // convert sbml data into a collection of Compartment objects
-        // comps = P.instantiateCompartmentsIgnore(ignoreCompartmentNameList, ignoreCompartmentIdList);
         comps = P.instantiateCompartments();
         if (comps == null || comps.size() == 0) {
             System.out.println("Compartment instantiation failed. Returning with error");
@@ -137,37 +128,36 @@ public class Main {
         BioSystem bs = new BioSystem(comps, sinks, sources);
 
         // convert Java biosystem model in Modelica
-        // ModelBuilder mb = new ModelBuilder(bs, outputDir);
-        ModelBuilder mb = new ModelBuilder(bs, argcopy[2]);
+        ModelBuilder mb = new ModelBuilder(bs, outputModelicaDir);
         try {
             mb.buildBioSystem();
-        }catch(IOException e){
+        } catch(IOException e){
             System.out.println("Modelica files creation/writing failed");
         }
 
-        /*String xmlOutDir = "/home/scacio/Dropbox/Tesisti/software/development/reactome-compiler/test-case-6/out";
+        String xmlOutDir = "/home/scacio/Dropbox/Tesisti/software/development/reactome-compiler/test-case-6/out";
 
-        ConstraintBuilder cb = new ConstraintBuilder(bs, xmlOutDir);
         try {
+            ConstraintBuilder cb = new ConstraintBuilder(bs, xmlOutDir);
             cb.build();
-        } catch (IOException e) {
+        } catch (Exception e) {
             System.out.println("Constraints XML creation/writing failed");
             e.printStackTrace();
-        }*/
+        }
 
-        //String monOutDir = "/home/scacio/Dropbox/Tesisti/software/development/reactome-compiler/test-case-6/out";
-        /*MonitorBuilder monb = new MonitorBuilder(bs, argcopy[3], argcopy[2]);
+        MonitorBuilder monb = new MonitorBuilder(bs, xmlOutDir, outputModelicaDir);
         try {
             monb.build();
         } catch (IOException e) {
             System.out.println("Modelica monitor creation/writing failed");
             e.printStackTrace();
-        }*/
+        }
 
         System.out.println("All done!");
 
 
         /*
+        TODO: add --configure and --execute operational modes
         TODO: fix ignoring compartments trouble with reaction
          */
 
