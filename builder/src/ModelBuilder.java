@@ -55,64 +55,16 @@ public class ModelBuilder {
         sb_model.append("(V(start=cell_V));\n\n");
         sb_model.append(indent.repeat(depth+1).concat("inner parameter BioChem.Units.Volume cell_V = " +cellVolume)+";\n\n");
 
+        CompartmentBuilder cb;
         for(Compartment c : this.B.getCompartments()){
-            sb_model.append(this.buildCompartmentModel(c, this.comp_number.get(c.getId()),
-                    compartmentVolumePercentage, depth+1));
-            sb_instance.append(this.buildCompartmentInstance(c, this.comp_number.get(c.getId()), depth+1));
+            cb = new CompartmentBuilder(c, this.comp_number.get(c.getId()));
+            sb_model.append(cb.buildCompartmentModel(compartmentVolumePercentage, depth+1));
+            sb_instance.append(cb.buildCompartmentInstance(depth+1));
         }
 
         if(this.cell_equation.toString().equals(indent.concat("equation\n\n"))) this.cell_equation.delete(0, this.cell_equation.length());
 
         return sb_model.toString()+sb_instance.toString()+"\n"+this.cell_equation.toString()+"\n"+indent+"end Cell;\n\n";
-    }
-
-    /**
-     * Method used to declare all the compartments in Modelica as "CompartmentName c_i CompartmentId"
-     * @param compartment the name of the compartment
-     * @param compIndex progressive number used to declare the compartment
-     * @param depth used for indentation purposes
-     * @return a String comprised of Modelica code for the declaration of compartments
-     */
-    public String buildCompartmentInstance(Compartment compartment, int compIndex, int depth){
-
-        String indent = indentation.repeat(depth);
-        return indent.concat(
-                ModelBuilder.toClassName(compartment.getName()).concat(
-                        " c_".concat(
-                                String.valueOf(compIndex).concat(
-                                        " \"".concat(
-                                                compartment.getId().concat("\";\n"))))));
-    }
-
-    /**
-     * Method used to build the compartments in Modelica, handling the building of their species and reactions
-     * @param compartment the compartment to be built
-     * @param compIndex the progressive index used in the declaration of the compartment
-     * @param cellVolumePercentage the volume of the compartment in proportion to the cell volume
-     * @param depth used for indentation purposes
-     * @return a string comprised of Modelica code handling a compartment
-     */
-    public String buildCompartmentModel(Compartment compartment, int compIndex,
-                                        double cellVolumePercentage, int depth){
-
-        String indent = indentation.repeat(depth);
-        StringBuilder sb = new StringBuilder(indent);
-
-        //build Model compartment
-        String name = ModelBuilder.toClassName(compartment.getName());
-        sb.append("model ".concat(name.concat("\n")));
-        sb.append(indent.concat("    extends BioChem.Compartments.Compartment"));
-        sb.append("(V(start="+cellVolumePercentage+"*cell_V));\n\n");
-
-        sb.append(indent.concat("    outer parameter BioChem.Units.Volume cell_V;\n\n"));
-
-        sb.append(this.buildAllSpecies(compartment, depth+1));
-
-        sb.append(this.buildAllReactions(compartment, compIndex, depth+1));
-
-        sb.append(indent.concat("end ".concat(name.concat(";\n\n"))));
-
-        return sb.toString();
     }
 
     public String buildAllReactions(Compartment compartment, int compIndex, int depth){
@@ -375,36 +327,8 @@ public class ModelBuilder {
         return sb.toString()+"\n";
     }
 
-    public String buildAllSpecies(Compartment compartment, int depth){
 
-        String indent = indentation.repeat(depth);
-        StringBuilder sb = new StringBuilder();
-        Random r = new Random();
-        double mean = 1e-12;
-        double std_dev = 1e-14;
 
-        for(Species s : compartment.getSpecies()){
-            if(s.isBoundary()) sb.append(indent.concat("BioChem.Substances.BoundarySubstance "));//.concat(s.getId().concat("\""+s.getName()+"\";\n"))));
-            else sb.append(indent.concat("BioChem.Substances.Substance "));//
-            double init = Math.abs(r.nextGaussian()*std_dev+mean);
-            sb.append(s.getId().concat("(n(start=".concat(String.valueOf(init)/*.replace("E", "e")*/.concat(")) \""+s.getName()+"\";\n"))));
-        }
-
-        return sb.toString().concat("\n");
-    }
-
-    private static String toClassName(String s){
-        String res = "";
-        res = res.concat(s.substring(0,1).toUpperCase());
-        for(int i = 1; i < s.length(); i++){
-            if(s.substring(i,i+1).equals(" ")){
-                res = res.concat(s.substring(i+1,i+2).toUpperCase());
-                i++;
-            }
-            else res = res.concat(s.substring(i, i+1));
-        }
-        return res;
-    }
 
     private static String makeLegalName(String s){
         if (Character.isDigit(s.charAt(0))) {
