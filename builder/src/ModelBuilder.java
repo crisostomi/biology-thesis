@@ -327,9 +327,6 @@ public class ModelBuilder {
         return sb.toString()+"\n";
     }
 
-
-
-
     private static String makeLegalName(String s){
         if (Character.isDigit(s.charAt(0))) {
             String out = "s_";

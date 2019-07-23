@@ -58,9 +58,11 @@ public class Main {
 
         /*
         0. input folder with sbml files
-        1. output folder to write sbml_union and Modelica files
+        1. output folder to write sbml_union
+        2. output folder to write Modelica files (BioSystem + Monitor)
+        3. input config file
         */
-        String[] argcopy = new String[3];
+        String[] argcopy = new String[args.length];
         System.arraycopy(args, 0, argcopy, 0, args.length);
         if(argcopy[2] == null) argcopy[2] = argcopy[1];
 
@@ -101,7 +103,7 @@ public class Main {
         Parser P;
 
         // parse input sbml
-        try {
+        try { //TODO: don't generate sbml union in this Main
             // P = new Parser(inputDir, outputDir);
             P = new Parser(argcopy[0], argcopy[1]);
         } catch(ParserConfigurationException e){
@@ -143,7 +145,7 @@ public class Main {
             System.out.println("Modelica files creation/writing failed");
         }
 
-        String xmlOutDir = "/home/scacio/Dropbox/Tesisti/software/development/reactome-compiler/test-case-6/out";
+        /*String xmlOutDir = "/home/scacio/Dropbox/Tesisti/software/development/reactome-compiler/test-case-6/out";
 
         ConstraintBuilder cb = new ConstraintBuilder(bs, xmlOutDir);
         try {
@@ -151,10 +153,10 @@ public class Main {
         } catch (IOException e) {
             System.out.println("Constraints XML creation/writing failed");
             e.printStackTrace();
-        }
+        }*/
 
-        String monOutDir = "/home/scacio/Dropbox/Tesisti/software/development/reactome-compiler/test-case-6/out";
-        MonitorBuilder monb = new MonitorBuilder(bs, xmlOutDir, monOutDir);
+        //String monOutDir = "/home/scacio/Dropbox/Tesisti/software/development/reactome-compiler/test-case-6/out";
+        MonitorBuilder monb = new MonitorBuilder(bs, argcopy[3], argcopy[2]);
         try {
             monb.build();
         } catch (IOException e) {
@@ -163,6 +165,7 @@ public class Main {
         }
 
         System.out.println("All done!");
+
 
         /*
         TODO: fix ignoring compartments trouble with reaction
