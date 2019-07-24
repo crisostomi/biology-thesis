@@ -50,9 +50,9 @@ class CompartmentBuilder {
             connect.append(rb.equation.toString());
             this.compartment_links.append(rb.transport.toString());
         }
-        if(ReactionBuilder.getNotAssignedK1() > 0) sb.append(indent.concat("    parameter BioChem.Units.RateCoefficient const_k1["
+        if(ReactionBuilder.getNotAssignedK1() > 0) sb.append(indent.concat("    parameter BioChem.Units.ReactionCoefficient const_k1["
                 .concat(String.valueOf(ReactionBuilder.getNotAssignedK1()).concat("];\n"))));
-        if(ReactionBuilder.getNotAssignedK2() > 0) sb.append(indent.concat("    parameter BioChem.Units.RateCoefficient const_k2["
+        if(ReactionBuilder.getNotAssignedK2() > 0) sb.append(indent.concat("    parameter BioChem.Units.ReactionCoefficient const_k2["
                 .concat(String.valueOf(ReactionBuilder.getNotAssignedK2()).concat("];\n"))));
 
         sb.append("\n".concat(species.toString().concat("\n")));
