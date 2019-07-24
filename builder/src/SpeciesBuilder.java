@@ -1,7 +1,4 @@
-//import java.util.Random;
-
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import java.util.HashMap;
@@ -11,8 +8,9 @@ class SpeciesBuilder {
     private Species s;
     private static String indentation = "    ";
     private static HashMap<String, String> initialAmounts;
+    private static int not_assigned;
     static Document knowledge;
-    static int not_assigned;
+
 
     SpeciesBuilder(Species s){ this.s = s; }
 
@@ -33,10 +31,7 @@ class SpeciesBuilder {
             init = SpeciesBuilder.initialAmounts.get(this.s.getId());
         }
 
-        if(init.equals("")){
-            SpeciesBuilder.not_assigned++;
-            init = "init["+SpeciesBuilder.not_assigned+"]";
-        }
+        if(init.equals("")) init = "init["+(++SpeciesBuilder.not_assigned)+"]";
 
         res += s.getId() + "(n(start=".concat(init.concat(")) \""+s.getName()+"\";\n"));
 
@@ -46,6 +41,7 @@ class SpeciesBuilder {
     static void buildKnowledge(){
 
         SpeciesBuilder.initialAmounts = new HashMap<>();
+        SpeciesBuilder.resetNotAssigned();
         //Node listOfSpecies = knowledge.getElementsByTagName("listOfSpecies").item(0);
         NodeList children = knowledge.getElementsByTagName("listOfSpecies").item(0).getChildNodes();
         String init, id;
@@ -58,5 +54,9 @@ class SpeciesBuilder {
             SpeciesBuilder.initialAmounts.put(id, init);
         }
     }
+
+    static int getNotAssigned(){ return SpeciesBuilder.not_assigned; }
+
+    static void resetNotAssigned(){ SpeciesBuilder.not_assigned = 0; }
 
 }

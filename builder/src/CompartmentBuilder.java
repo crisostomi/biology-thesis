@@ -32,24 +32,31 @@ class CompartmentBuilder {
         //sb.append(indent.concat("    parameter "));
 
         //sb.append(this.buildAllSpecies(compartment, depth+1));
-        SpeciesBuilder.not_assigned = 0;
         SpeciesBuilder.buildKnowledge();
         StringBuilder species = new StringBuilder();
         for(Species s : this.c.getSpecies()) species.append(new SpeciesBuilder(s).buildSpecies(c, depth+1));
         //sb.append("\n");
-        if(SpeciesBuilder.not_assigned > 0) sb.append(indent.concat("    parameter BioChem.Units.AmountOfSubstance init["
-                .concat(String.valueOf(SpeciesBuilder.not_assigned).concat("]);\n\n"))));
+        if(SpeciesBuilder.getNotAssigned() > 0) sb.append(indent.concat("    parameter BioChem.Units.AmountOfSubstance init["
+                .concat(String.valueOf(SpeciesBuilder.getNotAssigned()).concat("]);\n\n"))));
         sb.append(species.toString().concat("\n"));
 
         //sb.append(this.buildAllReactions(compartment, compIndex, depth+1));
         ReactionBuilder rb;
+
+        ReactionBuilder.buildKnowledge();
         StringBuilder connect = new StringBuilder();
+        StringBuilder reactions = new StringBuilder();
         for(SimpleReaction r : this.c.getReactions()){
             rb = new ReactionBuilder(r);
-            sb.append(rb.buildReaction(this.c, depth+1));
+            reactions.append(rb.buildReaction(this.c, depth+1));
             connect.append(rb.equation.toString());
             this.compartment_links.append(rb.transport.toString());
         }
+        if(ReactionBuilder.getNotAssignedK1() > 0) sb.append("    parameter BioChem.Units.RateCoefficient const_k1["
+                .concat(String.valueOf(ReactionBuilder.getNotAssignedK1()).concat("]);\n")));
+        if(ReactionBuilder.getNotAssignedK2() > 0) sb.append("    parameter BioChem.Units.RateCoefficient const_k2["
+                .concat(String.valueOf(ReactionBuilder.getNotAssignedK2()).concat("]);\n\n")));
+        sb.append(reactions.toString().concat("\n"));
         if(!connect.toString().equals("")){
             sb.append("\n".concat(indent.concat("equation\n\n")));
             sb.append(connect.toString());
