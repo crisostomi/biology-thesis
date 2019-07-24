@@ -50,13 +50,13 @@ public class Execute {
             System.out.println("Modelica files creation/writing failed");
         }
 
-        /*MonitorBuilder monb = new MonitorBuilder(bs, configDir, outputModelicaDir);
+        MonitorBuilder monb = new MonitorBuilder(bs, configDir, outputModelicaDir);
         try {
             monb.build();
         } catch (IOException e) {
             System.out.println("Modelica monitor creation/writing failed");
             e.printStackTrace();
-        }*/
+        }
 
         System.out.println("All done!");
     }

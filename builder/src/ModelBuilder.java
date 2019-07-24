@@ -73,6 +73,7 @@ public class ModelBuilder {
         sb_model.append("(V(start=cell_V));\n\n");
         sb_model.append(indent.repeat(depth+1).concat("inner parameter BioChem.Units.Volume cell_V = " +cellVolume)+";\n\n");
 
+
         CompartmentBuilder cb;
         for(Compartment c : this.B.getCompartments()){
             cb = new CompartmentBuilder(c, this.comp_number.get(c.getId()));
@@ -80,6 +81,9 @@ public class ModelBuilder {
             sb_instance.append(cb.buildCompartmentInstance(depth+1));
             this.cell_equation.append(cb.getCompartmentLinks().toString());
         }
+
+        sb_instance.append(MonitorBuilder.declareMonitor(indent.repeat(depth+1)));
+        this.cell_equation.append("\n").append(MonitorBuilder.linkMonitor(this.B, comp_number, indent.repeat(depth+1)));
 
         if(this.cell_equation.toString().equals(indent.concat("equation\n\n"))) this.cell_equation.delete(0, this.cell_equation.length());
 

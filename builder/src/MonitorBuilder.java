@@ -7,6 +7,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
+import java.util.HashMap;
 import java.util.HashSet;
 
 public class MonitorBuilder {
@@ -161,7 +162,7 @@ public class MonitorBuilder {
         }
     }
 
-    private HashSet<Constraint> parseXml() throws ParserConfigurationException, SAXException, IOException {
+    private HashSet<Constraint> parseConfigFile() throws ParserConfigurationException, SAXException, IOException {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder docBuild = dbf.newDocumentBuilder();
 
@@ -170,7 +171,8 @@ public class MonitorBuilder {
         NodeList elements = doc.getElementsByTagName("species");
 
         HashSet<Constraint> constraints = new HashSet<>();
-        for (int i = 0; i < elements.getLength(); i++) { //TODO: this one just works for Species - missing Reactions
+
+        for (int i = 0; i < elements.getLength(); i++) {
             NamedNodeMap attr = elements.item(i).getAttributes();
             String id = attr.getNamedItem("id").getNodeValue();
             String min = attr.getNamedItem("minAmount").getNodeValue();
@@ -195,7 +197,7 @@ public class MonitorBuilder {
     private StringBuilder buildParametersBlock(int depth) {
 
         try {
-            HashSet<Constraint> constraints = parseXml();
+            HashSet<Constraint> constraints = parseConfigFile();
 
             StringBuilder sb = new StringBuilder();
 
@@ -205,8 +207,10 @@ public class MonitorBuilder {
 
             return sb;
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             System.out.println("Parsing of biological knowledge base failed.");
-            e.printStackTrace();
+            System.exit(1);
+
             return null;
         }
     }
@@ -356,6 +360,39 @@ public class MonitorBuilder {
         sb.append(indent + "when edge(" + aux + ") then \n");
         sb.append(indent + "    " + mon + " := true;\n");
         sb.append(indent + "end when;\n");
+
+        return sb;
+    }
+
+    /**
+     * Method to declare the Monitor inside main Modelica class (BioSystem.mo)
+     * @param indent used for indentation purposes
+     * @return the declaration of the Monitor in Modelica
+     */
+    public static StringBuilder declareMonitor(String indent) {
+        return new StringBuilder(indent + "Monitor mon;\n");
+    }
+
+    /**
+     * Method to link all the species in the biosystem with the corresponding input variables in the monitor
+     * @param B the biosystem
+     * @param compNumberMap the map containing information about the name of the compartment in B
+     * @param indent used for indentation purposes
+     * @return a block of Modelica code handling the linking of the variables of the monitor
+     */
+    public static StringBuilder linkMonitor(BioSystem B, HashMap<String, Integer> compNumberMap, String indent) {
+        // for every species in the biosystem
+            // in the monitor there are variables species_amount that need to be linked to species.n
+        StringBuilder sb = new StringBuilder();
+
+        for (Compartment c: B.getCompartments()) {
+            for (Species s: c.getSpecies()) {
+                String speciesId = s.getId();
+                Integer compNumber = compNumberMap.get(c.getId());
+                String compName = "c_" + compNumber;
+                sb.append(indent + "mon." + speciesId + "_amount = " + compName + "." + speciesId + ".n;\n");
+            }
+        }
 
         return sb;
     }
