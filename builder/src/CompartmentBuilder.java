@@ -38,8 +38,7 @@ class CompartmentBuilder {
         for(Species s : this.c.getSpecies()) species.append(new SpeciesBuilder(s).buildSpecies(c, depth+1));
         //sb.append("\n");
         if(SpeciesBuilder.not_assigned > 0) sb.append(indent.concat("    parameter BioChem.Units.AmountOfSubstance init["
-                .concat(String.valueOf(SpeciesBuilder.not_assigned)
-                        .concat("] = fill(1, ".concat(String.valueOf(SpeciesBuilder.not_assigned)).concat(");\n\n")))));
+                .concat(String.valueOf(SpeciesBuilder.not_assigned).concat("]);\n\n"))));
         sb.append(species.toString().concat("\n"));
 
         //sb.append(this.buildAllReactions(compartment, compIndex, depth+1));

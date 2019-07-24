@@ -98,19 +98,19 @@ class ReactionBuilder {
                 int dst_number = ReactionBuilder.comp_number.get(ce.getCompDstId());
                 if(ce.getExternalReactant() != null){
                     sb.append(
-                            this.buildConnectExternalReactant(src_number, dst_number, this.r, ce, s, depth-1)
+                            this.buildConnectExternalReactant(dst_number, src_number, this.r, ce, s, depth-1)
                     );
                     s++;
                 }
                 else if(ce.getExternalProduct() != null){
                     sb.append(
-                            this.buildConnectExternalProduct(src_number, dst_number, this.r, ce, p, depth-1)
+                            this.buildConnectExternalProduct(dst_number, src_number, this.r, ce, p, depth-1)
                     );
                     p++;
                 }
                 else if(ce.getExternalModifier() != null){
                     sb.append(
-                            this.buildConnectExternalModifier(src_number, dst_number, this.r, ce, /*m,*/ depth-1)
+                            this.buildConnectExternalModifier(dst_number, src_number, this.r, ce, /*m,*/ depth-1)
                     );
                     //m++;
                 }
