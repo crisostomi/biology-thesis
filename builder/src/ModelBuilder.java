@@ -58,7 +58,7 @@ public class ModelBuilder {
         ReactionBuilder.setCompNumber(this.comp_number);
 
         try {
-            String filename = this.configDir + "/constraints.xml";
+            String filename = this.configDir + "/config.xml";
             File conf = new File(filename);
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();

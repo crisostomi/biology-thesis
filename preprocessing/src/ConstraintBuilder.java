@@ -108,7 +108,7 @@ public class ConstraintBuilder {
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
         DOMSource domSource = new DOMSource(this.document);
-        StreamResult streamResult = new StreamResult(new File(this.outDir +"/constraints.xml"));
+        StreamResult streamResult = new StreamResult(new File(this.outDir +"/config.xml"));
         transformer.setOutputProperty(OutputKeys.INDENT, "yes");
         transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
         transformer.transform(domSource, streamResult);
