@@ -75,7 +75,7 @@ public class ConstraintBuilder {
      * @return a line of XML with the definition of the constraint for the species
      */
     private Element buildSpeciesConstraint(Species species) {
-        Element constraint = this.document.createElement("constraint");
+        Element constraint = this.document.createElement("species");
         constraint.setAttribute("id", species.getId());
         constraint.setAttribute("name", species.getName());
 
@@ -92,12 +92,20 @@ public class ConstraintBuilder {
      * @return a line of XML with the definition of the constraint for the species
      */
     private Element buildReactionConstraint(SimpleReaction reaction) {
-        Element constraint = this.document.createElement("constraint");
+        String tagName = (reaction.isReversible()) ? "reversible" : "irreversible";
+        Element constraint = this.document.createElement(tagName);
         constraint.setAttribute("id", reaction.getId());
         constraint.setAttribute("name", reaction.getName());
 
-        constraint.setAttribute("minConstant", "");
-        constraint.setAttribute("maxConstant", "");
+        constraint.setAttribute("k1", "");
+        constraint.setAttribute("min_k1", "");
+        constraint.setAttribute("max_k1", "");
+
+        if (reaction.isReversible()) {
+            constraint.setAttribute("k2", "");
+            constraint.setAttribute("min_k1", "");
+            constraint.setAttribute("max_k1", "");
+        }
 
         return constraint;
     }

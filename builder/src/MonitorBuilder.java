@@ -167,7 +167,7 @@ public class MonitorBuilder {
 
         File xml = new File(this.xmlDir + "/config.xml");
         Document doc = docBuild.parse(xml);
-        NodeList elements = doc.getElementsByTagName("constraint");
+        NodeList elements = doc.getElementsByTagName("species");
 
         HashSet<Constraint> constraints = new HashSet<>();
         for (int i = 0; i < elements.getLength(); i++) { //TODO: this one just works for Species - missing Reactions
