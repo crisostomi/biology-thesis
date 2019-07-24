@@ -34,15 +34,13 @@ class CompartmentBuilder {
         //sb.append(this.buildAllSpecies(compartment, depth+1));
         SpeciesBuilder.buildKnowledge();
         StringBuilder species = new StringBuilder();
-        for(Species s : this.c.getSpecies()) species.append(new SpeciesBuilder(s).buildSpecies(c, depth+1));
+        for(Species s : this.c.getSpecies()) species.append(new SpeciesBuilder(s).buildSpecies(depth+1));
         //sb.append("\n");
         if(SpeciesBuilder.getNotAssigned() > 0) sb.append(indent.concat("    parameter BioChem.Units.AmountOfSubstance init["
-                .concat(String.valueOf(SpeciesBuilder.getNotAssigned()).concat("]);\n\n"))));
-        sb.append(species.toString().concat("\n"));
+                .concat(String.valueOf(SpeciesBuilder.getNotAssigned()).concat("];\n"))));
 
         //sb.append(this.buildAllReactions(compartment, compIndex, depth+1));
         ReactionBuilder rb;
-
         ReactionBuilder.buildKnowledge();
         StringBuilder connect = new StringBuilder();
         StringBuilder reactions = new StringBuilder();
@@ -52,10 +50,12 @@ class CompartmentBuilder {
             connect.append(rb.equation.toString());
             this.compartment_links.append(rb.transport.toString());
         }
-        if(ReactionBuilder.getNotAssignedK1() > 0) sb.append("    parameter BioChem.Units.RateCoefficient const_k1["
-                .concat(String.valueOf(ReactionBuilder.getNotAssignedK1()).concat("]);\n")));
-        if(ReactionBuilder.getNotAssignedK2() > 0) sb.append("    parameter BioChem.Units.RateCoefficient const_k2["
-                .concat(String.valueOf(ReactionBuilder.getNotAssignedK2()).concat("]);\n\n")));
+        if(ReactionBuilder.getNotAssignedK1() > 0) sb.append(indent.concat("    parameter BioChem.Units.RateCoefficient const_k1["
+                .concat(String.valueOf(ReactionBuilder.getNotAssignedK1()).concat("];\n"))));
+        if(ReactionBuilder.getNotAssignedK2() > 0) sb.append(indent.concat("    parameter BioChem.Units.RateCoefficient const_k2["
+                .concat(String.valueOf(ReactionBuilder.getNotAssignedK2()).concat("];\n\n"))));
+
+        sb.append("\n".concat(species.toString().concat("\n")));
         sb.append(reactions.toString().concat("\n"));
         if(!connect.toString().equals("")){
             sb.append("\n".concat(indent.concat("equation\n\n")));

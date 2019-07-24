@@ -14,7 +14,7 @@ class SpeciesBuilder {
 
     SpeciesBuilder(Species s){ this.s = s; }
 
-    String buildSpecies(Compartment compartment, int depth){
+    String buildSpecies(int depth){
 
         String indent = indentation.repeat(depth);
         //StringBuilder sb = new StringBuilder();
