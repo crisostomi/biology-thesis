@@ -2,7 +2,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.util.HashSet;
 
 public class Configure {
-    public static void run(String inputDir, String outputSBMLDir, String configXMLfile) {
+    public static void run(String inputDir, String outputSBMLDir, String configDir) {
         /*
         0. input folder with sbml files
         1. output folder to write sbml_union
@@ -15,7 +15,7 @@ public class Configure {
         Parser P;
 
         // parse input sbml
-        try { //TODO: don't generate sbml union in this Configure
+        try {
             P = new Parser(inputDir, outputSBMLDir);
         } catch(ParserConfigurationException e){
             System.out.println("Parsing fail due to SBMLBuilder instantiation failure");
@@ -33,7 +33,7 @@ public class Configure {
         BioSystem bs = new BioSystem(comps, null, null);
 
         try {
-            ConstraintBuilder cb = new ConstraintBuilder(bs, configXMLfile);
+            ConstraintBuilder cb = new ConstraintBuilder(bs, configDir);
             cb.build();
         } catch (Exception e) {
             System.out.println("Constraints XML creation/writing failed");

@@ -1,5 +1,3 @@
-import org.w3c.dom.Document;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.BufferedWriter;
@@ -7,25 +5,23 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Random;
 
 public class ModelBuilder {
 
     private BioSystem B;
     private String output_dir;
-    private String config;
+    private String configDir;
     private StringBuilder cell_equation;
     private HashMap<String, Integer> comp_number;       // key: compartmentId, value: progressive number
     private static final String indentation = "    ";   // 4 spaces used for indentation
     private static double cellVolume = 10e-12;
 
-    public ModelBuilder(BioSystem B, String od, String config) {
+    public ModelBuilder(BioSystem B, String od, String configDir) {
         this.B = B;
         this.output_dir = od;
         this.cell_equation = new StringBuilder();
         this.comp_number = new HashMap<>();
-        this.config = config;
+        this.configDir = configDir;
     }
 
     public void buildBioSystem() throws IOException {
@@ -62,13 +58,14 @@ public class ModelBuilder {
         ReactionBuilder.setCompNumber(this.comp_number);
 
         try {
-            File conf = new File(this.config);
+            String filename = this.configDir + "/constraints.xml";
+            File conf = new File(filename);
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             SpeciesBuilder.knowledge = dBuilder.parse(conf);
             ReactionBuilder.knowledge = SpeciesBuilder.knowledge;
         }catch(Exception e){
-            System.out.println("Failed to open configuration file. Is "+this.config+" a legitimate xml configuration file?");
+            System.out.println("Failed to open configuration file. Is "+this.configDir +" a legitimate xml configuration file?");
             return null;
         }
 

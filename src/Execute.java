@@ -10,7 +10,7 @@ public class Execute {
         Parser P;
 
         // parse input sbml
-        try { //TODO: don't generate sbml union in this Configure
+        try { //TODO: don't generate sbml union here
             P = new Parser(inputDir, outputSBMLDir);
         } catch(ParserConfigurationException e){
             System.out.println("Parsing fail due to SBMLBuilder instantiation failure");
@@ -43,7 +43,7 @@ public class Execute {
         BioSystem bs = new BioSystem(comps, sinks, sources);
 
         // convert Java biosystem model in Modelica
-        ModelBuilder mb = new ModelBuilder(bs, outputModelicaDir);
+        ModelBuilder mb = new ModelBuilder(bs, outputModelicaDir, configDir);
         try {
             mb.buildBioSystem();
         } catch(IOException e){
