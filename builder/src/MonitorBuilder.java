@@ -11,8 +11,8 @@ import java.util.HashSet;
 
 public class MonitorBuilder {
 
-    public static final double MINCONCENTRATION = 0;
-    public static final double MAXCONCENTRATION = 10e-6;
+    public static final double MINAMOUNT = 0;
+    public static final double MAXAMOUNT = 10e-6;
 
     private BioSystem B;
     private String xmlDir;
@@ -170,11 +170,16 @@ public class MonitorBuilder {
         NodeList elements = doc.getElementsByTagName("constraint");
 
         HashSet<Constraint> constraints = new HashSet<>();
-        for (int i = 0; i < elements.getLength(); i++) {
+        for (int i = 0; i < elements.getLength(); i++) { //TODO: this one just works for Species - missing Reactions
             NamedNodeMap attr = elements.item(i).getAttributes();
             String id = attr.getNamedItem("id").getNodeValue();
-            double minAmount = Double.valueOf(attr.getNamedItem("minAmount").getNodeValue());
-            double maxAmount = Double.valueOf(attr.getNamedItem("maxAmount").getNodeValue());
+            String min = attr.getNamedItem("minAmount").getNodeValue();
+            String max = attr.getNamedItem("maxAmount").getNodeValue();
+            double minAmount, maxAmount;
+            if(min.equals("")) minAmount = MINAMOUNT;
+            else minAmount = Double.valueOf(min);
+            if(max.equals("")) maxAmount = MAXAMOUNT;
+            else maxAmount = Double.valueOf(max);
 
             constraints.add(new Constraint(id, minAmount, maxAmount));
         }

@@ -49,7 +49,7 @@ class SpeciesBuilder {
         //Node listOfSpecies = knowledge.getElementsByTagName("listOfSpecies").item(0);
         NodeList children = knowledge.getElementsByTagName("listOfSpecies").item(0).getChildNodes();
         String init, id;
-        Node n;
+        //Node n;
         for(int i = 0; i < children.getLength(); i++){
             if (children.item(i).getTextContent().matches("\n\\s*")) continue;
 
