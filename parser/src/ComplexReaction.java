@@ -14,6 +14,7 @@ public class ComplexReaction extends SimpleReaction {
         this.setName(sr.getName());
         this.setReactants(sr.getReactants());
         this.setProducts(sr.getProducts());
+        this.setReversible(sr.isReversible());
     }
 
     public enum ModifierType{

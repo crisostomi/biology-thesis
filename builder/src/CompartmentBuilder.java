@@ -53,7 +53,7 @@ class CompartmentBuilder {
         if(ReactionBuilder.getNotAssignedK1() > 0) sb.append(indent.concat("    parameter BioChem.Units.RateCoefficient const_k1["
                 .concat(String.valueOf(ReactionBuilder.getNotAssignedK1()).concat("];\n"))));
         if(ReactionBuilder.getNotAssignedK2() > 0) sb.append(indent.concat("    parameter BioChem.Units.RateCoefficient const_k2["
-                .concat(String.valueOf(ReactionBuilder.getNotAssignedK2()).concat("];\n\n"))));
+                .concat(String.valueOf(ReactionBuilder.getNotAssignedK2()).concat("];\n"))));
 
         sb.append("\n".concat(species.toString().concat("\n")));
         sb.append(reactions.toString().concat("\n"));
