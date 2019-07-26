@@ -45,17 +45,14 @@ public class MonitorBuilder {
 
         sb.append("block Monitor\n\n");
 
-        sb.append(indentation + "connector connector_input = input BioChem.Units.AmountOfSubstance;\n");
-        sb.append(indentation + "connector connector_output = output Boolean;\n\n");
-
         sb.append(buildParametersBlock(depth+1));
         sb.append(buildDeclarationBlock(depth+1) + "\n\n");
 
         // sb.append(buildInitialEquationBlock(depth+1) + "\n\n");
 
-        // sb.append(buildEquationBlock(depth+1) + "\n\n");
+        sb.append(buildEquationBlock(depth+1) + "\n\n");
 
-        sb.append(buildAlgorithmBlock(depth+1) + "\n\n");
+        // sb.append(buildAlgorithmBlock(depth+1) + "\n\n");
 
         sb.append("end Monitor;\n");
 
@@ -103,7 +100,7 @@ public class MonitorBuilder {
         String indent = indentation.repeat(depth);
         StringBuilder sb = new StringBuilder();
 
-        sb.append(indent + "connector_input " + species.getId() + "_amount;\n");
+        sb.append(indent + "input BioChem.Units.AmountOfSubstance " + species.getId() + "_amount;\n");
 
         return sb;
     }
@@ -119,7 +116,7 @@ public class MonitorBuilder {
         String indent = indentation.repeat(depth);
         StringBuilder sb = new StringBuilder();
 
-        sb.append(indent + "connector_output " + species.getId() + "_monitor;\n");
+        sb.append(indent + "output Real " + species.getId() + "_monitor;\n");
 
         return sb;
     }
@@ -278,11 +275,6 @@ public class MonitorBuilder {
         return sb;
     }
 
-    /**
-     * Method to build the equation block of the monitor in Modelica, by parsing the KB
-     * @param depth used for indentation purposes
-     * @return
-     */
     private StringBuilder buildEquationBlock(int depth) {
         String indent = indentation.repeat(depth);
         StringBuilder sb = new StringBuilder();
@@ -292,9 +284,8 @@ public class MonitorBuilder {
             sb.append("\n" + indent + "    // " + compartment.getId() + "\n");
 
             for (Species species: compartment.getSpecies()) {
-                sb.append(buildEquationRange(species, depth+1));
+                sb.append(buildSpeciesEquation(species, depth+1));
             }
-
         }
 
         return sb;
@@ -306,41 +297,17 @@ public class MonitorBuilder {
      * @param depth used for indentation purposes
      * @return a line of Modelica code handling the auxiliary variable for the species
      */
-    private StringBuilder buildEquationRange(Species species, int depth) {
+    private StringBuilder buildSpeciesEquation(Species species, int depth) {
         String indent = indentation.repeat(depth);
         StringBuilder sb = new StringBuilder();
 
-        String aux = species.getId() + "_aux";
-        String amount = species.getId() + "_amount";
-        String minAmount = species.getId() + "_minAmount";
-        String maxAmount = species.getId() + "_maxAmount";
+        String x = species.getId() + "_amount";
+        String b = species.getId() + "_minAmount";
+        String a = species.getId() + "_maxAmount";
 
-        sb.append(indent + aux + " = (" + amount + " >= " + maxAmount + ") or " +
-                "(" + amount + " <= " + minAmount + ");\n");
+        String z = species.getId() + "_monitor";
 
-        return sb;
-
-    }
-
-    /**
-     * Method to build the algorithm block for the Modelica monitor, that properly updates the output variables
-     * for the species when their amount gets outside of the intended range
-     * @param depth used for indentation purposes
-     * @return the algorithm block for the Modelica monitor
-     */
-    private StringBuilder buildAlgorithmBlockOld(int depth) {
-        String indent = indentation.repeat(depth);
-        StringBuilder sb = new StringBuilder();
-        sb.append(indent + "algorithm\n");
-
-        for (Compartment compartment: B.getCompartments()) {
-            sb.append("\n" + indent + "    // " + compartment.getId() + "\n");
-
-            for (Species species: compartment.getSpecies()) {
-                sb.append(buildSpeciesAlgorithm(species, depth+1));
-            }
-
-        }
+        sb.append(indent + "der("+ z +") = (("+ x +" - ("+ b +"+"+ a +")/2) / 2)^2;\n");
 
         return sb;
 
@@ -376,34 +343,11 @@ public class MonitorBuilder {
      * @param depth used for indentation purposes
      * @return a block of Modelica code handling the update of the output variable of a single species
      */
-    private StringBuilder buildSpeciesAlgorithmOld(Species species, int depth) {
-
-        String indent = indentation.repeat(depth);
-        StringBuilder sb = new StringBuilder();
-
-        String aux = species.getId() + "_aux";
-        String mon = species.getId() + "_monitor";
-
-        sb.append(indent + "when edge(" + aux + ") then \n");
-        sb.append(indent + "    " + mon + " := true;\n");
-        sb.append(indent + "end when;\n");
-
-        return sb;
-    }
-
-
-    /**
-     * Method to build the Modelica code to handle the monitor variable for a single species
-     * @param species the species of interest
-     * @param depth used for indentation purposes
-     * @return a block of Modelica code handling the update of the output variable of a single species
-     */
     private StringBuilder buildSpeciesAlgorithm(Species species, int depth) {
 
         String indent = indentation.repeat(depth);
         StringBuilder sb = new StringBuilder();
 
-        String aux = species.getId() + "_aux";
         String mon = species.getId() + "_monitor";
 
         String amount = species.getId() + "_amount";
@@ -434,7 +378,7 @@ public class MonitorBuilder {
      * @param indent used for indentation purposes
      * @return a block of Modelica code handling the linking of the variables of the monitor
      */
-    public static StringBuilder linkMonitorOld(BioSystem B, HashMap<String, Integer> compNumberMap, String indent) {
+    public static StringBuilder linkMonitor(BioSystem B, HashMap<String, Integer> compNumberMap, String indent) {
         // for every species in the biosystem
             // in the monitor there are variables species_amount that need to be linked to species.n
         StringBuilder sb = new StringBuilder();
@@ -457,7 +401,7 @@ public class MonitorBuilder {
      * @param compNumberMap the map containing information about the name of the compartment in B
      * @param indent used for indentation purposes
      * @return a block of Modelica code handling the linking of the variables of the monitor
-     */
+     *//*
     public static StringBuilder linkMonitor(BioSystem B, HashMap<String, Integer> compNumberMap, String indent) {
         // for every species in the biosystem
         // in the monitor there are variables species_amount that need to be linked to species.n
@@ -474,7 +418,7 @@ public class MonitorBuilder {
 
         return sb;
     }
-
+*/
     /*
     TODO: properly link Monitor block input variables in BioSystem
      */
