@@ -1,8 +1,5 @@
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import org.apache.commons.cli.*;
 
 public class Main {

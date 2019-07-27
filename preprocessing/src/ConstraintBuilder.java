@@ -1,6 +1,7 @@
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-
+import org.w3c.dom.Node;
+import org.xml.sax.SAXException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -24,12 +25,13 @@ public class ConstraintBuilder {
      * @param b the biosystem built from sbml data
      * @param outDir the output directory where to put the built XML
      */
-    public ConstraintBuilder(BioSystem b, String outDir) throws ParserConfigurationException {
+    public ConstraintBuilder(BioSystem b, String outDir) throws ParserConfigurationException, IOException, SAXException {
         B = b;
         this.outDir = outDir;
-        DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder documentBuilder = documentFactory.newDocumentBuilder();
-        this.document = documentBuilder.newDocument();
+        File conf = new File(this.outDir + "/config.xml");
+        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+        this.document = dBuilder.parse(conf);
     }
 
     /**
@@ -38,35 +40,36 @@ public class ConstraintBuilder {
      */
     public void build() throws ParserConfigurationException, IOException, TransformerException {
 
-        Element constraints = this.document.createElement("constraints");
+        Node listOfSpecies = this.document.getElementsByTagName("listOfSpecies").item(0);
+        Node listOfReactions = this.document.getElementsByTagName("listOfReactions").item(0);
+
+        this.buildAllSpeciesConstraints(listOfSpecies);
+        this.buildAllReactionsConstraints(listOfReactions);
+        /*Element constraints = this.document.createElement("constraints");
 
         constraints.appendChild(this.buildAllSpeciesConstraints());
         constraints.appendChild(this.buildAllReactionsConstraints());
 
-        this.document.appendChild(constraints);
+        this.document.appendChild(constraints);*/
         this.close();
     }
 
-    private Element buildAllSpeciesConstraints() {
-        Element listOfSpecies = this.document.createElement("listOfSpecies");
+    private void buildAllSpeciesConstraints(Node listOfSpecies) {
+        //Element listOfSpecies = this.document.createElement("listOfSpecies");
         for (Compartment c: this.B.getCompartments()) {
             for (Species s: c.getSpecies()) {
-                listOfSpecies.appendChild(buildSpeciesConstraint(s));
+                listOfSpecies.appendChild(this.buildSpeciesConstraint(s));
             }
         }
-
-        return listOfSpecies;
     }
 
-    private Element buildAllReactionsConstraints() {
-        Element listOfReactions = this.document.createElement("listOfReactions");
+    private void buildAllReactionsConstraints(Node listOfReactions) {
+        //Element listOfReactions = this.document.createElement("listOfReactions");
         for (Compartment c: this.B.getCompartments()) {
             for (SimpleReaction r: c.getReactions()) {
-                listOfReactions.appendChild(buildReactionConstraint(r));
+                listOfReactions.appendChild(this.buildReactionConstraint(r));
             }
         }
-
-        return listOfReactions;
     }
 
     /**
@@ -103,8 +106,8 @@ public class ConstraintBuilder {
 
         if (reaction.isReversible()) {
             constraint.setAttribute("k2", "");
-            constraint.setAttribute("min_k1", "");
-            constraint.setAttribute("max_k1", "");
+            constraint.setAttribute("min_k2", "");
+            constraint.setAttribute("max_k2", "");
         }
 
         return constraint;
