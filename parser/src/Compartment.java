@@ -72,6 +72,14 @@ public class Compartment {
 
     public int getNumReactions(){ return this.reactions.size(); }
 
+    public int getNumReversibleReactions(){
+        int res = 0;
+        for(SimpleReaction r : this.getReactions()){
+            if (r.isReversible()) res++;
+        }
+        return res;
+    }
+
     public ArrayList<Species> getSpecies(){ return this.species; }
 
     public ArrayList<SimpleReaction> getReactions(){ return this.reactions; }

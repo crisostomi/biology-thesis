@@ -7,10 +7,10 @@ class SpeciesBuilder {
 
     private Species s;
     private static String indentation = "    ";
-    private static HashMap<String, String> initialAmounts;
-    private static int not_assigned;
-    static Document knowledge;
-
+    private static int init_index = 1;
+    //private static HashMap<String, String> initialAmounts;
+    //private static int not_assigned;
+    //static Document knowledge;
 
     SpeciesBuilder(Species s){ this.s = s; }
 
@@ -26,19 +26,19 @@ class SpeciesBuilder {
         if(s.isBoundary()) res = indent + "BioChem.Substances.BoundarySubstance ";//.concat(s.getId().concat("\""+s.getName()+"\";\n"))));
         else res = indent + "BioChem.Substances.Substance ";//
 
-        String init = "";
+        /*String init = "";
         if(SpeciesBuilder.initialAmounts.containsKey(this.s.getId())){
             init = SpeciesBuilder.initialAmounts.get(this.s.getId());
         }
 
-        if(init.equals("")) init = "init["+(++SpeciesBuilder.not_assigned)+"]";
+        if(init.equals("")) init = "init["+(++SpeciesBuilder.not_assigned)+"]";*/
 
-        res += s.getId() + "(n(start=".concat(init.concat(")) \""+s.getName()+"\";\n"));
+        res += s.getId() + "(n(start=init[" + (SpeciesBuilder.init_index++) + "])) \""+s.getName()+"\";\n";
 
         return res;
     }
 
-    static void buildKnowledge(){
+    /*static void buildKnowledge(){
 
         SpeciesBuilder.initialAmounts = new HashMap<>();
         SpeciesBuilder.resetNotAssigned();
@@ -53,10 +53,10 @@ class SpeciesBuilder {
             init = children.item(i).getAttributes().getNamedItem("initialAmount").getNodeValue();
             SpeciesBuilder.initialAmounts.put(id, init);
         }
-    }
+    }*/
 
-    static int getNotAssigned(){ return SpeciesBuilder.not_assigned; }
+    /*static int getNotAssigned(){ return SpeciesBuilder.not_assigned; }
 
-    static void resetNotAssigned(){ SpeciesBuilder.not_assigned = 0; }
+    static void resetNotAssigned(){ SpeciesBuilder.not_assigned = 0; }*/
 
 }

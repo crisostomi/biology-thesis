@@ -1,6 +1,7 @@
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -58,7 +59,8 @@ public class ConstraintBuilder {
         //Element listOfSpecies = this.document.createElement("listOfSpecies");
         for (Compartment c: this.B.getCompartments()) {
             for (Species s: c.getSpecies()) {
-                listOfSpecies.appendChild(this.buildSpeciesConstraint(s));
+                if(!ConstraintBuilder.isSpeciesInDocument(this.document, s.getId()))
+                    listOfSpecies.appendChild(this.buildSpeciesConstraint(s));
             }
         }
     }
@@ -67,7 +69,8 @@ public class ConstraintBuilder {
         //Element listOfReactions = this.document.createElement("listOfReactions");
         for (Compartment c: this.B.getCompartments()) {
             for (SimpleReaction r: c.getReactions()) {
-                listOfReactions.appendChild(this.buildReactionConstraint(r));
+                if(!ConstraintBuilder.isReactionInDocument(this.document, r.getId(), r.isReversible()))
+                    listOfReactions.appendChild(this.buildReactionConstraint(r));
             }
         }
     }
@@ -113,9 +116,40 @@ public class ConstraintBuilder {
         return constraint;
     }
 
+    private static boolean isSpeciesInDocument(Document doc, String spec_id){
+
+        NodeList species = doc.getElementsByTagName("species");
+        for(int i = 0; i < species.getLength(); i++){
+            if(species.item(i).getAttributes().getNamedItem("id").getNodeValue().equals(spec_id)) return true;
+        }
+        return false;
+    }
+
+    private static boolean isReactionInDocument(Document doc, String react_id, boolean rev){
+
+        NodeList reactions = rev ? doc.getElementsByTagName("reversible") : doc.getElementsByTagName("irreversible");
+        for(int i = 0; i < reactions.getLength(); i++){
+            if(reactions.item(i).getAttributes().getNamedItem("id").getNodeValue().equals(react_id)) return true;
+        }
+        return false;
+    }
+
+    public static void trimWhitespace(Node node) {
+        NodeList children = node.getChildNodes();
+        for(int i = 0; i < children.getLength(); ++i) {
+            Node child = children.item(i);
+            if(child.getNodeType() == Node.TEXT_NODE) {
+                child.setTextContent(child.getTextContent().trim());
+            }
+            trimWhitespace(child);
+        }
+    }
+
 
     public void close() throws TransformerException {
+
         this.document.normalizeDocument();
+        trimWhitespace(this.document);
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
         DOMSource domSource = new DOMSource(this.document);

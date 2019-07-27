@@ -11,11 +11,13 @@ class ReactionBuilder {
     private static String indentation = "    ";
     private static HashSet<CompartmentEdge> compEdges;
     private static HashMap<String, Integer> comp_number;
-    private static int not_assigned_k1;
+    private static int k1_index = 1;
+    private static int k2_index = 1;
+   /* private static int not_assigned_k1;
     private static int not_assigned_k2;
     private static HashMap<String, String> reaction_k1;
     private static HashMap<String, String> reaction_k2;
-    static Document knowledge;
+    static Document knowledge;*/
     StringBuilder transport;
     StringBuilder equation;
 
@@ -261,7 +263,7 @@ class ReactionBuilder {
         /*double mean = 1e3;
         double std_dev = 1e3;*/
 
-        String k1 = "", k2 = "";
+        /*String k1 = "", k2 = "";
         if(ReactionBuilder.reaction_k1.containsKey(this.r.getId())){
             k1 = ReactionBuilder.reaction_k1.get(this.r.getId());
             if(k1.equals("")) k1 = "const_k1["+(++ReactionBuilder.not_assigned_k1)+"]";
@@ -271,10 +273,10 @@ class ReactionBuilder {
                 k2 = ReactionBuilder.reaction_k2.get(this.r.getId());
                 if(k2.equals("")) k2 = "const_k2["+(++ReactionBuilder.not_assigned_k2)+"]";
             }
-        }
+        }*/
 
-        sb.append("k1=".concat(k1));
-        if(react.isReversible()) sb.append(", k2=".concat(k2));
+        sb.append("k1=".concat("const_k1["+(ReactionBuilder.k1_index++)+"]"));
+        if(react.isReversible()) sb.append(", k2=".concat("const_k2["+(ReactionBuilder.k2_index++)+"]"));
 
         int sub = 1, prod = 1;
         for(Species s : react.getReactants().keySet()){
@@ -308,7 +310,7 @@ class ReactionBuilder {
         return sb.toString()+")";
     }
 
-    static void buildKnowledge(){
+    /*static void buildKnowledge(){
 
         ReactionBuilder.reaction_k1 = new HashMap<>();
         ReactionBuilder.reaction_k2 = new HashMap<>();
@@ -332,7 +334,7 @@ class ReactionBuilder {
             ReactionBuilder.reaction_k1.put(id, k1);
             ReactionBuilder.reaction_k2.put(id, k2);
         }
-    }
+    }*/
 
     static HashSet<CompartmentEdge> getCompEdges() {
         return compEdges;
@@ -346,15 +348,15 @@ class ReactionBuilder {
         return comp_number;
     }
 
-    public static void setCompNumber(HashMap<String, Integer> comp_number) {
+    static void setCompNumber(HashMap<String, Integer> comp_number) {
         ReactionBuilder.comp_number = comp_number;
     }
 
-    static int getNotAssignedK1(){ return ReactionBuilder.not_assigned_k1; }
+    /*static int getNotAssignedK1(){ return ReactionBuilder.not_assigned_k1; }
 
     static int getNotAssignedK2(){ return ReactionBuilder.not_assigned_k2; }
 
     static void resetNotAssignedK1(){ ReactionBuilder.not_assigned_k1 = 0; }
 
-    static void resetNotAssignedK2(){ ReactionBuilder.not_assigned_k2 = 0; }
+    static void resetNotAssignedK2(){ ReactionBuilder.not_assigned_k2 = 0; }*/
 }

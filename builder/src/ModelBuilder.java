@@ -10,7 +10,7 @@ public class ModelBuilder {
 
     private BioSystem B;
     private String output_dir;
-    private String configDir;
+    //private String configDir;
     private StringBuilder cell_equation;
     private HashMap<String, Integer> comp_number;       // key: compartmentId, value: progressive number
     private static final String indentation = "    ";   // 4 spaces used for indentation
@@ -21,7 +21,7 @@ public class ModelBuilder {
         this.output_dir = od;
         this.cell_equation = new StringBuilder();
         this.comp_number = new HashMap<>();
-        this.configDir = configDir;
+        //this.configDir = configDir;
     }
 
     public void buildBioSystem() throws IOException {
@@ -57,7 +57,7 @@ public class ModelBuilder {
         ReactionBuilder.setCompEdges(this.B.getCompEdges());
         ReactionBuilder.setCompNumber(this.comp_number);
 
-        try {
+        /*try {
             String filename = this.configDir + "/config.xml";
             File conf = new File(filename);
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -67,7 +67,7 @@ public class ModelBuilder {
         }catch(Exception e){
             System.out.println("Failed to open configuration file. Is "+this.configDir +" a legitimate xml configuration file?");
             return null;
-        }
+        }*/
 
         sb_model.append("model Cell\n".concat(indent.repeat(2).concat("extends BioChem.Compartments.MainCompartment")));
         sb_model.append("(V(start=cell_V));\n\n");

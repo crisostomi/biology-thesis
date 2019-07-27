@@ -32,16 +32,18 @@ class CompartmentBuilder {
         //sb.append(indent.concat("    parameter "));
 
         //sb.append(this.buildAllSpecies(compartment, depth+1));
-        SpeciesBuilder.buildKnowledge();
+        //SpeciesBuilder.buildKnowledge();
         StringBuilder species = new StringBuilder();
         for(Species s : this.c.getSpecies()) species.append(new SpeciesBuilder(s).buildSpecies(depth+1));
         //sb.append("\n");
-        if(SpeciesBuilder.getNotAssigned() > 0) sb.append(indent.concat("    parameter BioChem.Units.AmountOfSubstance init["
-                .concat(String.valueOf(SpeciesBuilder.getNotAssigned()).concat("];\n"))));
+        /*if(SpeciesBuilder.getNotAssigned() > 0) sb.append(indent.concat("    parameter BioChem.Units.AmountOfSubstance init["
+                .concat(String.valueOf(SpeciesBuilder.getNotAssigned()).concat("];\n"))));*/
+        if(this.c.getNumSpecies() > 0) sb.append(indent.concat("    parameter BioChem.Units.AmountOfSubstance init["
+                .concat(String.valueOf(this.c.getNumSpecies())).concat("];\n")));
 
         //sb.append(this.buildAllReactions(compartment, compIndex, depth+1));
         ReactionBuilder rb;
-        ReactionBuilder.buildKnowledge();
+        //ReactionBuilder.buildKnowledge();
         StringBuilder connect = new StringBuilder();
         StringBuilder reactions = new StringBuilder();
         for(SimpleReaction r : this.c.getReactions()){
@@ -50,10 +52,17 @@ class CompartmentBuilder {
             connect.append(rb.equation.toString());
             this.compartment_links.append(rb.transport.toString());
         }
-        if(ReactionBuilder.getNotAssignedK1() > 0) sb.append(indent.concat("    parameter BioChem.Units.ReactionCoefficient const_k1["
+        /*if(ReactionBuilder.getNotAssignedK1() > 0) sb.append(indent.concat("    parameter BioChem.Units.ReactionCoefficient const_k1["
                 .concat(String.valueOf(ReactionBuilder.getNotAssignedK1()).concat("];\n"))));
         if(ReactionBuilder.getNotAssignedK2() > 0) sb.append(indent.concat("    parameter BioChem.Units.ReactionCoefficient const_k2["
-                .concat(String.valueOf(ReactionBuilder.getNotAssignedK2()).concat("];\n"))));
+                .concat(String.valueOf(ReactionBuilder.getNotAssignedK2()).concat("];\n"))));*/
+        if(this.c.getNumReactions() > 0){
+            sb.append(indent.concat("    parameter BioChem.Units.ReactionCoefficient const_k1["
+                    .concat(String.valueOf(this.c.getNumReactions()).concat("];\n"))));
+            int rev = this.c.getNumReversibleReactions();
+            if(rev > 0) sb.append(indent.concat("    parameter BioChem.Units.ReactionCoefficient const_k2["
+                    .concat(String.valueOf(rev).concat("];\n"))));
+        }
 
         sb.append("\n".concat(species.toString().concat("\n")));
         sb.append(reactions.toString().concat("\n"));
