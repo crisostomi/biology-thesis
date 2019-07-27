@@ -27,7 +27,9 @@ public class Main {
         handleArguments(args);
 
         if (configure) {
-            Configure.run(inputDir, outputSBMLDir, configDir);
+            System.out.println("-c option is deprecated; run with -e");
+            System.exit(1);
+            //Configure.run(inputDir, outputSBMLDir, configDir);
         } else if (execute) {
             Execute.run(inputDir, outputSBMLDir, outputModelicaDir, configDir);
         }

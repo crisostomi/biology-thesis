@@ -98,6 +98,10 @@ public class BioSystem {
         return compsEdges;
     }
 
+    public int countSpecies(){
+        return this.compartments.stream().mapToInt(Compartment::getNumSpecies).sum();
+    }
+
     public HashSet<Compartment> getCompartments(){ return this.compartments; }
 
     public HashSet<Species> getSinks() {

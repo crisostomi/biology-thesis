@@ -20,6 +20,8 @@ public class ConstraintBuilder {
     private BioSystem B;
     private String outDir;
     private Document document;
+    private static final double MINAMOUNT = 0;
+    private static final double MAXAMOUNT = 10e-6;
 
     /**
      * Class to build an XML carrying biological constraints information
@@ -85,8 +87,8 @@ public class ConstraintBuilder {
         constraint.setAttribute("id", species.getId());
         constraint.setAttribute("name", species.getName());
 
-        constraint.setAttribute("minAmount", "");
-        constraint.setAttribute("maxAmount", "");
+        constraint.setAttribute("minAmount", String.valueOf(MINAMOUNT));
+        constraint.setAttribute("maxAmount", String.valueOf(MAXAMOUNT));
         constraint.setAttribute("initialAmount", "");
 
         return constraint;

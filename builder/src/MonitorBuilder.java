@@ -2,7 +2,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -12,11 +11,11 @@ import java.util.HashSet;
 
 public class MonitorBuilder {
 
-    public static final double MINAMOUNT = 0;
-    public static final double MAXAMOUNT = 10e-6;
+    /*public static final double MINAMOUNT = 0;
+    public static final double MAXAMOUNT = 10e-6;*/
 
     private BioSystem B;
-    private String xmlDir;
+    //private String xmlDir;
     private String outDir;
 
     private static final String indentation = "    ";   // 4 spaces used for indentation
@@ -24,12 +23,11 @@ public class MonitorBuilder {
     /**
      * Class to build the Modelica monitor needed for the parameter sweep search
      * @param b the biosystem parsed and built from sbml data
-     * @param xmlDir the path of th XML knowledge-base file
      * @param outDir the path of the output directory where to put the Modelica file
      */
-    public MonitorBuilder(BioSystem b, String xmlDir, String outDir) {
+    public MonitorBuilder(BioSystem b, /*String xmlDir, */String outDir) {
         B = b;
-        this.xmlDir = xmlDir;
+        //this.xmlDir = xmlDir;
         this.outDir = outDir;
     }
 
@@ -68,7 +66,6 @@ public class MonitorBuilder {
     private StringBuilder buildDeclarationBlock(int depth) {
         String indent = indentation.repeat(depth);
         StringBuilder sb = new StringBuilder();
-
 
         for (Compartment compartment: B.getCompartments()) {
             sb.append("\n" + indent + "// " + compartment.getId() + "\n");
@@ -121,13 +118,13 @@ public class MonitorBuilder {
         return sb;
     }
 
-    /**
+    /*/**
      * Method to declare an auxiliary boolean variable for a species, used in the algorithm block
      * @param species the species of interest
      * @param depth used for indentation purposes
      * @return
      */
-    private StringBuilder declareAuxiliary(Species species, int depth) {
+    /*private StringBuilder declareAuxiliary(Species species, int depth) {
         String indent = indentation.repeat(depth);
         StringBuilder sb = new StringBuilder();
 
@@ -135,9 +132,9 @@ public class MonitorBuilder {
 
         return sb;
 
-    }
+    }*/
 
-    private class Constraint {
+    /*private class Constraint {
 
         private String speciesId;
         private double minAmount;
@@ -187,7 +184,7 @@ public class MonitorBuilder {
         }
 
         return constraints;
-    }
+    }*/
 
     /**
      * Method to declare all the parameters carrying information about constraints
@@ -197,13 +194,14 @@ public class MonitorBuilder {
     private StringBuilder buildParametersBlock(int depth) {
 
         try {
-            HashSet<Constraint> constraints = parseConfigFile();
+            //HashSet<Constraint> constraints = parseConfigFile();
 
             StringBuilder sb = new StringBuilder();
 
-            for (Constraint constraint: constraints) {
-                sb.append(buildParameter(constraint, depth));
-            }
+            //for (Constraint constraint: constraints) {
+            sb.append(buildParameters("maxAmount", depth));
+            sb.append(buildParameters("minAmount", depth));
+            //}
 
             return sb;
         } catch (Exception e) {
@@ -215,27 +213,31 @@ public class MonitorBuilder {
         }
     }
 
-    private StringBuilder buildParameter(Constraint constraint, int depth) {
+    private StringBuilder buildParameters(String name, int depth) {
+
         String indent = indentation.repeat(depth);
         StringBuilder sb = new StringBuilder();
 
-        String speciesId = constraint.getSpeciesId();
+        /*String speciesId = constraint.getSpeciesId();
         double minAmount = constraint.getMinAmount();
-        double maxAmount = constraint.getMaxAmount();
+        double maxAmount = constraint.getMaxAmount();*/
+        sb.append(indent.concat("parameter BioChem.Units.AmountOfSubstance ").
+                concat(name).concat("[").concat(String.valueOf(this.B.countSpecies())).concat("];\n"));
 
-        sb.append(indent + "parameter Real " + speciesId + "_minAmount = " + minAmount +";\n");
-        sb.append(indent + "parameter Real " + speciesId + "_maxAmount = " + maxAmount +";\n");
+        /*sb.append(indent + "parameter Real " + speciesId + "_minAmount = " + minAmount +";\n");
+        sb.append(indent + "parameter Real " + speciesId + "_maxAmount = " + maxAmount +";\n");*/
 
         return sb;
 
     }
 
+    /*
     /**
      * Method to build the initial equation block of the monitor in Modelica
      * @param depth used for indentation purposes
      * @return the Modelica initial equation block
      */
-    private StringBuilder buildInitialEquationBlock(int depth) {
+    /*private StringBuilder buildInitialEquationBlock(int depth) {
         String indent = indentation.repeat(depth);
         StringBuilder sb = new StringBuilder();
         sb.append(indent + "initial equation\n");
@@ -252,7 +254,6 @@ public class MonitorBuilder {
             }
 
         }
-
         return sb;
     }
 
@@ -273,7 +274,7 @@ public class MonitorBuilder {
         sb.append(indent + "pre(" + species.getId() + "_aux) = false;\n");
 
         return sb;
-    }
+    }*/
 
     private StringBuilder buildEquationBlock(int depth) {
         String indent = indentation.repeat(depth);
@@ -319,7 +320,7 @@ public class MonitorBuilder {
      * @param depth used for indentation purposes
      * @return the algorithm block for the Modelica monitor
      */
-    private StringBuilder buildAlgorithmBlock(int depth) {
+    /*private StringBuilder buildAlgorithmBlock(int depth) {
         String indent = indentation.repeat(depth);
         StringBuilder sb = new StringBuilder();
         sb.append(indent + "algorithm\n");
@@ -335,15 +336,15 @@ public class MonitorBuilder {
 
         return sb;
 
-    }
+    }*/
 
-    /**
+    /*/**
      * Method to build the Modelica code to handle the monitor variable for a single species
      * @param species the species of interest
      * @param depth used for indentation purposes
      * @return a block of Modelica code handling the update of the output variable of a single species
      */
-    private StringBuilder buildSpeciesAlgorithm(Species species, int depth) {
+    /*private StringBuilder buildSpeciesAlgorithm(Species species, int depth) {
 
         String indent = indentation.repeat(depth);
         StringBuilder sb = new StringBuilder();
@@ -360,7 +361,7 @@ public class MonitorBuilder {
         sb.append(indent + "end if;\n");
 
         return sb;
-    }
+    }*/
 
     /**
      * Method to declare the Monitor inside main Modelica class (BioSystem.mo)
@@ -395,14 +396,14 @@ public class MonitorBuilder {
         return sb;
     }
 
-    /**
+    /*/**
      * Method to link all the species in the biosystem with the corresponding input variables in the monitor
      * @param B the biosystem
      * @param compNumberMap the map containing information about the name of the compartment in B
      * @param indent used for indentation purposes
      * @return a block of Modelica code handling the linking of the variables of the monitor
-     *//*
-    public static StringBuilder linkMonitor(BioSystem B, HashMap<String, Integer> compNumberMap, String indent) {
+     */
+    /*public static StringBuilder linkMonitor(BioSystem B, HashMap<String, Integer> compNumberMap, String indent) {
         // for every species in the biosystem
         // in the monitor there are variables species_amount that need to be linked to species.n
         StringBuilder sb = new StringBuilder();
@@ -417,8 +418,8 @@ public class MonitorBuilder {
         }
 
         return sb;
-    }
-*/
+    }*/
+
     /*
     TODO: properly link Monitor block input variables in BioSystem
      */
