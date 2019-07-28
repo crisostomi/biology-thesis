@@ -14,6 +14,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 
 public class ConstraintBuilder {
 
@@ -22,6 +23,7 @@ public class ConstraintBuilder {
     private Document document;
     private static final double MINAMOUNT = 0;
     private static final double MAXAMOUNT = 10e-6;
+    public static HashMap<String, Integer> speciesIndex;
 
     /**
      * Class to build an XML carrying biological constraints information
@@ -35,6 +37,12 @@ public class ConstraintBuilder {
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
         this.document = dBuilder.parse(conf);
+
+        ConstraintBuilder.speciesIndex = new HashMap<>();
+        int i = 1;
+        for(Compartment c : this.B.getCompartments()){
+            for(Species s : c.getSpecies()) speciesIndex.put(s.getId(), i++);
+        }
     }
 
     /**
@@ -86,6 +94,7 @@ public class ConstraintBuilder {
         Element constraint = this.document.createElement("species");
         constraint.setAttribute("id", species.getId());
         constraint.setAttribute("name", species.getName());
+        constraint.setAttribute("index", String.valueOf(speciesIndex.get(species.getId())));
 
         constraint.setAttribute("minAmount", String.valueOf(MINAMOUNT));
         constraint.setAttribute("maxAmount", String.valueOf(MAXAMOUNT));

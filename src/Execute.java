@@ -43,8 +43,9 @@ public class Execute {
         BioSystem bs = new BioSystem(comps, sinks, sources);
 
         //update config.xml file
+        ConstraintBuilder cb;
         try {
-            ConstraintBuilder cb = new ConstraintBuilder(bs, configDir);
+            cb = new ConstraintBuilder(bs, configDir);
             cb.build();
         } catch(Exception e){
             System.out.println("Failed to update config.xml - is "+configDir+"/config.xml a legal configuration file?");
@@ -58,7 +59,7 @@ public class Execute {
             System.out.println("Modelica files creation/writing failed");
         }
 
-        MonitorBuilder1 monb = new MonitorBuilder1(bs,/* configDir,*/ outputModelicaDir);
+        MonitorBuilder1 monb = new MonitorBuilder1(bs,/* configDir,*/ outputModelicaDir, ConstraintBuilder.speciesIndex);
         try {
             monb.build();
         } catch (IOException e) {

@@ -1,13 +1,8 @@
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
-
-import java.util.HashMap;
-
 class SpeciesBuilder {
 
     private Species s;
     private static String indentation = "    ";
-    private static int init_index = 1;
+    static int init_index = 1;
     //private static HashMap<String, String> initialAmounts;
     //private static int not_assigned;
     //static Document knowledge;

@@ -5,7 +5,7 @@ public class MonitorBuilder1 {
 
     private BioSystem B;
     private String outDir;
-    private static int der_index = 1;
+    private HashMap<String, Integer> speciesIndex;
 
     private static final String indentation = "    ";   // 4 spaces used for indentation
 
@@ -14,9 +14,10 @@ public class MonitorBuilder1 {
      * @param b the biosystem parsed and built from sbml data
      * @param outDir the path of the output directory where to put the Modelica file
      */
-    public MonitorBuilder1(BioSystem b, String outDir) {
+    public MonitorBuilder1(BioSystem b, String outDir, HashMap<String, Integer> speciesIndex) {
         B = b;
         this.outDir = outDir;
+        this.speciesIndex = speciesIndex;
     }
 
     /**
@@ -148,8 +149,8 @@ public class MonitorBuilder1 {
         StringBuilder sb = new StringBuilder();
 
         String x = species.getId() + "_amount";
-        String b = "minAmount["+(MonitorBuilder1.der_index)+"]";
-        String a = "maxAmount["+(MonitorBuilder1.der_index++)+"]";
+        String b = "minAmount["+this.speciesIndex.get(species.getId())+"]";
+        String a = "maxAmount["+this.speciesIndex.get(species.getId())+"]";
 
         String z = species.getId() + "_monitor";
 

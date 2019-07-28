@@ -37,6 +37,7 @@ class CompartmentBuilder {
         //sb.append(this.buildAllSpecies(compartment, depth+1));
         //SpeciesBuilder.buildKnowledge();
         StringBuilder species = new StringBuilder();
+        SpeciesBuilder.init_index = 1;
         for(Species s : this.c.getSpecies()) species.append(new SpeciesBuilder(s).buildSpecies(depth+1));
         //sb.append("\n");
         /*if(SpeciesBuilder.getNotAssigned() > 0) sb.append(indent.concat("    parameter BioChem.Units.AmountOfSubstance init["
