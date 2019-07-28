@@ -1,7 +1,4 @@
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
@@ -45,7 +42,7 @@ public class ModelBuilder {
 
     }
 
-    public String buildCell(double cellVolume, int depth){
+    String buildCell(double cellVolume, int depth){
 
         double compartmentVolumePercentage = 0.1;
         String indent = indentation.repeat(depth);
@@ -71,7 +68,7 @@ public class ModelBuilder {
 
         sb_model.append("model Cell\n".concat(indent.repeat(2).concat("extends BioChem.Compartments.MainCompartment")));
         sb_model.append("(V(start=cell_V));\n\n");
-        sb_model.append(indent.repeat(depth+1).concat("inner parameter BioChem.Units.Volume cell_V = " +cellVolume)+";\n\n");
+        sb_model.append(indent.repeat(depth+1).concat("inner parameter BioChem.Units.Volume cell_V;\n\n")); /* = " +cellVolume)+"*/
 
 
         CompartmentBuilder cb;

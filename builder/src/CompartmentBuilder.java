@@ -26,9 +26,12 @@ class CompartmentBuilder {
         String name = CompartmentBuilder.toClassName(this.c.getName());
         sb.append("model ".concat(name.concat("\n")));
         sb.append(indent.concat("    extends BioChem.Compartments.Compartment"));
-        sb.append("(V(start=".concat(String.valueOf(cellVolumePercentage)).concat("*cell_V));\n\n"));
+        sb.append("(V(start=".concat("vol_percentage").concat("*cell_V));\n\n"));
 
+        sb.append(indent.concat("    parameter Real vol_percentage(min=0, max=1);\n"));
         sb.append(indent.concat("    outer parameter BioChem.Units.Volume cell_V;\n"));
+
+
         //sb.append(indent.concat("    parameter "));
 
         //sb.append(this.buildAllSpecies(compartment, depth+1));

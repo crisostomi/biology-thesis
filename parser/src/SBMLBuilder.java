@@ -10,7 +10,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 
-public class SBMLBuilder {
+class SBMLBuilder {
 
     private Document document;      // it stores the sbml being built
     private String outputDir;
@@ -20,14 +20,14 @@ public class SBMLBuilder {
      * @param outputDir the path of the output directory of the union sbml
      * @throws ParserConfigurationException
      */
-    public SBMLBuilder(String outputDir) throws ParserConfigurationException{
+    SBMLBuilder(String outputDir) throws ParserConfigurationException{
         DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder documentBuilder = documentFactory.newDocumentBuilder();
         this.document = documentBuilder.newDocument();
         this.outputDir = outputDir;
     }
 
-    public void buildRoot(Node root) {
+    void buildRoot(Node root) {
         this.document.appendChild(this.document.importNode(root,false));
         Element model = this.document.createElement("model");
         model.setAttribute("id", "pathway_union");
@@ -40,21 +40,21 @@ public class SBMLBuilder {
         this.document.getFirstChild().appendChild(model);
     }
 
-    public void annotate(Node model){
+    void annotate(Node model){
         Node annotation = this.document.getElementsByTagName("annotation").item(0);
         Node model_tag = this.document.importNode(model, false);
         annotation.appendChild(model_tag);
     }
 
-    public void addCompartment(Node comp){
+    void addCompartment(Node comp){
         this.document.getElementsByTagName("listOfCompartments").item(0).appendChild(this.document.importNode(comp, false));
     }
 
-    public void addSpecies(Node spec){
+    void addSpecies(Node spec){
         this.document.getElementsByTagName("listOfSpecies").item(0).appendChild(this.document.importNode(spec, false));
     }
 
-    public void addReaction(Node react){
+    void addReaction(Node react){
         Node r = this.document.importNode(react, false);
         this.document.getElementsByTagName("listOfReactions").item(0).appendChild(r);
         r.appendChild(this.document.createElement("listOfReactants"));
@@ -62,7 +62,7 @@ public class SBMLBuilder {
         r.appendChild(this.document.createElement("listOfModifiers"));
     }
 
-    public void addReactantReference(Node sr, String reactid){
+    void addReactantReference(Node sr, String reactid){
         NodeList reactions = this.document.getElementsByTagName("reaction");
         Node react = reactions.item(0);
         for(int i = 0; i < reactions.getLength(); i++){
@@ -76,7 +76,7 @@ public class SBMLBuilder {
         reactants.appendChild(this.document.importNode(sr, false));
     }
 
-    public void addProductReference(Node sr, String reactid){
+    void addProductReference(Node sr, String reactid){
         NodeList reactions = this.document.getElementsByTagName("reaction");
         Node react = reactions.item(0);
         for(int i = 0; i < reactions.getLength(); i++){
@@ -90,7 +90,7 @@ public class SBMLBuilder {
         products.appendChild(this.document.importNode(sr, false));
     }
 
-    public void addModifierReference(Node sr, String reactid){
+    void addModifierReference(Node sr, String reactid){
         NodeList reactions = this.document.getElementsByTagName("reaction");
         Node react = reactions.item(0);
         for(int i = 0; i < reactions.getLength(); i++){
@@ -104,7 +104,7 @@ public class SBMLBuilder {
         modifiers.appendChild(this.document.importNode(sr, false));
     }
 
-    public void close() throws TransformerException {
+    void close() throws TransformerException {
         this.document.normalizeDocument();
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
