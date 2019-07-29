@@ -112,8 +112,8 @@ public class Parser {
         for(int i = 0; i < all_comps.getLength(); i++){
             name = all_comps.item(i).getAttributes().getNamedItem("name").getNodeValue();
             id = all_comps.item(i).getAttributes().getNamedItem("id").getNodeValue();
-            if (ignore && this.ignoreList.contains(id)) continue;
-            if (select && !this.selectList.contains(id)) continue;
+            /*if (ignore && this.ignoreList.contains(id)) continue;
+            if (select && !this.selectList.contains(id)) continue;*/
             if(searchCompartmentById(result, id) == null){
                 result.add(new Compartment(name, id));
                 this.builder.addCompartment(all_comps.item(i));
@@ -126,8 +126,8 @@ public class Parser {
         for(int i = 0; i < all_spec.getLength(); i++){
             comp = all_spec.item(i).getAttributes().getNamedItem("compartment").getNodeValue();
 
-            if (ignore && this.ignoreList.contains(comp)) continue;
-            if (select && !this.selectList.contains(comp)) continue;
+            /*if (ignore && this.ignoreList.contains(comp)) continue;
+            if (select && !this.selectList.contains(comp)) continue;*/
 
             name = all_spec.item(i).getAttributes().getNamedItem("name").getNodeValue()/*.replaceAll("\\[.*\\]", "").trim()*/;
             id = all_spec.item(i).getAttributes().getNamedItem("id").getNodeValue();
@@ -150,8 +150,8 @@ public class Parser {
             Node n = all_reacts.item(i);
             comp = n.getAttributes().getNamedItem("compartment").getNodeValue();
 
-            if (ignore && this.ignoreList.contains(comp)) continue;
-            if (select && !this.selectList.contains(comp)) continue;
+            /*if (ignore && this.ignoreList.contains(comp)) continue;
+            if (select && !this.selectList.contains(comp)) continue;*/
 
             name = n.getAttributes().getNamedItem("name").getNodeValue();
             id = n.getAttributes().getNamedItem("id").getNodeValue();
@@ -210,9 +210,9 @@ public class Parser {
                 }
             }
 
-            SimpleReaction reac_check = (complex) ? comp_r : r;
+            /*SimpleReaction reac_check = (complex) ? comp_r : r;
 
-            if (!checkReaction(reac_check)) continue;
+            if (!checkReaction(reac_check)) continue;*/
 
             if(found != null && found.searchReaction(id) == null){ //add reaction to compartment
                 if(complex) found.addReaction(comp_r); //if(reversible) found.addReaction(comp_r_inv);
