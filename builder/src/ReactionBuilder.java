@@ -4,16 +4,18 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 
-
 class ReactionBuilder {
 
     private SimpleReaction r;
     private static String indentation = "    ";
     private static HashSet<CompartmentEdge> compEdges;
-    private static HashMap<String, Integer> comp_number;
-    private static int k1_index = 1;
+    private static HashMap<String, Integer> compNumber;
+    private static HashMap<String, Integer> k1Index;
+    private static HashMap<String, Integer> k2Index;
+    /*private static int k1_index = 1;
     private static int k2_index = 1;
-   /* private static int not_assigned_k1;
+    static Document config;
+    private static int not_assigned_k1;
     private static int not_assigned_k2;
     private static HashMap<String, String> reaction_k1;
     private static HashMap<String, String> reaction_k2;
@@ -97,11 +99,11 @@ class ReactionBuilder {
 
         StringBuilder sb = new StringBuilder(/*indentation.repeat(depth)*/);
 
-        int src_number = ReactionBuilder.comp_number.get(compId);
+        int src_number = ReactionBuilder.compNumber.get(compId);
         for(CompartmentEdge ce : ReactionBuilder.getCompEdges()){
             if(ce.getTransport().getId().equals(this.r.getId())){
 
-                int dst_number = ReactionBuilder.comp_number.get(ce.getCompDstId());
+                int dst_number = ReactionBuilder.compNumber.get(ce.getCompDstId());
                 if(ce.getExternalReactant() != null){
                     sb.append(
                             this.buildConnectExternalReactant(dst_number, src_number, this.r, ce, s, depth-1)
@@ -275,8 +277,8 @@ class ReactionBuilder {
             }
         }*/
 
-        sb.append("k1=".concat("const_k1["+(ReactionBuilder.k1_index++)+"]"));
-        if(react.isReversible()) sb.append(", k2=".concat("const_k2["+(ReactionBuilder.k2_index++)+"]"));
+        sb.append("k1=".concat("const_k1["+ReactionBuilder.k1Index.get(r.getId())+"]"));
+        if(react.isReversible()) sb.append(", k2=".concat("const_k2["+ReactionBuilder.k2Index.get(r.getId())+"]"));
 
         int sub = 1, prod = 1;
         for(Species s : react.getReactants().keySet()){
@@ -308,6 +310,23 @@ class ReactionBuilder {
 
         }
         return sb.toString()+")";
+    }
+
+    static void parseConfig(Document config){
+
+        ReactionBuilder.k1Index = new HashMap<>();
+        ReactionBuilder.k2Index = new HashMap<>();
+        NodeList rev = config.getElementsByTagName("reversible");
+        NodeList irrev = config.getElementsByTagName("irreversible");
+        for(int i = 0; i < rev.getLength(); i++) {
+            k1Index.put(rev.item(i).getAttributes().getNamedItem("id").getNodeValue(),
+                    Integer.parseInt(rev.item(i).getAttributes().getNamedItem("k1_index").getNodeValue()));
+            k2Index.put(rev.item(i).getAttributes().getNamedItem("id").getNodeValue(),
+                    Integer.parseInt(rev.item(i).getAttributes().getNamedItem("k2_index").getNodeValue()));
+        }
+        for(int i = 0; i < irrev.getLength(); i++)
+            k1Index.put(irrev.item(i).getAttributes().getNamedItem("id").getNodeValue(),
+                    Integer.parseInt(irrev.item(i).getAttributes().getNamedItem("k1_index").getNodeValue()));
     }
 
     /*static void buildKnowledge(){
@@ -345,11 +364,11 @@ class ReactionBuilder {
     }
 
     public static HashMap<String, Integer> getCompNumber() {
-        return comp_number;
+        return compNumber;
     }
 
     static void setCompNumber(HashMap<String, Integer> comp_number) {
-        ReactionBuilder.comp_number = comp_number;
+        ReactionBuilder.compNumber = comp_number;
     }
 
     /*static int getNotAssignedK1(){ return ReactionBuilder.not_assigned_k1; }

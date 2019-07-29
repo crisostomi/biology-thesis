@@ -4,6 +4,7 @@ class CompartmentBuilder {
     private int comp_number;
     private static String indentation = "    ";
     private StringBuilder compartment_links;
+    //static Document config;
 
     CompartmentBuilder(Compartment c, int comp_number){
         this.c = c;
@@ -37,7 +38,7 @@ class CompartmentBuilder {
         //sb.append(this.buildAllSpecies(compartment, depth+1));
         //SpeciesBuilder.buildKnowledge();
         StringBuilder species = new StringBuilder();
-        SpeciesBuilder.init_index = 1;
+        //SpeciesBuilder.init_index = 1;
         for(Species s : this.c.getSpecies()) species.append(new SpeciesBuilder(s).buildSpecies(depth+1));
         //sb.append("\n");
         /*if(SpeciesBuilder.getNotAssigned() > 0) sb.append(indent.concat("    parameter BioChem.Units.AmountOfSubstance init["

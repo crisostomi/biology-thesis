@@ -1,9 +1,15 @@
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+
+import java.util.HashMap;
+
 class SpeciesBuilder {
 
     private Species s;
     private static String indentation = "    ";
-    static int init_index = 1;
-    //private static HashMap<String, String> initialAmounts;
+    //static int init_index = 1;
+    //static Document config;
+    private static HashMap<String, Integer> initIndex;
     //private static int not_assigned;
     //static Document knowledge;
 
@@ -28,9 +34,19 @@ class SpeciesBuilder {
 
         if(init.equals("")) init = "init["+(++SpeciesBuilder.not_assigned)+"]";*/
 
-        res += s.getId() + "(n(start=init[" + (SpeciesBuilder.init_index++) + "])) \""+s.getName()+"\";\n";
+        res += s.getId() + "(n(start=init[" + SpeciesBuilder.initIndex.get(s.getId()) + "])) \""+s.getName()+"\";\n";
 
         return res;
+    }
+
+    static void parseConfig(Document config){
+
+        SpeciesBuilder.initIndex = new HashMap<>();
+        NodeList nl = config.getElementsByTagName("species");
+        for(int i = 0; i < nl.getLength(); i++)
+            initIndex.put(nl.item(i).getAttributes().getNamedItem("id").getNodeValue(),
+                    Integer.parseInt(nl.item(i).getAttributes().getNamedItem("init_index").getNodeValue()));
+
     }
 
     /*static void buildKnowledge(){

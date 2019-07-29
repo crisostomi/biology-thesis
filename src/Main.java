@@ -2,15 +2,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-
 import org.apache.commons.cli.*;
-
+import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 
 public class Main {
 
     private static String inputDir;
-    private static String configFilePath;
+    private static String kbFilePath;
     private static String outputSBMLDir;
     private static String outputModelicaDir;
 
@@ -25,7 +24,7 @@ public class Main {
     private static ArrayList<String> selectCompartmentList;
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, SAXException, ParserConfigurationException {
 
         handleOptions(args);
         handleArguments(args);
@@ -78,23 +77,24 @@ public class Main {
         //update config.xml file
         ConfigBuilder cb;
         try {
-            cb = new ConfigBuilder(bs, configFilePath);
-            cb.build();
+            cb = new ConfigBuilder(bs, kbFilePath + "/kb.xml", outputModelicaDir + "/config.xml");
+            cb.buildKB();
+            cb.buildConfig();
         } catch(Exception e){
-            System.out.println("Failed to update configuration file.\nIs "+ configFilePath +
+            System.out.println("Failed to update configuration file.\nIs "+ kbFilePath +
                     " a legal configuration file?");
             System.exit(1);
         }
 
         // convert Java biosystem model in Modelica
-        ModelBuilder mb = new ModelBuilder(bs, outputModelicaDir, configFilePath);
+        ModelBuilder mb = new ModelBuilder(bs, outputModelicaDir, outputModelicaDir + "/config.xml");
         try {
             mb.buildBioSystem();
-        } catch(IOException e){
+        } catch(Exception e){
             System.out.println("Modelica files creation/writing failed");
         }
 
-        MonitorBuilder monb = new MonitorBuilder(bs, outputModelicaDir, ConfigBuilder.speciesIndex);
+        MonitorBuilder monb = new MonitorBuilder(bs, outputModelicaDir);
         try {
             monb.build();
         } catch (IOException e) {
@@ -120,7 +120,7 @@ public class Main {
             }
 
             inputDir = argcopy[0];
-            configFilePath = argcopy[1];
+            kbFilePath = argcopy[1];
             outputSBMLDir = argcopy[2];
 
             if (argcopy.length > 4) {

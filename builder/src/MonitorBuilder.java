@@ -1,3 +1,5 @@
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
 import java.io.*;
 import java.util.HashMap;
 
@@ -5,8 +7,7 @@ public class MonitorBuilder {
 
     private BioSystem B;
     private String outDir;
-    private HashMap<String, Integer> speciesIndex;
-
+    private static HashMap<String, Integer> speciesIndex;
     private static final String indentation = "    ";   // 4 spaces used for indentation
 
     /**
@@ -14,10 +15,19 @@ public class MonitorBuilder {
      * @param b the biosystem parsed and built from sbml data
      * @param outDir the path of the output directory where to put the Modelica file
      */
-    public MonitorBuilder(BioSystem b, String outDir, HashMap<String, Integer> speciesIndex) {
-        B = b;
+    public MonitorBuilder(BioSystem b, String outDir) {
+        this.B = b;
         this.outDir = outDir;
-        this.speciesIndex = speciesIndex;
+
+    }
+
+    static void parseConfig(Document config){
+
+        MonitorBuilder.speciesIndex = new HashMap<>();
+        NodeList nl = config.getElementsByTagName("species");
+        for(int i = 0; i < nl.getLength(); i++)
+            speciesIndex.put(nl.item(i).getAttributes().getNamedItem("id").getNodeValue(),
+                    Integer.parseInt(nl.item(i).getAttributes().getNamedItem("bounds_index").getNodeValue()));
     }
 
     /**

@@ -14,64 +14,103 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 
 public class ConfigBuilder {
 
     private BioSystem B;
+    private String kbPath;
     private String configPath;
-    private Document document;
+    private Document kb;
+    private Document config;
     private static final double MINAMOUNT = 0;
     private static final double MAXAMOUNT = 10e-6;
     private static final double MINREACTION = 0;
     private static final double MAXREACTION = 10e10;
-    public static HashMap<String, Integer> speciesIndex;
+    //public static HashMap<String, Integer> speciesIndex;
 
     /**
      * Class to build an XML carrying biological constraints information
      * @param b the biosystem built from sbml data
-     * @param configPath the output directory where to put the built XML
+     * @param kbPath the output directory where to put the built XML
      */
-    public ConfigBuilder(BioSystem b, String configPath) throws ParserConfigurationException, IOException, SAXException {
+    public ConfigBuilder(BioSystem b, String kbPath, String configDir) throws ParserConfigurationException, IOException, SAXException {
         B = b;
-        this.configPath = configPath;
-        File conf = new File(this.configPath);
+        this.kbPath = kbPath;
+        this.configPath = configDir;
+
+        File kb = new File(this.kbPath);
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-        this.document = dBuilder.parse(conf);
+        this.kb = dBuilder.parse(kb);
+        this.config = dBuilder.newDocument();
 
-        ConfigBuilder.speciesIndex = new HashMap<>();
-        int i = 1;
-        for(Compartment c : this.B.getCompartments()){
-            for(Species s : c.getSpecies()) speciesIndex.put(s.getId(), i++);
-        }
     }
 
     /**
      * Method to build the XML
-     * @throws IOException
      */
-    public void build() throws ParserConfigurationException, IOException, TransformerException {
+    public void buildKB() throws TransformerException {
 
-        Node listOfSpecies = this.document.getElementsByTagName("listOfSpecies").item(0);
-        Node listOfReactions = this.document.getElementsByTagName("listOfReactions").item(0);
+        Node listOfSpecies = this.kb.getElementsByTagName("listOfSpecies").item(0);
+        Node listOfReactions = this.kb.getElementsByTagName("listOfReactions").item(0);
+        Node constraints = this.kb.getElementsByTagName("constraints").item(0);
+
 
         this.buildAllSpeciesConstraints(listOfSpecies);
         this.buildAllReactionsConstraints(listOfReactions);
-        /*Element constraints = this.document.createElement("constraints");
 
-        constraints.appendChild(this.buildAllSpeciesConstraints());
-        constraints.appendChild(this.buildAllReactionsConstraints());
+        constraints.appendChild(listOfSpecies);
+        constraints.appendChild(listOfReactions);
 
-        this.document.appendChild(constraints);*/
-        this.close();
+       // this.kb.appendChild(constraints);
+        this.closeKB();
+    }
+
+    public void buildConfig() throws TransformerException {
+
+        Node configuration = this.config.createElement("configuration");
+        this.config.appendChild(configuration);
+        Node listOfSpecies = this.config.createElement("listOfSpecies");
+        Node listOfReactions = this.config.createElement("listOfReactions");
+        configuration.appendChild(listOfSpecies);
+        configuration.appendChild(listOfReactions);
+
+        /*ConfigBuilder.speciesIndex = new HashMap<>();
+        int i = 1;
+        for(Compartment c : this.B.getCompartments()){
+            for(Species s : c.getSpecies()) speciesIndex.put(s.getId(), i++);
+        }*/
+
+        Element species, reaction;
+        int i = 1, x, y, t;
+        for (Compartment c: this.B.getCompartments()) {
+            x = 1;
+            y = 1;
+            t = 1;
+            for (Species s: c.getSpecies()) {
+                species = this.config.createElement("species");
+                species.setAttribute("id", s.getId());
+                species.setAttribute("bounds_index", String.valueOf(i++));
+                species.setAttribute("init_index", String.valueOf(x++));
+                listOfSpecies.appendChild(species);
+            }
+            for (SimpleReaction r: c.getReactions()) {
+                reaction = r.isReversible() ? this.config.createElement("reversible") : this.config.createElement("irreversible");
+                reaction.setAttribute("id", r.getId());
+                reaction.setAttribute("k1_index", String.valueOf(y++));
+                if(r.isReversible()) reaction.setAttribute("k2_index", String.valueOf(t++));
+                listOfReactions.appendChild(reaction);
+            }
+        }
+
+        this.closeConfig();
     }
 
     private void buildAllSpeciesConstraints(Node listOfSpecies) {
         //Element listOfSpecies = this.document.createElement("listOfSpecies");
         for (Compartment c: this.B.getCompartments()) {
             for (Species s: c.getSpecies()) {
-                if(!ConfigBuilder.isSpeciesInDocument(this.document, s.getId()))
+                if(!ConfigBuilder.isSpeciesInDocument(this.kb, s.getId()))
                     listOfSpecies.appendChild(this.buildSpeciesConstraint(s));
             }
         }
@@ -81,7 +120,7 @@ public class ConfigBuilder {
         //Element listOfReactions = this.document.createElement("listOfReactions");
         for (Compartment c: this.B.getCompartments()) {
             for (SimpleReaction r: c.getReactions()) {
-                if(!ConfigBuilder.isReactionInDocument(this.document, r.getId(), r.isReversible()))
+                if(!ConfigBuilder.isReactionInDocument(this.kb, r.getId(), r.isReversible()))
                     listOfReactions.appendChild(this.buildReactionConstraint(r));
             }
         }
@@ -93,10 +132,10 @@ public class ConfigBuilder {
      * @return a line of XML with the definition of the constraint for the species
      */
     private Element buildSpeciesConstraint(Species species) {
-        Element constraint = this.document.createElement("species");
+        Element constraint = this.kb.createElement("species");
         constraint.setAttribute("id", species.getId());
         constraint.setAttribute("name", species.getName());
-        constraint.setAttribute("index", String.valueOf(speciesIndex.get(species.getId())));
+        //constraint.setAttribute("index", String.valueOf(speciesIndex.get(species.getId())));
 
         constraint.setAttribute("minAmount", String.valueOf(MINAMOUNT));
         constraint.setAttribute("maxAmount", String.valueOf(MAXAMOUNT));
@@ -112,7 +151,7 @@ public class ConfigBuilder {
      */
     private Element buildReactionConstraint(SimpleReaction reaction) {
         String tagName = (reaction.isReversible()) ? "reversible" : "irreversible";
-        Element constraint = this.document.createElement(tagName);
+        Element constraint = this.kb.createElement(tagName);
         constraint.setAttribute("id", reaction.getId());
         constraint.setAttribute("name", reaction.getName());
 
@@ -159,13 +198,26 @@ public class ConfigBuilder {
     }
 
 
-    public void close() throws TransformerException {
+    public void closeKB() throws TransformerException {
 
-        this.document.normalizeDocument();
-        trimWhitespace(this.document);
+        this.kb.normalizeDocument();
+        trimWhitespace(this.kb);
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
-        DOMSource domSource = new DOMSource(this.document);
+        DOMSource domSource = new DOMSource(this.kb);
+        StreamResult streamResult = new StreamResult(new File(this.kbPath));
+        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+        transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+        transformer.transform(domSource, streamResult);
+    }
+
+    public void closeConfig() throws TransformerException {
+
+        this.config.normalizeDocument();
+        trimWhitespace(this.config);
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        Transformer transformer = transformerFactory.newTransformer();
+        DOMSource domSource = new DOMSource(this.config);
         StreamResult streamResult = new StreamResult(new File(this.configPath));
         transformer.setOutputProperty(OutputKeys.INDENT, "yes");
         transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
