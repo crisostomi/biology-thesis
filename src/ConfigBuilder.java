@@ -23,6 +23,8 @@ public class ConfigBuilder {
     private Document document;
     private static final double MINAMOUNT = 0;
     private static final double MAXAMOUNT = 10e-6;
+    private static final double MINREACTION = 0;
+    private static final double MAXREACTION = 10e10;
     public static HashMap<String, Integer> speciesIndex;
 
     /**
@@ -115,13 +117,13 @@ public class ConfigBuilder {
         constraint.setAttribute("name", reaction.getName());
 
         constraint.setAttribute("k1", "");
-        constraint.setAttribute("min_k1", "");
-        constraint.setAttribute("max_k1", "");
+        constraint.setAttribute("min_k1", String.valueOf(MINREACTION));
+        constraint.setAttribute("max_k1", String.valueOf(MAXREACTION));
 
         if (reaction.isReversible()) {
             constraint.setAttribute("k2", "");
-            constraint.setAttribute("min_k2", "");
-            constraint.setAttribute("max_k2", "");
+            constraint.setAttribute("min_k2", String.valueOf(MINREACTION));
+            constraint.setAttribute("max_k2", String.valueOf(MAXREACTION));
         }
 
         return constraint;
