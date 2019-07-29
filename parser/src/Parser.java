@@ -13,6 +13,12 @@ public class Parser {
     private String inputDir;
     private SBMLBuilder builder;
 
+    private boolean ignore = false;
+    private boolean select = false;
+
+    private ArrayList<String> ignoreList;
+    private ArrayList<String> selectList;
+
     /**
      * Class used to parse sbml data and pass it down to the SBMLBuilder in order to build the union SBML
      * @param inputDir the directory with the sbml data to be parsed
@@ -26,16 +32,32 @@ public class Parser {
     }
 
     /**
+     * Class used to parse sbml data and pass it down to the SBMLBuilder in order to build the union SBML
+     * @param inputDir the directory with the sbml data to be parsed
+     * @param sbmlOut the directory where to build the union sbml
+     * @throws ParserConfigurationException
+     * @see SBMLBuilder
+     */
+    public Parser(String inputDir, String sbmlOut,
+                  ArrayList<String> ignoreList, ArrayList<String> selectList) throws ParserConfigurationException{
+        this.inputDir = inputDir;
+        this.builder = new SBMLBuilder(sbmlOut);
+        this.ignoreList = ignoreList;
+        this.selectList = selectList;
+
+        if (ignoreList != null) {
+            ignore = true;
+        } else if (selectList != null){
+            select = true;
+        }
+    }
+
+    /**
      * Method to get out all the information of the input sbml carried by a set of compartments
      * @return the set of compartments in the sbml data
      * @see Compartment
      */
     public HashSet<Compartment> instantiateCompartments() {
-        return instantiateCompartmentsIgnore(null, null);
-    }
-
-    public HashSet<Compartment> instantiateCompartmentsIgnore(ArrayList<String> ignoreNameList,
-                                                              ArrayList<String> ignoreIdList) {
         HashSet<Compartment> result = new HashSet<>();
         File dir = new File(this.inputDir);
         File[] dirList = dir.listFiles();
@@ -52,7 +74,7 @@ public class Parser {
                         first = false;
                     }
                     this.builder.annotate(doc.getElementsByTagName("model").item(0));
-                    this.findCompartmentsIgnore(doc.getElementsByTagName("compartment"), ignoreNameList, ignoreIdList, result);
+                    this.findCompartments(doc.getElementsByTagName("compartment"), result);
                     this.findSpecies(doc.getElementsByTagName("species"), result);
                     this.findReactions(doc.getElementsByTagName("reaction"), result);
                 }
@@ -60,41 +82,6 @@ public class Parser {
             }
             catch(Exception e){
                 e.printStackTrace();
-                System.out.println("Parsing failed. Returning with error");
-                return null;
-            }
-        }
-        else{
-            System.out.println(this.inputDir + "is not a directory. Please specify a directory containing .sbml files derived from Reactome database");
-        }
-        return result;
-    }
-
-    public HashSet<Compartment> instantiateCompartmentsSelect(ArrayList<String> selectNameList,
-                                                              ArrayList<String> selectIdList) {
-        HashSet<Compartment> result = new HashSet<>();
-        File dir = new File(this.inputDir);
-        File[] dirList = dir.listFiles();
-        if(dirList != null){
-            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            boolean first = true;
-            try {
-                DocumentBuilder docBuild = dbf.newDocumentBuilder();
-                for (File sbml : dirList) {
-                    //String id, name;
-                    Document doc = docBuild.parse(sbml);
-                    if(first){
-                        this.builder.buildRoot(doc.getElementsByTagName("sbml").item(0));
-                        first = false;
-                    }
-                    this.builder.annotate(doc.getElementsByTagName("model").item(0));
-                    this.findCompartmentsSelect(doc.getElementsByTagName("compartment"), selectNameList, selectIdList, result);
-                    this.findSpecies(doc.getElementsByTagName("species"), result);
-                    this.findReactions(doc.getElementsByTagName("reaction"), result);
-                }
-                this.builder.close();
-            }
-            catch(Exception e){
                 System.out.println("Parsing failed. Returning with error");
                 return null;
             }
@@ -121,48 +108,12 @@ public class Parser {
     }
 
     private void findCompartments(NodeList all_comps, HashSet<Compartment> result){
-        findCompartmentsIgnore(all_comps, null, null, result);
-    }
-
-    /**
-     * Method to create the object for the compartments found in the sbml
-     * @param all_comps a list of NodeList object containing information about the compartments
-     * @param ignoreNameList a list of names of compartments not to be added to result
-     * @param ignoreIdList a list of id of compartments not to be added to result
-     * @param result the resulting set of Compartments that gets populated by the method
-     */
-    private void findCompartmentsIgnore(NodeList all_comps, ArrayList<String> ignoreNameList,
-                                  ArrayList<String> ignoreIdList, HashSet<Compartment> result){
-        String name, id;
-        for(int i = 0; i < all_comps.getLength(); i++){
-            name = all_comps.item(i).getAttributes().getNamedItem("name").getNodeValue();
-            if (ignoreNameList != null && ignoreNameList.contains(name)) continue;
-            id = all_comps.item(i).getAttributes().getNamedItem("id").getNodeValue();
-            if (ignoreNameList != null && ignoreIdList.contains(id)) continue;
-            if(searchCompartmentById(result, id) == null){
-                result.add(new Compartment(name, id));
-                this.builder.addCompartment(all_comps.item(i));
-            }
-        }
-    }
-
-    /**
-     * Method to create the object for the compartments found in the sbml
-     * @param all_comps a list of NodeList object containing information about the compartments
-     * @param selectNameList a list of names of compartments not to be added to result
-     * @param selectIdList a list of id of compartments not to be added to result
-     * @param result the resulting set of Compartments that gets populated by the method
-     */
-    private void findCompartmentsSelect(NodeList all_comps, ArrayList<String> selectNameList,
-                                  ArrayList<String> selectIdList, HashSet<Compartment> result){
         String name, id;
         for(int i = 0; i < all_comps.getLength(); i++){
             name = all_comps.item(i).getAttributes().getNamedItem("name").getNodeValue();
             id = all_comps.item(i).getAttributes().getNamedItem("id").getNodeValue();
-            if ((selectIdList != null && !selectIdList.contains(id)) &&
-                    (selectNameList != null && !selectNameList.contains(name))) {
-                continue;
-            }
+            if (ignore && this.ignoreList.contains(id)) continue;
+            if (select && !this.selectList.contains(id)) continue;
             if(searchCompartmentById(result, id) == null){
                 result.add(new Compartment(name, id));
                 this.builder.addCompartment(all_comps.item(i));
@@ -174,6 +125,10 @@ public class Parser {
         String comp, name, id;
         for(int i = 0; i < all_spec.getLength(); i++){
             comp = all_spec.item(i).getAttributes().getNamedItem("compartment").getNodeValue();
+
+            if (ignore && this.ignoreList.contains(comp)) continue;
+            if (select && !this.selectList.contains(comp)) continue;
+
             name = all_spec.item(i).getAttributes().getNamedItem("name").getNodeValue()/*.replaceAll("\\[.*\\]", "").trim()*/;
             id = all_spec.item(i).getAttributes().getNamedItem("id").getNodeValue();
             Compartment found = searchCompartmentById(result, comp);
@@ -194,6 +149,10 @@ public class Parser {
             complex = false;
             Node n = all_reacts.item(i);
             comp = n.getAttributes().getNamedItem("compartment").getNodeValue();
+
+            if (ignore && this.ignoreList.contains(comp)) continue;
+            if (select && !this.selectList.contains(comp)) continue;
+
             name = n.getAttributes().getNamedItem("name").getNodeValue();
             id = n.getAttributes().getNamedItem("id").getNodeValue();
             reversible = Boolean.parseBoolean(n.getAttributes().getNamedItem("reversible").getNodeValue());
@@ -250,11 +209,41 @@ public class Parser {
 
                 }
             }
+
+            SimpleReaction reac_check = (complex) ? comp_r : r;
+
+            if (!checkReaction(reac_check)) continue;
+
             if(found != null && found.searchReaction(id) == null){ //add reaction to compartment
                 if(complex) found.addReaction(comp_r); //if(reversible) found.addReaction(comp_r_inv);
                 else found.addReaction(r); //if(reversible) found.addReaction(r_inv);
             }
         }
+    }
+
+    /**
+     * @param r the reaction
+     * @return whether a reaction has been correctly built
+     */
+    private boolean checkReaction(SimpleReaction r) {
+
+        for (Species s: r.getProducts().keySet()) {
+            if (s == null) return false;
+        }
+
+        for (Species s: r.getReactants().keySet()) {
+            if (s == null) return false;
+        }
+
+        if (r instanceof ComplexReaction) {
+            ComplexReaction comp_r = (ComplexReaction) r;
+
+            for (Species s: comp_r.getModifiers().keySet()) {
+                if (s == null) return false;
+            }
+        }
+
+        return false;
     }
 
 }

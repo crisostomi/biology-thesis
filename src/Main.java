@@ -21,9 +21,8 @@ public class Main {
             "[-ic <arg> | -sc <arg> ]";
 
     private static Options options = new Options();
-    private static ArrayList<String> ignoreCompartmentList = new ArrayList<>();
-    private static ArrayList<String> selectCompartmentList = new ArrayList<>();
-
+    private static ArrayList<String> ignoreCompartmentList;
+    private static ArrayList<String> selectCompartmentList;
 
 
     public static void main(String[] args) {
@@ -45,7 +44,7 @@ public class Main {
 
         // parse input sbml
         try {
-            P = new Parser(inputDir, outputSBMLDir);
+            P = new Parser(inputDir, outputSBMLDir, ignoreCompartmentList, selectCompartmentList);
         } catch(ParserConfigurationException e){
             System.out.println("Parsing fail due to SBMLBuilder instantiation failure");
             return;
@@ -104,10 +103,6 @@ public class Main {
         }
 
         System.out.println("All done!");
-
-        /*
-        TODO: fix ignoring compartments trouble with reaction
-         */
 
     }
 
@@ -194,8 +189,12 @@ public class Main {
                 System.exit(1);
             }*/
 
-            if (cmd.hasOption("ic")) ignoreCompartmentList.addAll(parseOptionList(cmd, "ignoreComp"));
-            if (cmd.hasOption("sc")) selectCompartmentList.addAll(parseOptionList(cmd, "selectComp"));
+            if (cmd.hasOption("ic")) {
+                ignoreCompartmentList = parseOptionList(cmd, "ignoreComp");
+            }
+            if (cmd.hasOption("sc")) {
+                selectCompartmentList = parseOptionList(cmd, "selectComp");
+            }
 
             if (cmd.hasOption("ic") && cmd.hasOption("sc")) {
                 System.out.println("Cannot ignore and select compartments at once.");
