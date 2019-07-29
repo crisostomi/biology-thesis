@@ -7,18 +7,18 @@ public class ModelBuilder {
 
     private BioSystem B;
     private String output_dir;
-    //private String configDir;
+    private String configPath;
     private StringBuilder cell_equation;
     private HashMap<String, Integer> comp_number;       // key: compartmentId, value: progressive number
     private static final String indentation = "    ";   // 4 spaces used for indentation
     private static double cellVolume = 10e-12;
 
-    public ModelBuilder(BioSystem B, String od, String configDir) {
+    public ModelBuilder(BioSystem B, String od, String configPath) {
         this.B = B;
         this.output_dir = od;
         this.cell_equation = new StringBuilder();
         this.comp_number = new HashMap<>();
-        //this.configDir = configDir;
+        this.configPath = configPath;
     }
 
     public void buildBioSystem() throws IOException {
@@ -55,14 +55,13 @@ public class ModelBuilder {
         ReactionBuilder.setCompNumber(this.comp_number);
 
         /*try {
-            String filename = this.configDir + "/config.xml";
-            File conf = new File(filename);
+            File conf = new File(this.configPath);
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             SpeciesBuilder.knowledge = dBuilder.parse(conf);
             ReactionBuilder.knowledge = SpeciesBuilder.knowledge;
         }catch(Exception e){
-            System.out.println("Failed to open configuration file. Is "+this.configDir +" a legitimate xml configuration file?");
+            System.out.println("Failed to open configuration file. Is "+ this.configPath +" a legitimate xml configuration file?");
             return null;
         }*/
 

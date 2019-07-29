@@ -17,6 +17,5 @@
     <orderEntry type="module" module-name="graph" exported="" />
     <orderEntry type="module" module-name="parser" exported="" />
     <orderEntry type="library" name="commons-cli" level="project" />
-    <orderEntry type="module" module-name="preprocessing" exported="" />
   </component>
 </module>

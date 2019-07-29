@@ -16,10 +16,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
-public class ConstraintBuilder {
+public class ConfigBuilder {
 
     private BioSystem B;
-    private String outDir;
+    private String configPath;
     private Document document;
     private static final double MINAMOUNT = 0;
     private static final double MAXAMOUNT = 10e-6;
@@ -28,17 +28,17 @@ public class ConstraintBuilder {
     /**
      * Class to build an XML carrying biological constraints information
      * @param b the biosystem built from sbml data
-     * @param outDir the output directory where to put the built XML
+     * @param configPath the output directory where to put the built XML
      */
-    public ConstraintBuilder(BioSystem b, String outDir) throws ParserConfigurationException, IOException, SAXException {
+    public ConfigBuilder(BioSystem b, String configPath) throws ParserConfigurationException, IOException, SAXException {
         B = b;
-        this.outDir = outDir;
-        File conf = new File(this.outDir + "/config.xml");
+        this.configPath = configPath;
+        File conf = new File(this.configPath);
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
         this.document = dBuilder.parse(conf);
 
-        ConstraintBuilder.speciesIndex = new HashMap<>();
+        ConfigBuilder.speciesIndex = new HashMap<>();
         int i = 1;
         for(Compartment c : this.B.getCompartments()){
             for(Species s : c.getSpecies()) speciesIndex.put(s.getId(), i++);
@@ -69,7 +69,7 @@ public class ConstraintBuilder {
         //Element listOfSpecies = this.document.createElement("listOfSpecies");
         for (Compartment c: this.B.getCompartments()) {
             for (Species s: c.getSpecies()) {
-                if(!ConstraintBuilder.isSpeciesInDocument(this.document, s.getId()))
+                if(!ConfigBuilder.isSpeciesInDocument(this.document, s.getId()))
                     listOfSpecies.appendChild(this.buildSpeciesConstraint(s));
             }
         }
@@ -79,7 +79,7 @@ public class ConstraintBuilder {
         //Element listOfReactions = this.document.createElement("listOfReactions");
         for (Compartment c: this.B.getCompartments()) {
             for (SimpleReaction r: c.getReactions()) {
-                if(!ConstraintBuilder.isReactionInDocument(this.document, r.getId(), r.isReversible()))
+                if(!ConfigBuilder.isReactionInDocument(this.document, r.getId(), r.isReversible()))
                     listOfReactions.appendChild(this.buildReactionConstraint(r));
             }
         }
@@ -164,7 +164,7 @@ public class ConstraintBuilder {
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
         DOMSource domSource = new DOMSource(this.document);
-        StreamResult streamResult = new StreamResult(new File(this.outDir +"/config.xml"));
+        StreamResult streamResult = new StreamResult(new File(this.configPath));
         transformer.setOutputProperty(OutputKeys.INDENT, "yes");
         transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
         transformer.transform(domSource, streamResult);
