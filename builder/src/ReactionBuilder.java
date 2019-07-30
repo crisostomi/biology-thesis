@@ -9,7 +9,6 @@ class ReactionBuilder {
     private SimpleReaction r;
     private static String indentation = "    ";
     private static HashSet<CompartmentEdge> compEdges;
-    private static HashMap<String, Integer> compNumber;
     private static HashMap<String, Integer> k1Index;
     private static HashMap<String, Integer> k2Index;
     /*private static int k1_index = 1;
@@ -99,26 +98,26 @@ class ReactionBuilder {
 
         StringBuilder sb = new StringBuilder(/*indentation.repeat(depth)*/);
 
-        int src_number = ReactionBuilder.compNumber.get(compId);
+        String srcId = compId;
         for(CompartmentEdge ce : ReactionBuilder.getCompEdges()){
             if(ce.getTransport().getId().equals(this.r.getId())){
 
-                int dst_number = ReactionBuilder.compNumber.get(ce.getCompDstId());
+                String dstId = ce.getCompDstId();
                 if(ce.getExternalReactant() != null){
                     sb.append(
-                            this.buildConnectExternalReactant(dst_number, src_number, this.r, ce, s, depth-1)
+                            this.buildConnectExternalReactant(srcId, dstId, this.r, ce, s, depth-1)
                     );
                     s++;
                 }
                 else if(ce.getExternalProduct() != null){
                     sb.append(
-                            this.buildConnectExternalProduct(dst_number, src_number, this.r, ce, p, depth-1)
+                            this.buildConnectExternalProduct(srcId, dstId, this.r, ce, p, depth-1)
                     );
                     p++;
                 }
                 else if(ce.getExternalModifier() != null){
                     sb.append(
-                            this.buildConnectExternalModifier(dst_number, src_number, this.r, ce, /*m,*/ depth-1)
+                            this.buildConnectExternalModifier(srcId, dstId, this.r, ce, /*m,*/ depth-1)
                     );
                     //m++;
                 }
@@ -127,41 +126,41 @@ class ReactionBuilder {
         return sb.toString();
     }
 
-    private String buildConnectExternalReactant(int srcIndex, int dstIndex, SimpleReaction react, CompartmentEdge ce, int s, int depth) {
+    private String buildConnectExternalReactant(String srcId, String dstId, SimpleReaction react, CompartmentEdge ce, int s, int depth) {
         String res = indentation.repeat(depth)
-                .concat("connect(c_".concat(String.valueOf(srcIndex).concat("."
+                .concat("connect(c_".concat(String.valueOf(srcId).concat("."
                         .concat(ce.getExternalReactant().getId().concat(".n1, c_")
-                                .concat(String.valueOf(dstIndex).concat("."
+                                .concat(String.valueOf(dstId).concat("."
                                         .concat(react.getId().concat(".s"))))))));
         if(react.getReactants().size() > 3 || react.getProducts().size() > 3) return res + "[".concat(String.valueOf(s).concat("]);\n"));
         else return res + String.valueOf(s).concat(");\n");
     }
 
-    private String buildConnectExternalProduct(int srcIndex, int dstIndex, SimpleReaction react, CompartmentEdge ce, int p, int depth) {
+    private String buildConnectExternalProduct(String srcId, String dstId, SimpleReaction react, CompartmentEdge ce, int p, int depth) {
         String res = indentation.repeat(depth)
-                .concat("connect(c_".concat(String.valueOf(srcIndex).concat("."
+                .concat("connect(c_".concat(String.valueOf(srcId).concat("."
                         .concat(ce.getExternalProduct().getId().concat(".n1, c_")
-                                .concat(String.valueOf(dstIndex).concat("."
+                                .concat(String.valueOf(dstId).concat("."
                                         .concat(react.getId().concat(".p"))))))));
         if(react.getReactants().size() > 3 || react.getProducts().size() > 3) return res + "[".concat(String.valueOf(p).concat("]);\n"));
         else return res + String.valueOf(p).concat(");\n");
     }
 
-    private String buildConnectExternalModifier(int srcIndex, int dstIndex, SimpleReaction react, CompartmentEdge ce, /*int m,*/ int depth) {
+    private String buildConnectExternalModifier(String srcId, String dstId, SimpleReaction react, CompartmentEdge ce, /*int m,*/ int depth) {
 
         String type;
         if(((ComplexReaction) react).getModifierType(ce.getExternalModifier()) == ComplexReaction.ModifierType.NEGATIVE_REGULATOR) type = "i";
         else type = "a";
         String res = indentation.repeat(depth)
-                .concat("connect(c_".concat(String.valueOf(srcIndex).concat("."
+                .concat("connect(c_".concat(String.valueOf(srcId).concat("."
                         .concat(ce.getExternalModifier().getId().concat(".n1, c_")
-                                .concat(String.valueOf(dstIndex).concat("."
+                                .concat(String.valueOf(dstId).concat("."
                                         .concat(react.getId().concat(".".concat(type
                                                 .concat("F1);\n"))))))))));
         if(react.isReversible()) res += indentation.repeat(depth)
-                .concat("connect(c_".concat(String.valueOf(srcIndex).concat("."
+                .concat("connect(c_".concat(String.valueOf(srcId).concat("."
                         .concat(ce.getExternalModifier().getId().concat(".n1, c_")
-                                .concat(String.valueOf(dstIndex).concat("."
+                                .concat(String.valueOf(dstId).concat("."
                                         .concat(react.getId().concat(".".concat(type
                                                 .concat("B1);\n"))))))))));
         return res;
@@ -361,14 +360,6 @@ class ReactionBuilder {
 
     static void setCompEdges(HashSet<CompartmentEdge> compEdges) {
         ReactionBuilder.compEdges = compEdges;
-    }
-
-    public static HashMap<String, Integer> getCompNumber() {
-        return compNumber;
-    }
-
-    static void setCompNumber(HashMap<String, Integer> comp_number) {
-        ReactionBuilder.compNumber = comp_number;
     }
 
     /*static int getNotAssignedK1(){ return ReactionBuilder.not_assigned_k1; }

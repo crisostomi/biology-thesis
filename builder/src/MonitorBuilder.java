@@ -183,21 +183,17 @@ public class MonitorBuilder {
     /**
      * Method to link all the species in the biosystem with the corresponding input variables in the monitor
      * @param B the biosystem
-     * @param compNumberMap the map containing information about the name of the compartment in B
      * @param indent used for indentation purposes
      * @return a block of Modelica code handling the linking of the variables of the monitor
      */
-    public static StringBuilder linkMonitor(BioSystem B, HashMap<String, Integer> compNumberMap, String indent) {
+    public static StringBuilder linkMonitor(BioSystem B, String indent) {
         // for every species in the biosystem
         // in the monitor there are variables species_amount that need to be linked to species.n
         StringBuilder sb = new StringBuilder();
 
         for (Compartment c: B.getCompartments()) {
             for (Species s: c.getSpecies()) {
-                String speciesId = s.getId();
-                Integer compNumber = compNumberMap.get(c.getId());
-                String compName = "c_" + compNumber;
-                sb.append(indent + "mon." + speciesId + "_amount = " + compName + "." + speciesId + ".n;\n");
+                sb.append(indent + "mon." + s.getId() + "_amount = " + c.getId() + "." + s.getId() + ".n;\n");
             }
         }
 

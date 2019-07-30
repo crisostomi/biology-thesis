@@ -65,7 +65,6 @@ public class ModelBuilder {
         this.cellEquation.append(indent.concat("equation\n\n"));
 
         ReactionBuilder.setCompEdges(this.B.getCompEdges());
-        ReactionBuilder.setCompNumber(this.compNumber);
 
         /*try {
             File conf = new File(this.configPath);
@@ -84,14 +83,14 @@ public class ModelBuilder {
 
         CompartmentBuilder cb;
         for(Compartment c : this.B.getCompartments()){
-            cb = new CompartmentBuilder(c, this.compNumber.get(c.getId()));
+            cb = new CompartmentBuilder(c);
             sb_model.append(cb.buildCompartmentModel(compartmentVolumePercentage, depth+1));
             sb_instance.append(cb.buildCompartmentInstance(depth+1));
             this.cellEquation.append(cb.getCompartmentLinks().toString());
         }
 
         sb_instance.append(MonitorBuilder.declareMonitor(indent.repeat(depth+1)));
-        this.cellEquation.append("\n").append(MonitorBuilder.linkMonitor(this.B, compNumber, indent.repeat(depth+1)));
+        this.cellEquation.append("\n").append(MonitorBuilder.linkMonitor(this.B, indent.repeat(depth+1)));
 
         if(this.cellEquation.toString().equals(indent.concat("equation\n\n"))) this.cellEquation.delete(0, this.cellEquation.length());
 

@@ -1,14 +1,12 @@
 class CompartmentBuilder {
 
     private Compartment c;
-    private int comp_number;
     private static String indentation = "    ";
     private StringBuilder compartment_links;
     //static Document config;
 
-    CompartmentBuilder(Compartment c, int comp_number){
+    CompartmentBuilder(Compartment c){
         this.c = c;
-        this.comp_number = comp_number;
         this.compartment_links = new StringBuilder();
     }
 
@@ -87,8 +85,8 @@ class CompartmentBuilder {
      * @return a String comprised of Modelica code for the declaration of compartments
      */
     String buildCompartmentInstance(int depth){
-        return indentation.repeat(depth)+CompartmentBuilder.toClassName(this.c.getName())+
-                " c_"+comp_number+" \""+this.c.getId()+"\";\n";
+        return indentation.repeat(depth) +
+                CompartmentBuilder.toClassName(this.c.getName()) + " " + this.c.getId()+";\n";
     }
 
     private static String toClassName(String s){
