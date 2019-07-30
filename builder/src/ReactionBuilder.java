@@ -128,9 +128,9 @@ class ReactionBuilder {
 
     private String buildConnectExternalReactant(String srcId, String dstId, SimpleReaction react, CompartmentEdge ce, int s, int depth) {
         String res = indentation.repeat(depth)
-                .concat("connect(c_".concat(String.valueOf(srcId).concat("."
-                        .concat(ce.getExternalReactant().getId().concat(".n1, c_")
-                                .concat(String.valueOf(dstId).concat("."
+                .concat("connect(".concat(String.valueOf(dstId).concat("."
+                        .concat(ce.getExternalReactant().getId().concat(".n1, ")
+                                .concat(String.valueOf(srcId).concat("."
                                         .concat(react.getId().concat(".s"))))))));
         if(react.getReactants().size() > 3 || react.getProducts().size() > 3) return res + "[".concat(String.valueOf(s).concat("]);\n"));
         else return res + String.valueOf(s).concat(");\n");
@@ -138,9 +138,9 @@ class ReactionBuilder {
 
     private String buildConnectExternalProduct(String srcId, String dstId, SimpleReaction react, CompartmentEdge ce, int p, int depth) {
         String res = indentation.repeat(depth)
-                .concat("connect(c_".concat(String.valueOf(srcId).concat("."
-                        .concat(ce.getExternalProduct().getId().concat(".n1, c_")
-                                .concat(String.valueOf(dstId).concat("."
+                .concat("connect(".concat(String.valueOf(dstId).concat("."
+                        .concat(ce.getExternalProduct().getId().concat(".n1, ")
+                                .concat(String.valueOf(srcId).concat("."
                                         .concat(react.getId().concat(".p"))))))));
         if(react.getReactants().size() > 3 || react.getProducts().size() > 3) return res + "[".concat(String.valueOf(p).concat("]);\n"));
         else return res + String.valueOf(p).concat(");\n");
@@ -152,15 +152,16 @@ class ReactionBuilder {
         if(((ComplexReaction) react).getModifierType(ce.getExternalModifier()) == ComplexReaction.ModifierType.NEGATIVE_REGULATOR) type = "i";
         else type = "a";
         String res = indentation.repeat(depth)
-                .concat("connect(c_".concat(String.valueOf(srcId).concat("."
-                        .concat(ce.getExternalModifier().getId().concat(".n1, c_")
-                                .concat(String.valueOf(dstId).concat("."
+                .concat("connect(".concat(String.valueOf(dstId).concat("."
+                        .concat(ce.getExternalModifier().getId().concat(".n1, ")
+                                .concat(String.valueOf(srcId).concat("."
                                         .concat(react.getId().concat(".".concat(type
                                                 .concat("F1);\n"))))))))));
+
         if(react.isReversible()) res += indentation.repeat(depth)
-                .concat("connect(c_".concat(String.valueOf(srcId).concat("."
-                        .concat(ce.getExternalModifier().getId().concat(".n1, c_")
-                                .concat(String.valueOf(dstId).concat("."
+                .concat("connect(".concat(String.valueOf(dstId).concat("."
+                        .concat(ce.getExternalModifier().getId().concat(".n1, ")
+                                .concat(String.valueOf(srcId).concat("."
                                         .concat(react.getId().concat(".".concat(type
                                                 .concat("B1);\n"))))))))));
         return res;
