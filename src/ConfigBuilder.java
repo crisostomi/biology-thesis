@@ -90,7 +90,7 @@ public class ConfigBuilder {
             for (Species s: c.getSpecies()) {
                 species = this.config.createElement("species");
                 species.setAttribute("id", s.getId());
-                species.setAttribute("comparment", c.getId());
+                species.setAttribute("compartment", c.getId());
                 species.setAttribute("bounds_index", String.valueOf(i++));
                 species.setAttribute("init_index", String.valueOf(x++));
                 listOfSpecies.appendChild(species);
@@ -98,7 +98,7 @@ public class ConfigBuilder {
             for (SimpleReaction r: c.getReactions()) {
                 reaction = r.isReversible() ? this.config.createElement("reversible") : this.config.createElement("irreversible");
                 reaction.setAttribute("id", r.getId());
-                reaction.setAttribute("comparment", c.getId());
+                reaction.setAttribute("compartment", c.getId());
                 reaction.setAttribute("k1_index", String.valueOf(y++));
                 if(r.isReversible()) reaction.setAttribute("k2_index", String.valueOf(t++));
                 listOfReactions.appendChild(reaction);
