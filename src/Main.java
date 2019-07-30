@@ -77,7 +77,7 @@ public class Main {
         //update config.xml file
         ConfigBuilder cb;
         try {
-            cb = new ConfigBuilder(bs, kbFilePath + "/kb.xml", outputModelicaDir + "/config.xml");
+            cb = new ConfigBuilder(bs, kbFilePath, outputModelicaDir + "/config.xml");
             cb.buildKB();
             cb.buildConfig();
         } catch(Exception e){
