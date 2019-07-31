@@ -44,7 +44,7 @@ public class MonitorBuilder {
 
         sb.append(buildParametersBlock(depth+1));
         sb.append(buildDeclarationBlock(depth+1) + "\n\n");
-
+        sb.append(buildInitialEquationBlock(depth+1) + "\n\n");
         sb.append(buildEquationBlock(depth+1) + "\n\n");
 
         sb.append("end Monitor;\n");
@@ -127,6 +127,33 @@ public class MonitorBuilder {
         return sb;
     }
 
+    private StringBuilder buildInitialEquationBlock(int depth) {
+        String indent = indentation.repeat(depth);
+        StringBuilder sb = new StringBuilder();
+        sb.append(indent + "initial equation\n");
+
+        for (Compartment compartment: B.getCompartments()) {
+            sb.append("\n" + indent + "    // " + compartment.getId() + "\n");
+
+            for (Species species: compartment.getSpecies()) {
+                sb.append(buildSpeciesInitialEquation(species, depth+1));
+            }
+        }
+
+        return sb;
+    }
+
+    private StringBuilder buildSpeciesInitialEquation(Species species, int depth) {
+        String indent = indentation.repeat(depth);
+        StringBuilder sb = new StringBuilder();
+
+        String mon = species.getId() + "_monitor";
+
+        sb.append(indent + mon + " = 0;\n");
+
+        return sb;
+
+    }
 
     /**
      * Method to build the equation block for all the species constraints

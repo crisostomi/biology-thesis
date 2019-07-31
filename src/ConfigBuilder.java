@@ -70,8 +70,10 @@ public class ConfigBuilder {
 
         Node configuration = this.config.createElement("configuration");
         this.config.appendChild(configuration);
+        Node listOfCompartments = this.config.createElement("listOfCompartments");
         Node listOfSpecies = this.config.createElement("listOfSpecies");
         Node listOfReactions = this.config.createElement("listOfReactions");
+        configuration.appendChild(listOfCompartments);
         configuration.appendChild(listOfSpecies);
         configuration.appendChild(listOfReactions);
 
@@ -81,9 +83,12 @@ public class ConfigBuilder {
             for(Species s : c.getSpecies()) speciesIndex.put(s.getId(), i++);
         }*/
 
-        Element species, reaction;
+        Element compartment, species, reaction;
         int i = 1, x, y, t;
         for (Compartment c: this.B.getCompartments()) {
+            compartment = this.config.createElement("compartment");
+            compartment.setAttribute("id", c.getId());
+            listOfCompartments.appendChild(compartment);
             x = 1;
             y = 1;
             t = 1;
